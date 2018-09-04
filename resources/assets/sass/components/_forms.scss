@@ -1,0 +1,12 @@
+/*
+ * Estilos de Formularios
+ */
+
+label {
+	cursor: pointer;
+	font-weight: 700;
+}
+.form-group.required .col-form-label:after { 
+	content:"*";
+	color:red;
+}
