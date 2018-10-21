@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\OptionRequest;
 use App\Http\Requests\UpdateOptionRequest;
 use Laracasts\Flash\Flash;
-use App\Watchdog;
+
 
 class OptionsController extends Controller
 {
@@ -57,12 +57,6 @@ class OptionsController extends Controller
     {
         $option = new Option($request->all());
         $option->save();
-        $watchdog = new Watchdog();
-        $watchdog->user_id = Auth::id();
-        $watchdog->type = 'create';
-        $watchdog->text = 'Se ha creado la opción '.$option->display_name.' con el valor: '.$option->value;
-        $watchdog->ip = $request->ip();
-        $watchdog->save();
         Flash::success('Se ha creado la opción '.$option->display_name.' de forma exitosa');
         return redirect()->route('options.index');
     }
@@ -85,12 +79,6 @@ class OptionsController extends Controller
                 if($option->value != $valor){
                     $option->value = $valor;
                     $option->save();
-                    $watchdog = new Watchdog();
-                    $watchdog->user_id = Auth::id();
-                    $watchdog->type = 'edit';
-                    $watchdog->text = 'Se ha editado la opción '.$option->display_name.' con el valor: '.$option->value;
-                    $watchdog->ip = $request->ip();
-                    $watchdog->save();
                 }
             }
         }
@@ -105,12 +93,6 @@ class OptionsController extends Controller
             $logo = Option::where('name', 'site_logo')->get()->first();
             $logo->value = 'storage/images/logo/'.$imgname;
             $logo->save();
-            $watchdog = new Watchdog();
-            $watchdog->user_id = Auth::id();
-            $watchdog->type = 'edit';
-            $watchdog->text = 'Se ha editado el logo de la institución con el valor: '.$logo->value;
-            $watchdog->ip = $request->ip();
-            $watchdog->save();
         }
         Flash::success('Se han actualizado las opciones');
         return redirect()->route('options.index');

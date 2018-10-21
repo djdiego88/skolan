@@ -12,7 +12,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Laracasts\Flash\Flash;
 use App\Option;
-use App\Watchdog;
 use App\Usermeta;
 use Spatie\Permission\Models\Role;
 use Carbon\Carbon;
@@ -121,12 +120,6 @@ class UsersController extends Controller
                     if($userid != "1"){
                         $user = User::find(intval($userid));
                         $user->status = $request->status;
-                        $watchdog = new Watchdog();
-                        $watchdog->user_id = Auth::id();
-                        $watchdog->type = 'edit_user';
-                        $watchdog->text = 'Se ha actualizado al usuario '.$user->first_name.' '.$user->last_name.' con el Estado: '.$request->status ;
-                        $watchdog->ip = $request->ip();
-                        $watchdog->save();
                         $user->save();
                     }else{
                         Flash::error('No tienes los permisos suficientes para actualizar el estado de este usuario');
@@ -140,12 +133,6 @@ class UsersController extends Controller
                     foreach ($usersids as $userid) {
                         if($userid != "1"){
                             $user = User::find(intval($userid));
-                            $watchdog = new Watchdog();
-                            $watchdog->user_id = Auth::id();
-                            $watchdog->type = 'delete_user';
-                            $watchdog->text = 'Se ha eliminado al usuario '.$user->first_name.' '.$user->last_name;
-                            $watchdog->ip = $request->ip();
-                            $watchdog->save();
                             $user->delete();
                         }else{
                             Flash::error('No tienes los permisos suficientes para eliminar este usuario');
@@ -220,13 +207,6 @@ class UsersController extends Controller
         $displayname->value = $display_name;
         $displayname->save();
 
-        $watchdog = new Watchdog();
-        $watchdog->user_id = Auth::id();
-        $watchdog->type = 'add_user';
-        $watchdog->text = 'Se ha añadido el usuario '.$user->first_name.' '.$user->last_name.'.';
-        $watchdog->ip = $request->ip();
-        $watchdog->save();
-
         Flash::success('Se ha añadido el usuario '.$user->first_name.' '.$user->last_name.'.');
         return redirect()->route('users.sa.index');
     }
@@ -248,7 +228,7 @@ class UsersController extends Controller
 
     public function editSuperAdmin($id)
     {
-        if($id != "1"){
+        if($id != "1"/* || Auth::id() == 1*/){
             $user = User::with(['usermeta' => function ($query) {
                         $query->where('name', '=', 'display_name');
                     }])->find($id);
@@ -309,13 +289,6 @@ class UsersController extends Controller
         $displayname->value = $display_name;
         $displayname->save();
 
-        $watchdog = new Watchdog();
-        $watchdog->user_id = Auth::id();
-        $watchdog->type = 'edit_user';
-        $watchdog->text = 'Se ha actualizado el usuario '.$user->first_name.' '.$user->last_name.'.';
-        $watchdog->ip = $request->ip();
-        $watchdog->save();
-
         Flash::success('Se ha actualizado el usuario '.$user->first_name.' '.$user->last_name.'.');
         return redirect()->route('users.sa.show', $user->id);
     }
@@ -323,13 +296,7 @@ class UsersController extends Controller
     public function destroySuperAdmin($id)
     {
         $user = User::find($id);
-        $watchdog = new Watchdog();
-        $watchdog->user_id = Auth::id();
-        $watchdog->type = 'delete_user';
-        $watchdog->text = 'Se ha eliminado al usuario '.$user->first_name.' '.$user->last_name;
         Flash::success('Se ha eliminado al usuario '.$user->first_name.' '.$user->last_name);
-        $watchdog->ip = \Request::ip();
-        $watchdog->save();
         $user->delete();
         return redirect()->route('users.sa.index');
     }
@@ -350,12 +317,6 @@ class UsersController extends Controller
                 foreach ($usersids as $userid) {
                     $user = User::find(intval($userid));
                     $user->status = $request->status;
-                    $watchdog = new Watchdog();
-                    $watchdog->user_id = Auth::id();
-                    $watchdog->type = 'edit_user';
-                    $watchdog->text = 'Se ha actualizado al usuario '.$user->first_name.' '.$user->last_name.' con el Estado: '.$request->status ;
-                    $watchdog->ip = $request->ip();
-                    $watchdog->save();
                     $user->save();
                 }
                 Flash::success('Se ha actualizado el estado de los usuarios seleccionados');
@@ -364,12 +325,6 @@ class UsersController extends Controller
                 if($request->action == 'delete'){
                     foreach ($usersids as $userid) {
                         $user = User::find(intval($userid));
-                        $watchdog = new Watchdog();
-                        $watchdog->user_id = Auth::id();
-                        $watchdog->type = 'delete_user';
-                        $watchdog->text = 'Se ha eliminado al usuario '.$user->first_name.' '.$user->last_name;
-                        $watchdog->ip = $request->ip();
-                        $watchdog->save();
                         $user->delete();
                     }
                     Flash::success('Se han eliminado los usuarios seleccionados');
@@ -439,13 +394,6 @@ class UsersController extends Controller
         $displayname->value = $display_name;
         $displayname->save();
 
-        $watchdog = new Watchdog();
-        $watchdog->user_id = Auth::id();
-        $watchdog->type = 'add_user';
-        $watchdog->text = 'Se ha añadido el usuario '.$user->first_name.' '.$user->last_name.'.';
-        $watchdog->ip = $request->ip();
-        $watchdog->save();
-
         Flash::success('Se ha añadido el usuario '.$user->first_name.' '.$user->last_name.'.');
         return redirect()->route('users.ad.index');
     }
@@ -514,13 +462,6 @@ class UsersController extends Controller
         $displayname->value = $display_name;
         $displayname->save();
 
-        $watchdog = new Watchdog();
-        $watchdog->user_id = Auth::id();
-        $watchdog->type = 'edit_user';
-        $watchdog->text = 'Se ha actualizado el usuario '.$user->first_name.' '.$user->last_name.'.';
-        $watchdog->ip = $request->ip();
-        $watchdog->save();
-
         Flash::success('Se ha actualizado el usuario '.$user->first_name.' '.$user->last_name.'.');
         return redirect()->route('users.ad.show', $user->id);
     }
@@ -528,13 +469,7 @@ class UsersController extends Controller
     public function destroyAdministrative($id)
     {
         $user = User::find($id);
-        $watchdog = new Watchdog();
-        $watchdog->user_id = Auth::id();
-        $watchdog->type = 'delete_user';
-        $watchdog->text = 'Se ha eliminado al usuario '.$user->first_name.' '.$user->last_name;
         Flash::success('Se ha eliminado al usuario '.$user->first_name.' '.$user->last_name);
-        $watchdog->ip = \Request::ip();
-        $watchdog->save();
         $user->delete();
         return redirect()->route('users.ad.index');
     }

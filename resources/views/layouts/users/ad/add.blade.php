@@ -84,8 +84,8 @@
 		{!! Form::label('photo','Foto del usuario:',['class'=>'col-sm-3 col-md-2 col-form-label']); !!}
 		<div class="col-sm-9 col-md-6">
 			<img src="{{asset('storage/images/photos/default-avatar.png')}}" class="img-thumbnail" width="150" height="auto">
-			{!! Form::file('photo',['class'=>'form-control-file']); !!}
-			<small class="form-text text-muted">{{ __('Solo archivos: JPG o PNG. Peso máximo: 1 MB') }}</small>
+			{!! Form::file('photo',['class'=>'form-control-file', 'accept'=>'.png, .jpg, .jpeg']); !!}
+			<small class="form-text text-muted">{{ __('Solo archivos: JPG o PNG. Peso máximo: 2 MB') }}</small>
 		</div>
 	</div>
 	<div class="form-group required row">

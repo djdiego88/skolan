@@ -6,12 +6,14 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Cmgmyr\Messenger\Traits\Messagable;
 use Spatie\Permission\Traits\HasRoles;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class User extends Authenticatable
 {
     use Notifiable;
     use Messagable;
     use HasRoles;
+    use LogsActivity;
 
     protected $table = 'users';
     protected $dates = ['created_at', 'updated_at', 'last_access', 'birth_date'];
@@ -33,6 +35,10 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    protected static $logFillable = true;
+
+    protected static $logOnlyDirty = true;
 
     public function usermeta() {
         return $this->hasMany('App\Usermeta');

@@ -10,14 +10,16 @@
         "fideloper/proxy": "^4.0",
         "intervention/image": "^2.4",
         "laracasts/flash": "^3.0",
-        "laravel/framework": "5.6.*",
+        "laravel/framework": "5.7.*",
         "laravel/tinker": "^1.0",
-        "laravelcollective/html": "^5.6",
-        "laraveles/spanish": "^1.0",
+        "laravelcollective/html": "^5.7",
+        "laraveles/spanish": "^1.1",
         "predis/predis": "^1.1",
-        "spatie/laravel-permission": "^2.12"
+        "spatie/laravel-activitylog": "^3.1",
+        "spatie/laravel-permission": "^2.23"
     },
     "require-dev": {
+        "beyondcode/laravel-dump-server": "^1.0",
         "filp/whoops": "^2.0",
         "fzaninotto/faker": "^1.4",
         "mockery/mockery": "^1.0",

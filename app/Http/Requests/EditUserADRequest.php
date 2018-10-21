@@ -38,7 +38,7 @@ class EditUserADRequest extends FormRequest
             'nacionality' => 'max:3|alpha|required',
             'location' => 'min:4|string|required',
             'address' => 'min:4|string|required',
-            'photo' => 'mimes:jpeg,jpg,png|max:1024',
+            'photo' => 'mimes:jpeg,jpg,png|max:2048',
             'status' => 'max:20|alpha|required',
         ];
     }

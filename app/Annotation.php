@@ -3,12 +3,19 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class Annotation extends Model
 {
+    use LogsActivity;
+
     protected $table = 'annotations';
 
     protected $fillable = ['student_id', 'teacher_id', 'year_id', 'schoolterm_id', 'type', 'name', 'description', 'show'];
+
+    protected static $logFillable = true;
+
+    protected static $logOnlyDirty = true;
 
     public function teacher() {
     	return $this->belongsTo('App\Teacher');

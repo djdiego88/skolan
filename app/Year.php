@@ -3,12 +3,19 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class Year extends Model
 {
+    use LogsActivity;
+
     protected $table = 'years';
 
     protected $fillable = ['value', 'status'];
+
+    protected static $logFillable = true;
+
+    protected static $logOnlyDirty = true;
 
     public function schoolterms() {
         return $this->hasMany('App\Schoolterm');

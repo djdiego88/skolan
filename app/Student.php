@@ -3,12 +3,19 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class Student extends Model
 {
+    use LogsActivity;
+
     protected $table = 'students';
 
     protected $fillable = ['user_id', 'neighborhood', 'socioeconomic_level', 'commune', 'health_care', 'blood_type', 'allergies', 'diseases'];
+
+    protected static $logFillable = true;
+
+    protected static $logOnlyDirty = true;
 
     public function user() {
     	return $this->belongsTo('App\User');

@@ -98,8 +98,8 @@
 			@else
 			<img src="{{asset($user->photo)}}" class="img-thumbnail" width="150" height="auto">
 			@endif
-			{!! Form::file('photo',['class'=>'form-control-file']); !!}
-			<small class="text-muted">{{ __('Solo archivos: JPG o PNG. Peso máximo: 1 MB') }}</small>
+			{!! Form::file('photo',['class'=>'form-control-file', 'accept'=>'.png, .jpg, .jpeg']); !!}
+			<small class="text-muted">{{ __('Solo archivos: JPG o PNG. Peso máximo: 2 MB') }}</small>
 		</div>
 	</div>
 	<div class="form-group required row">

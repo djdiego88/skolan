@@ -58,9 +58,10 @@ class DatabaseSeeder extends Seeder
         $adminQualification = Permission::create(['name' => 'admin-qualification']);
         $editQualification = Permission::create(['name' => 'edit-qualification']);
         $viewQualification = Permission::create(['name' => 'view-qualification']);
+        $viewActivityLog = Permission::create(['name' => 'view-activitylog']);
         //Asignar permisos a roles
         $superadmin->givePermissionTo(Permission::all());
-		$administrative->givePermissionTo([$adminStudent,$adminParent,$adminTeacher,$adminGrade,$adminClassroom,$adminSubject,$adminSchedule,$adminArea,$adminHQ,$adminSchoolday,$adminYear,$adminSchoolterm,$adminEnrollment,$adminAbsence,$adminAnnotation,$adminHomework,$adminQualification]);
+		$administrative->givePermissionTo([$adminStudent,$adminParent,$adminTeacher,$adminGrade,$adminClassroom,$adminSubject,$adminSchedule,$adminArea,$adminHQ,$adminSchoolday,$adminYear,$adminSchoolterm,$adminEnrollment,$adminAbsence,$adminAnnotation,$adminHomework,$adminQualification, $viewActivityLog]);
 		$coordinator->givePermissionTo([$adminSchedule,$adminEnrollment,$adminAbsence,$adminAnnotation,$viewHomework,$viewQualification]);
 		$teacher->givePermissionTo([$adminAbsence,$adminAnnotation,$viewHomework,$viewQualification]);
 		$student->givePermissionTo([$viewAbsence,$viewAnnotation,$viewHomework,$viewQualification]);

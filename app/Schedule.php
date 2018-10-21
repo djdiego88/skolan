@@ -3,12 +3,19 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class Schedule extends Model
 {
+    use LogsActivity;
+
     protected $table = 'classroom_subject';
 
     protected $fillable = ['classroom_id', 'subject_id', 'teacher_id', 'day', 'start_time', 'end_time'];
+
+    protected static $logFillable = true;
+
+    protected static $logOnlyDirty = true;
 
     public function teacher() {
     	return $this->belongsTo('App\Teacher');
