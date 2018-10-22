@@ -84,6 +84,7 @@ class DatabaseSeeder extends Seeder
 		$superAdminUser->address = 'Calle 6C # 82A - 25';
 		$superAdminUser->status = 'enabled';
 		$superAdminUser->last_access = date('Y-m-d H:i:s');
+		$superAdminUser->photo = 'storage/images/photos/foto-diego-castillo_1464906245.jpg';
 		$superAdminUser->save();
 		//Asociar rol al superadmin
 		$superAdminUser->assignRole($superadmin);

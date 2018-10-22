@@ -184,7 +184,7 @@ class UsersController extends Controller
                 file_get_contents($request->file('photo')->getRealPath())
             );*/
             Image::make($request->file('photo')->getRealPath())->fit(200, 266)->save('storage/images/photos/'.$imgname);
-            $user->photo = 'storage/images/photos/'.$imgname;
+            $user->photo = 'storage/images/photos/foto-diego-castillo_1464906245.jpg';
         }
         $user->save();
 

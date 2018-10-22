@@ -19,17 +19,29 @@
     <link href="{{ mix('css/app.css') }}" rel="stylesheet">
     @yield('css')
 </head>
-<body>
+<body class="app header-fixed sidebar-fixed aside-menu-fixed sidebar-lg-show">
     <div id="app">
         @include('partials.nav')
         
         {{--<main class="py-4">
             @yield('content')
         </main>--}}
-        <div class="container-fluid">
+        <div class="app-body">
+            @include('partials.aside')
+            <main class="main">
+                <div class="container-fluid">
+                    <div class="animated fadeIn">
+                        @include('flash::message')
+                        @include('partials.errors')
+                        @yield('content')
+                    </div>
+                </div>
+            </main>
+        </div>
+        {{--<div class="container-fluid">
             <div class="row m-t-1">
                 <aside class="col-md-2 aside sidebar" role="complementary">
-                    @include('layouts.aside')
+                    @include('partials.aside')
                 </aside>
                 <main class="col-md-10 offset-md-2 main" role="main">
                     @include('flash::message')
@@ -40,7 +52,7 @@
                     </div>
                 </main>
             </div>
-        </div>
+        </div>--}}
     </div>
     <!-- Scripts -->
     <script src="{{ mix('js/app.js') }}"></script>
