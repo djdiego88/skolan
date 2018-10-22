@@ -23,7 +23,7 @@ const app = new Vue({
 });
 */
 
-$('.sidebar > .list-group > .list-group-item.drdo').on('click', function(){
+/*$('.sidebar > .list-group > .list-group-item.drdo').on('click', function(){
     $(this).toggleClass('opened').toggleClass('closed');
-});
+});*/
 $('div.alert').not('.alert-important').delay(7000).fadeOut(350);
