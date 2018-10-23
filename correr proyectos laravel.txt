@@ -1,0 +1,110 @@
+﻿1. Instalar composer
+2. Ejecutar en consola: composer create-project laravel/laravel nombreproyecto
+3. Actualizar archivo .env
+4. Crear base de datos por consola: CREATE DATABASE skolan_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+5. $ php artisan storage:link    IMPORTANTE: Crear symlink de public/storage apuntando a la carpeta real storage/app/public
+6. $ php artisan vendor:publish --provider="Spatie\Permission\PermissionServiceProvider" --tag="migrations"
+7. $ php artisan vendor:publish --provider="Cmgmyr\Messenger\MessengerServiceProvider" --tag="config"
+8. Configurar user_model en /config/messenger.php
+9. $ php artisan vendor:publish --provider="Cmgmyr\Messenger\MessengerServiceProvider" --tag="migrations"
+X. $ php artisan vendor:publish --provider="Spatie\Activitylog\ActivitylogServiceProvider" --tag="migrations"
+X. $ php artisan vendor:publish --provider="Spatie\Activitylog\ActivitylogServiceProvider" --tag="config"
+X. Configurar días a retener en el log
+10. $ php artisan laraveles:install-lang
+11. $ php artisan vendor:publish --provider="Laracasts\Flash\FlashServiceProvider"
+X. Instalar redis en el SO (Windows: https://github.com/ServiceStack/redis-windows)
+12. $ php artisan migrate:refresh --seed
+13. $ npm install
+14. $ npm run dev ----------------- $ npm run production
+15. Ejecutar en consola: php artisan serve
+
+
+**---Comandos---**
+* Para crear migraciones o tablas de la BD:
+- php artisan make:migration nombre_de_la_migracion --create=nombredelatabla
+
+* Para ejecutar las migraciones
+- php artisan migrate
+
+* Refresh the database and run all database seeds...
+- php artisan migrate:refresh --seed
+
+* Para crear modelo
+- php artisan make:model NombreDelModelo
+
+* Para abrir componente de prueba tinker
+- php artisan tinker
+
+* Para crear un controlador
+- php artisan make:controller NombreController --resource
+
+* Para crear un request personalizado
+- php artisan make:request NombreRequest
+
+* Para instalar proceso de autenticación de usuarios
+- php artisan make:auth
+
+* Para crear un Seed
+- php artisan make:seeder UsersTableSeeder
+
+
+**---Paquetes PHP Composer (https://packagist.org/)---**
+- laravelcollective/html = Para crear formularios desde Laravel
+		composer require laravelcollective/html
+	INgresar providers y aliases en config/app.php
+
+- cviebrock/eloquent-sluggable = Para crear slugs en la aplicación
+		composer require cviebrock/eloquent-sluggable
+	Ingresar providers y aliases en config/app.php
+		php artisan vendor:publish
+
+- laracasts/flash = Para notificaciones
+		composer require laracasts/flash
+	Ingresar providers y aliases en config/app.php
+
+- laravel/socialite = para login mediante redes sociales
+		composer require laravel/socialite
+	Ingresar providers y aliases en config/app.php
+
+- nesbot/carbon = para manipular fechas
+	composer require nesbot/carbon
+
+- http://image.intervention.io/getting_started/installation = Para manipular imágenes
+	composer require intervention/image
+
+- https://github.com/laravel/socialite = Para registrarse y/o loguearse con Redes Sociales
+	composer require laravel/socialite
+
+- https://github.com/guicho0601/laravel-form-ajax-validation = Para validar form con AJAX
+
+- https://github.com/spatie/laravel-permission (https://laravel-news.com/two-best-roles-permissions-packages) = Para sistema de roles y permisos de usuarios
+
+- https://github.com/Bogardo/Mailgun = Para enviar correos mediante Mailgun
+
+- https://github.com/cmgmyr/laravel-messenger = Para envío de mensajes entre usuarios
+
+- https://github.com/ipalaus/geonames = Para incluir selects de países y ubicaciones
+
+- https://github.com/mewebstudio/Purifier = para limpiar html
+- https://packagist.org/packages/htmlawed/htmlawed = Para limpiar HTML
+- https://bhavyanshu.me/tutorials/custom-class-to-sanitize-input-in-laravel-5-laravel-security/01/11/2016 = para limpiar HTML
+- http://learninglaravel.net/using-ajax-in-laravel/link = Usar AJAX con Laravel
+- http://www.tutorials.kode-blog.com/laravel-5-ajax-tutorial = Usar AJAX con Laravel
+- http://www.pedroliveira.pt/ajax-post-with-laravel-5/ = Usar AJAX con Laravel
+- https://github.com/Laraveles/lang-spanish = Para traducir Laravel a Español
+- https://github.com/barryvdh/laravel-debugbar = Para DEbug tipo firebug con Laravel
+
+
+
+**--- Plugins útiles para proyectos ---**
+- https://alex-d.github.io/Trumbowyg/ = Para poner un WYSIWYG solo con Javascript
+- https://harvesthq.github.io/chosen/ = Para mejorar los input selects
+- http://wicky.nillia.ms/enquire.js/ = Para media queries con JavaScript
+- https://github.com/fyneworks/multifile = Para manejar subida de varios archivos con Javascript
+- https://github.com/maoberlehner/perfundo = Para lightboxes de imágenes y galerías
+
+**--- Recursos útiles para proyectos ---**
+- http://www.creative-tim.com/product/light-bootstrap-dashboard = Para paneles de administración con Bootstrap
+- Para validar input en Laravel = http://www.easylaravelbook.com/blog/2015/03/31/sanitizing-input-using-laravel-5-form-requests/
+- http://htmlpurifier.org/ = Para validar html y XSS en PHP
+- http://www.morphatic.com/2015/11/24/installing-laravel-5-1-at-digital-ocean-with-php-7/ = Para instalar Laravel en servidor
