@@ -26,15 +26,18 @@ class OptionsController extends Controller
     public function index()
     {
         $options = Option::all();
+        //dd($options);
         $styles = [
             'primary'=>'Principal',
             'style2'=>'Estilo 2', 
             'style3'=>'Estilo 3', 
             'style4'=>'Estilo 4'
         ];
-        return view('layouts.options.index')
+        return ['options'=> $options, 'styles' => $styles];
+
+    /*return view('layouts.options.index')
             ->with('options', $options)
-            ->with('styles', $styles);
+            ->with('styles', $styles);*/
     }
 
     /**
@@ -64,14 +67,12 @@ class OptionsController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\UpdateOptionRequest  $request
      * @param  \App\Option  $option
      * @return \Illuminate\Http\Response
      */
     public function update(UpdateOptionRequest $request)
-    {
-        //$options = Option::where('name', 'site_name')->get();
-        //dd($request->all());
+    {   
         $data = $request->all();
         foreach ($data as $name => $valor) {
             if($name != '_method' && $name != '_token' && $name != 'site_logo'){
@@ -94,7 +95,5 @@ class OptionsController extends Controller
             $logo->value = 'storage/images/logo/'.$imgname;
             $logo->save();
         }
-        Flash::success('Se han actualizado las opciones');
-        return redirect()->route('options.index');
     }
 }

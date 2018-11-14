@@ -76,7 +76,7 @@
         <div class="card">
             <div class="card-body p-5">
                 <div class="text-center d-lg-none">
-                    <img src="{{asset($options['site_logo'])}}" class="mb-5" width="150" alt="{{ config('app.name', 'Skolan') }}">
+                    <img src="{{asset($configs['site_logo'])}}" class="mb-5" width="150" alt="{{ config('app.name', 'Skolan') }}">
                 </div>
                 <h1>{{ __('Login') }}</h1>
                 <p class="text-muted">{{ __('Ingresa a tu cuenta') }}</p>

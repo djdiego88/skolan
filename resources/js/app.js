@@ -7,7 +7,13 @@
 
 require('./bootstrap');
 
-//window.Vue = require('vue');
+window.Vue = require('vue');
+import Toasted from 'vue-toasted';
+Vue.use(Toasted);
+Vue.toasted.register('error', message => message, {
+    position : 'top-center',
+    duration : 5000
+});
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -15,13 +21,13 @@ require('./bootstrap');
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-/*
-Vue.component('example-component', require('./components/ExampleComponent.vue'));
+
+Vue.component('options', require('./components/options/Options.vue'));
 
 const app = new Vue({
     el: '#app'
 });
-*/
+
 
 /*$('.sidebar > .list-group > .list-group-item.drdo').on('click', function(){
     $(this).toggleClass('opened').toggleClass('closed');

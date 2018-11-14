@@ -19,12 +19,12 @@ class AppServiceProvider extends ServiceProvider
         Schema::defaultStringLength(191);
 
         //Share options values with all views
-        $options_raw = Option::all();
-        $options = [];
-        foreach($options_raw as $option) {
-            $options[$option->name] = $option->value;
+        $options = Option::all();
+        $configs = [];
+        foreach($options as $option) {
+            $configs[$option->name] = $option->value;
         }
-        View::share('options', $options);
+        View::share('configs', $configs);
     }
 
     /**

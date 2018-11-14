@@ -18,17 +18,15 @@
     <!-- Styles -->
     <link href="{{ mix('css/app.css') }}" rel="stylesheet">
     @yield('css')
+    @yield('breadcrumbs-seo')
 </head>
 <body class="app header-fixed sidebar-fixed aside-menu-fixed sidebar-lg-show">
     <div id="app">
         @include('partials.nav')
-        
-        {{--<main class="py-4">
-            @yield('content')
-        </main>--}}
         <div class="app-body">
             @include('partials.aside')
             <main class="main">
+                @yield('breadcrumbs')
                 <div class="container-fluid">
                     <div class="animated fadeIn">
                         @include('flash::message')
@@ -38,23 +36,9 @@
                 </div>
             </main>
         </div>
-        {{--<div class="container-fluid">
-            <div class="row m-t-1">
-                <aside class="col-md-2 aside sidebar" role="complementary">
-                    @include('partials.aside')
-                </aside>
-                <main class="col-md-10 offset-md-2 main" role="main">
-                    @include('flash::message')
-                    @include('partials.errors')
-                    <h1 class="page-header">@yield('title', 'Panel de Control')</h1>
-                    <div class="content">
-                        @yield('content')
-                    </div>
-                </main>
-            </div>
-        </div>--}}
     </div>
     <!-- Scripts -->
+    @routes
     <script src="{{ mix('js/app.js') }}"></script>
     @yield('js')
 </body>

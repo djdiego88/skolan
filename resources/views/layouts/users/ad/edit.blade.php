@@ -5,6 +5,8 @@
 ?>
 @extends('layouts.app')
 @section('title', 'Editar Personal Administrativo')
+@section('breadcrumbs-seo', Breadcrumbs::view('breadcrumbs::json-ld', 'edit-ad', $user))
+@section('breadcrumbs', Breadcrumbs::render('edit-ad', $user))
 @section('content')
 <div class="user-buttons clearfix">
 	<a href="{{route('users.ad.add')}}" class="btn btn-secondary active btn-sm"><i class="fas fa-user-plus"></i> {{ __('Añadir usuario') }}</a>

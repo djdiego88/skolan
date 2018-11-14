@@ -1,5 +1,7 @@
 @extends('layouts.app')
 @section('title', 'Añadir Super Administrador')
+@section('breadcrumbs-seo', Breadcrumbs::view('breadcrumbs::json-ld', 'add-sa'))
+@section('breadcrumbs', Breadcrumbs::render('add-sa'))
 @section('content')
 {!! Form::open(['route' => 'users.sa.store', 'method' => 'POST', 'files' => true]); !!}
 	<div class="form-group required row">

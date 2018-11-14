@@ -10,6 +10,9 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+header('Access-Control-Allow-Origin:  *');
+header('Access-Control-Allow-Methods:  POST, GET, OPTIONS, PUT, DELETE');
+header('Access-Control-Allow-Headers:  Content-Type, X-Auth-Token, Origin, Authorization');
 
 //Auth::routes();
 
@@ -35,10 +38,11 @@ Route::middleware(['auth', 'enabled'])->group(function () {
         return view('dashboard');
     });
     //Options
-    Route::get('options', 'OptionsController@index')->name('options.index');
+    Route::view('options', 'layouts.options.index')->name('options');
+    Route::get('api/options/index', 'OptionsController@index')->name('options.index');
     Route::get('options/create', 'OptionsController@create')->name('options.create');
-    Route::post('options/create', 'OptionsController@store')->name('options.store');
-    Route::put('options', 'OptionsController@update')->name('options.update');
+    Route::post('api/options/create', 'OptionsController@store')->name('options.store');
+    Route::put('api/options/update', 'OptionsController@update')->name('options.update');
     //Users
     Route::prefix('users')->group(function () {
         Route::get('/', 'UsersController@index')->name('users.index');

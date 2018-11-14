@@ -29,7 +29,7 @@ class UpdateOptionRequest extends FormRequest
             'admin_email' => 'email|required',
             'items_per_page' => 'integer|min:1|max:70|required',
             'google_analytics_id' => 'max:30|alpha_dash',
-            'site_logo' => 'image|max:2048',
+            'site_logo' => 'mimes:jpeg,jpg,png|max:2048',
             'site_style' => 'min:1|max:40|string|required',
             'twitter_account' => 'max:16|alpha_dash',
             'facebook_url' => 'url',

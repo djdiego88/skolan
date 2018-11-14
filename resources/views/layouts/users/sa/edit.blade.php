@@ -5,6 +5,8 @@
 ?>
 @extends('layouts.app')
 @section('title', 'Editar Super Administrador')
+@section('breadcrumbs-seo', Breadcrumbs::view('breadcrumbs::json-ld', 'edit-sa', $user))
+@section('breadcrumbs', Breadcrumbs::render('edit-sa', $user))
 @section('content')
 <div class="user-buttons clearfix">
 	<a href="{{route('users.sa.add')}}" class="btn btn-secondary active btn-sm"><i class="fas fa-user-plus"></i> {{ __('Añadir usuario') }}</a>

@@ -99,7 +99,7 @@ class UsersController extends Controller
     {
         return view('layouts.users.index');
     }
-
+    
     public function indexSuperAdmin(Request $request)
     {
         $users = User::role('superadmin')->with(['usermeta' => function ($query) {
@@ -213,7 +213,7 @@ class UsersController extends Controller
 
     public function showSuperAdmin($id)
     {
-        if($id != "1"/* || Auth::id() == 1*/){
+        if($id != "1" || Auth::id() == 1){
             $user = User::with(['usermeta' => function ($query) {
                         $query->where('name', '=', 'display_name');
                     }])->find($id);
@@ -228,7 +228,7 @@ class UsersController extends Controller
 
     public function editSuperAdmin($id)
     {
-        if($id != "1"/* || Auth::id() == 1*/){
+        if($id != "1" || Auth::id() == 1){
             $user = User::with(['usermeta' => function ($query) {
                         $query->where('name', '=', 'display_name');
                     }])->find($id);
