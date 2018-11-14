@@ -9,8 +9,8 @@
 @import '~bootstrap/scss/bootstrap';
 
 // Coreui
-//@import '~@coreui/coreui/scss/coreui-standalone';
-@import '~@coreui/coreui/scss/coreui';
+@import '~@coreui/coreui/scss/coreui-standalone';
+//@import '~@coreui/coreui/scss/coreui';
 
 // Estilos globales
 @import "global";
@@ -19,8 +19,3 @@
 @import "components/forms";
 // Estilos de layouts
 // Estilos de secciones
-
-/*.navbar-laravel {
-  background-color: #fff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
-}*/
