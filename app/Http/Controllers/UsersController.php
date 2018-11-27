@@ -26,7 +26,7 @@ class UsersController extends Controller
 
         $this->pagination = Option::where('name', 'items_per_page')->first();
 
-        $countryjson = 'https://cdn.rawgit.com/umpirsky/country-list/master/data/es_CO/country.json';
+        $countryjson = 'https://cdn.jsdelivr.net/gh/umpirsky/country-list/data/es_CO/country.json';
         $json = file_get_contents($countryjson);
         $this->countries = json_decode($json, TRUE);
 
@@ -99,22 +99,37 @@ class UsersController extends Controller
     {
         return view('layouts.users.index');
     }
+    public function countriesArray()
+    {
+        $callback = function($key, $value) {
+            return ['value'=> $key, 'label'=> $value];
+        };
+        return array_map($callback, array_keys($this->countries), $this->countries);
+    }
     
     public function indexSuperAdmin(Request $request)
     {
-        $users = User::role('superadmin')->with(['usermeta' => function ($query) {
-                        $query->where('name', '=', 'display_name');
-                    }])->searchByName($request->name)->orderBy('users.id','DESC')->paginate($this->pagination->value);
-                    //dd($users);
-        return view('layouts.users.sa.index')
-            ->with('users',$users);
+        if (!$request->ajax()) {
+            abort(403, 'Unauthorized action.');
+        }
+        $query = User::role('superadmin')->with(['usermeta' => function ($query1) {
+                        $query1->where('name', '=', 'display_name');
+                    }]);
+        if($request->search) {
+            $query->searchByName($request->search);
+        }
+        $users = $query->orderBy($request->input('orderBy.column'), $request->input('orderBy.direction'))
+                    ->paginate($request->input('pagination.per_page'));
+        return response()->json(['users' => $users], 200);
     }
 
     public function massChangesSuperAdmin(Request $request)
     {
-        if(isset($request->users)){
+        if (!$request->ajax()) {
+            abort(403, 'Unauthorized action.');
+        }
+        if(!empty($request->users)){
             $usersids = $request->users;
-            //dd($usersids);
             if($request->status != ""){
                 foreach ($usersids as $userid) {
                     if($userid != "1"){
@@ -122,12 +137,10 @@ class UsersController extends Controller
                         $user->status = $request->status;
                         $user->save();
                     }else{
-                        Flash::error('No tienes los permisos suficientes para actualizar el estado de este usuario');
-                        return redirect()->route('users.sa.index');
+                        return response()->json(['message' => 'No tienes los permisos suficientes para actualizar el estado de este usuario'], 200);
                     }
                 }
-                Flash::success('Se ha actualizado el estado de los usuarios seleccionados');
-                return redirect()->route('users.sa.index');
+                return response()->json(['message' => 'Se ha actualizado el estado de los usuarios seleccionados'], 200);
             }elseif($request->action != ""){
                 if($request->action == 'delete'){
                     foreach ($usersids as $userid) {
@@ -135,59 +148,61 @@ class UsersController extends Controller
                             $user = User::find(intval($userid));
                             $user->delete();
                         }else{
-                            Flash::error('No tienes los permisos suficientes para eliminar este usuario');
-                            Flash::important();
-                            return redirect()->route('users.sa.index');
+                            return response()->json(['message' => 'No tienes los permisos suficientes para eliminar este usuario'], 200);
                         }
                     }
-                    Flash::success('Se han eliminado los usuarios seleccionados');
-                    return redirect()->route('users.sa.index');
+                    return response()->json(['message' => 'Se han eliminado los usuarios seleccionados'], 200);
                 }
             }
         }else {
-            Flash::error('Debes seleccionar al menos un usuario para realizar esta acción');
-            return redirect()->route('users.sa.index');
+            return response()->json(['message' => 'Debes seleccionar al menos un usuario para realizar esta acción'], 200);
         }
-        return redirect()->route('users.sa.index');
+        return response()->json($request->all(), 200);
     }
 
     public function createSuperAdmin()
     {
+        $countries = $this->countriesArray();
         return view('layouts.users.sa.add')
-            ->with('countries', $this->countries);
+            ->with('countries', $countries);
     }
 
     public function storeSuperAdmin(CreateUserSARequest $request)
     {
+        if (!$request->ajax()) {
+            abort(403, 'Unauthorized action.');
+        }
         $user = new User();
         $user->it = $request->it;
         $user->nid = $request->nid;
         $user->first_name = $request->first_name;
         $user->last_name = $request->last_name;
-        $user->email = $request->email;
+        if ($request->filled('email')) {
+            $user->email = $request->email;
+        }
         $user->password = Hash::make($request->password);
         $user->birth_date = $request->birth_date;
         $user->gender = $request->gender;
         $user->phone_number = $request->phone_number;
-        $user->cellphone_number = $request->cellphone_number;
+        if ($request->filled('cellphone_number')) {
+            $user->cellphone_number = $request->cellphone_number;
+        }
         $user->nacionality = $request->nacionality;
         $user->location = $request->location;
         $user->address = $request->address;
         $user->status = $request->status;
         $user->last_access = date('Y-m-d H:i:s');
-        if($request->file('photo')){
+        if($request->hasFile('photo')){
             $file = $request->file('photo');
             $name=basename($file->getClientOriginalName(),'.'.$file->getClientOriginalExtension());
             $imgname = $name.'_'.time().'.'.$file->getClientOriginalExtension();
-            /*Storage::put(
-                'public/images/photos/'.$imgname,
-                file_get_contents($request->file('photo')->getRealPath())
-            );*/
-            Image::make($request->file('photo')->getRealPath())->fit(200, 266)->save('storage/images/photos/'.$imgname);
-            $user->photo = 'storage/images/photos/foto-diego-castillo_1464906245.jpg';
+            Image::make($request->file('photo')->getRealPath())->fit(200)->save('storage/images/photos/'.$imgname);
+            $user->photo = 'storage/images/photos/'.$imgname;
         }
         $user->save();
 
+        //$rolesNames = array_pluck(json_decode($request->roles), ['name']);
+        //$user->assignRole($rolesNames);
         $user->assignRole('superadmin');
 
         $display_name = $user->first_name . ' '. $user->last_name;
@@ -207,8 +222,7 @@ class UsersController extends Controller
         $displayname->value = $display_name;
         $displayname->save();
 
-        Flash::success('Se ha añadido el usuario '.$user->first_name.' '.$user->last_name.'.');
-        return redirect()->route('users.sa.index');
+        return response()->json(null, 200);
     }
 
     public function showSuperAdmin($id)
@@ -217,101 +231,122 @@ class UsersController extends Controller
             $user = User::with(['usermeta' => function ($query) {
                         $query->where('name', '=', 'display_name');
                     }])->find($id);
+            $user->load('roles');
             return view('layouts.users.sa.show')
             ->with('user', $user)
             ->with('countries', $this->countries);
         }else {
             Flash::error('No tienes los permisos suficientes para ver esta información.');
-            return redirect()->route('users.sa.index');
+            return redirect()->route('users.sa');
         }
     }
 
     public function editSuperAdmin($id)
     {
         if($id != "1" || Auth::id() == 1){
+            $countries = $this->countriesArray();
             $user = User::with(['usermeta' => function ($query) {
                         $query->where('name', '=', 'display_name');
                     }])->find($id);
+            $user->load('roles');
             return view('layouts.users.sa.edit')
             ->with('user', $user)
-            ->with('countries', $this->countries);
+            ->with('countries', $countries);
         }else {
             Flash::error('No tienes los permisos suficientes para editar a este usuario.');
-            return redirect()->route('users.sa.index');
+            return redirect()->route('users.sa');
         }
     }
 
     public function updateSuperAdmin(EditUserSARequest $request, $id)
     {
-        $user = User::find($id);
-        $user->it = $request->it;
-        $user->nid = $request->nid;
-        $user->first_name = $request->first_name;
-        $user->last_name = $request->last_name;
-        $user->email = $request->email;
-        if($request->password != ''){
-            $user->password = Hash::make($request->password);
+        if (!$request->ajax()) {
+            abort(403, 'Unauthorized action.');
         }
-        $user->birth_date = $request->birth_date;
-        $user->gender = $request->gender;
-        $user->phone_number = $request->phone_number;
-        $user->cellphone_number = $request->cellphone_number;
-        $user->nacionality = $request->nacionality;
-        $user->location = $request->location;
-        $user->address = $request->address;
-        $user->status = $request->status;
-        $user->last_access = date('Y-m-d H:i:s');
-        if($request->file('photo')){
+        $user = User::find($id);
+        if($user->it != $request->it) $user->it = $request->it;
+        if($user->nid != $request->nid) $user->nid = $request->nid;
+        if($user->first_name != $request->first_name) $user->first_name = $request->first_name;
+        if($user->last_name != $request->last_name) $user->last_name = $request->last_name;
+        if($request->filled('email') && $user->email != $request->email) $user->email = $request->email;
+        if($request->filled('password') && $user->password != Hash::make($request->password)) $user->password = Hash::make($request->password);
+        if($user->birth_date != $request->birth_date) $user->birth_date = $request->birth_date;
+        if($user->gender != $request->gender) $user->gender = $request->gender;
+        if($user->phone_number != $request->phone_number) $user->phone_number = $request->phone_number;
+        if ($request->filled('cellphone_number') && $user->cellphone_number != $request->cellphone_number) $user->cellphone_number = $request->cellphone_number;
+        if($user->nacionality != $request->nacionality) $user->nacionality = $request->nacionality;
+        if($user->location != $request->location) $user->location = $request->location;
+        if($user->address != $request->address) $user->address = $request->address;
+        if($user->status != $request->status) $user->status = $request->status;
+        if($request->hasFile('photo')){
             $file = $request->file('photo');
             $name=basename($file->getClientOriginalName(),'.'.$file->getClientOriginalExtension());
             $imgname = $name.'_'.time().'.'.$file->getClientOriginalExtension();
-            /*Storage::put(
-                'public/images/photos/'.$imgname,
-                file_get_contents($request->file('photo')->getRealPath())
-            );*/
             Image::make($request->file('photo')->getRealPath())->fit(200, 266)->save('storage/images/photos/'.$imgname);
             $user->photo = 'storage/images/photos/'.$imgname;
         }
         $user->save();
 
-        $display_name = $user->first_name . ' '. $user->last_name;
-        $display_name = explode(" ",$display_name);
-        $countnames = count($display_name);
-        if($countnames == 1){
-            $display_name = $display_name[0];
-        }elseif($countnames == 2){
-            $display_name = $display_name[0].' '.$display_name[1];
-        }elseif($countnames == 3 || $countnames == 4){
-            $display_name = $display_name[0].' '.$display_name[2];
+        if($request->filled('roles')){
+            $rolesNames = array_pluck(json_decode($request->roles), ['name']);
+            $user->syncRoles($rolesNames);
+        }
+        if($user->first_name != $request->first_name || $user->last_name != $request->last_name){
+            $display_name = $user->first_name . ' '. $user->last_name;
+            $display_name = explode(" ",$display_name);
+            $countnames = count($display_name);
+            if($countnames == 1){
+                $display_name = $display_name[0];
+            }elseif($countnames == 2){
+                $display_name = $display_name[0].' '.$display_name[1];
+            }elseif($countnames == 3 || $countnames == 4){
+                $display_name = $display_name[0].' '.$display_name[2];
+            }
+
+            $displayname = Usermeta::where('user_id', $user->id)->where('name', 'display_name')->first();
+            $displayname->value = $display_name;
+            $displayname->save();
         }
 
-        $displayname = Usermeta::where('user_id', $user->id)->where('name', 'display_name')->first();
-        $displayname->value = $display_name;
-        $displayname->save();
-
-        Flash::success('Se ha actualizado el usuario '.$user->first_name.' '.$user->last_name.'.');
-        return redirect()->route('users.sa.show', $user->id);
+        //Flash::success('Se ha actualizado el usuario '.$user->first_name.' '.$user->last_name.'.');
+        //return redirect()->route('users.sa.show', $user->id);
+        return response()->json(null, 200);
     }
 
-    public function destroySuperAdmin($id)
+    public function destroySuperAdmin(Request $request, $id)
     {
-        $user = User::find($id);
-        Flash::success('Se ha eliminado al usuario '.$user->first_name.' '.$user->last_name);
+        if (!$request->ajax()) {
+            abort(403, 'Unauthorized action.');
+        }
+        $user = User::find(intval($id));
+        $name = $user->first_name.' '.$user->last_name;
         $user->delete();
-        return redirect()->route('users.sa.index');
+        return response()->json(['message' => 'Se ha eliminado al usuario '.$name], 200);
     }
 
     public function indexAdministrative(Request $request)
     {
-        $users = User::role('administrative')->with(['usermeta' => function ($query) {
+        /*$users = User::role('administrative')->with(['usermeta' => function ($query) {
                         $query->where('name', '=', 'display_name');
                     }])->searchByName($request->name)->orderBy('users.id','DESC')->paginate($this->pagination->value);
         return view('layouts.users.ad.index')
-            ->with('users',$users);
+            ->with('users',$users);*/
+        if (!$request->ajax()) {
+            abort(403, 'Unauthorized action.');
+        }
+        $query = User::role('administrative')->with(['usermeta' => function ($query1) {
+                        $query1->where('name', '=', 'display_name');
+                    }]);
+        if($request->search) {
+            $query->searchByName($request->search);
+        }
+        $users = $query->orderBy($request->input('orderBy.column'), $request->input('orderBy.direction'))
+                    ->paginate($request->input('pagination.per_page'));
+        return response()->json(['users' => $users], 200);
     }
     public function massChangesAdministrative(Request $request)
     {
-        if(isset($request->users)){
+        /*if(isset($request->users)){
             $usersids = $request->users;
             if($request->status != ""){
                 foreach ($usersids as $userid) {
@@ -335,18 +370,54 @@ class UsersController extends Controller
             Flash::error('Debes seleccionar al menos un usuario para realizar esta acción');
             return redirect()->route('users.ad.index');
         }
-        return redirect()->route('users.ad.index');
+        return redirect()->route('users.ad.index');*/
+        if (!$request->ajax()) {
+            abort(403, 'Unauthorized action.');
+        }
+        if(!empty($request->users)){
+            $usersids = $request->users;
+            if($request->status != ""){
+                foreach ($usersids as $userid) {
+                    if($userid != "1"){
+                        $user = User::find(intval($userid));
+                        $user->status = $request->status;
+                        $user->save();
+                    }else{
+                        return response()->json(['message' => 'No tienes los permisos suficientes para actualizar el estado de este usuario'], 200);
+                    }
+                }
+                return response()->json(['message' => 'Se ha actualizado el estado de los usuarios seleccionados'], 200);
+            }elseif($request->action != ""){
+                if($request->action == 'delete'){
+                    foreach ($usersids as $userid) {
+                        if($userid != "1"){
+                            $user = User::find(intval($userid));
+                            $user->delete();
+                        }else{
+                            return response()->json(['message' => 'No tienes los permisos suficientes para eliminar este usuario'], 200);
+                        }
+                    }
+                    return response()->json(['message' => 'Se han eliminado los usuarios seleccionados'], 200);
+                }
+            }
+        }else {
+            return response()->json(['message' => 'Debes seleccionar al menos un usuario para realizar esta acción'], 200);
+        }
+        return response()->json($request->all(), 200);
     }
 
     public function createAdministrative()
     {
+        /*return view('layouts.users.ad.add')
+            ->with('countries', $this->countries);*/
+        $countries = $this->countriesArray();
         return view('layouts.users.ad.add')
-            ->with('countries', $this->countries);
+            ->with('countries', $countries);
     }
 
     public function storeAdministrative(CreateUserADRequest $request)
     {
-        $user = new User();
+        /*$user = new User();
         $user->it = $request->it;
         $user->nid = $request->nid;
         $user->first_name = $request->first_name;
@@ -366,10 +437,6 @@ class UsersController extends Controller
             $file = $request->file('photo');
             $name=basename($file->getClientOriginalName(),'.'.$file->getClientOriginalExtension());
             $imgname = $name.'_'.time().'.'.$file->getClientOriginalExtension();
-            /*Storage::put(
-                'public/images/photos/'.$imgname,
-                file_get_contents($request->file('photo')->getRealPath())
-            );*/
             Image::make($request->file('photo')->getRealPath())->fit(200, 266)->save('storage/images/photos/'.$imgname);
             $user->photo = 'storage/images/photos/'.$imgname;
         }
@@ -395,32 +462,111 @@ class UsersController extends Controller
         $displayname->save();
 
         Flash::success('Se ha añadido el usuario '.$user->first_name.' '.$user->last_name.'.');
-        return redirect()->route('users.ad.index');
+        return redirect()->route('users.ad.index');*/
+        if (!$request->ajax()) {
+            abort(403, 'Unauthorized action.');
+        }
+        $user = new User();
+        $user->it = $request->it;
+        $user->nid = $request->nid;
+        $user->first_name = $request->first_name;
+        $user->last_name = $request->last_name;
+        if ($request->filled('email')) {
+            $user->email = $request->email;
+        }
+        $user->password = Hash::make($request->password);
+        $user->birth_date = $request->birth_date;
+        $user->gender = $request->gender;
+        $user->phone_number = $request->phone_number;
+        if ($request->filled('cellphone_number')) {
+            $user->cellphone_number = $request->cellphone_number;
+        }
+        $user->nacionality = $request->nacionality;
+        $user->location = $request->location;
+        $user->address = $request->address;
+        $user->status = $request->status;
+        $user->last_access = date('Y-m-d H:i:s');
+        if($request->hasFile('photo')){
+            $file = $request->file('photo');
+            $name=basename($file->getClientOriginalName(),'.'.$file->getClientOriginalExtension());
+            $imgname = $name.'_'.time().'.'.$file->getClientOriginalExtension();
+            Image::make($request->file('photo')->getRealPath())->fit(200)->save('storage/images/photos/'.$imgname);
+            $user->photo = 'storage/images/photos/'.$imgname;
+        }
+        $user->save();
+
+        //$rolesNames = array_pluck(json_decode($request->roles), ['name']);
+        //$user->assignRole($rolesNames);
+        $user->assignRole('administrative');
+
+        $display_name = $user->first_name . ' '. $user->last_name;
+        $display_name = explode(" ",$display_name);
+        $countnames = count($display_name);
+        if($countnames == 1){
+            $display_name = $display_name[0];
+        }elseif($countnames == 2){
+            $display_name = $display_name[0].' '.$display_name[1];
+        }elseif($countnames == 3 || $countnames == 4){
+            $display_name = $display_name[0].' '.$display_name[2];
+        }
+
+        $displayname = new Usermeta();
+        $displayname->user_id = $user->id;
+        $displayname->name = 'display_name';
+        $displayname->value = $display_name;
+        $displayname->save();
+
+        return response()->json(null, 200);
     }
 
     public function showAdministrative($id)
     {
-        $user = User::with(['usermeta' => function ($query) {
+        /*$user = User::with(['usermeta' => function ($query) {
                     $query->where('name', '=', 'display_name');
                 }])->find($id);
         return view('layouts.users.ad.show')
         ->with('user', $user)
-        ->with('countries', $this->countries);
+        ->with('countries', $this->countries);*/
+        if($id != "1" || Auth::id() == 1){
+            $user = User::with(['usermeta' => function ($query) {
+                        $query->where('name', '=', 'display_name');
+                    }])->find($id);
+            $user->load('roles');
+            return view('layouts.users.ad.show')
+            ->with('user', $user)
+            ->with('countries', $this->countries);
+        }else {
+            Flash::error('No tienes los permisos suficientes para ver esta información.');
+            return redirect()->route('users.ad.index');
+        }
     }
 
     public function editAdministrative($id)
     {
-        $user = User::with(['usermeta' => function ($query) {
+        /*$user = User::with(['usermeta' => function ($query) {
                     $query->where('name', '=', 'display_name');
                 }])->find($id);
         return view('layouts.users.ad.edit')
         ->with('user', $user)
-        ->with('countries', $this->countries);
+        ->with('countries', $this->countries);*/
+        if($id != "1" || Auth::id() == 1){
+            $countries = $this->countriesArray();
+            $user = User::with(['usermeta' => function ($query) {
+                        $query->where('name', '=', 'display_name');
+                    }])->find($id);
+            $user->load('roles');
+            return view('layouts.users.ad.edit')
+            ->with('user', $user)
+            ->with('countries', $countries);
+        }else {
+            Flash::error('No tienes los permisos suficientes para editar a este usuario.');
+            return redirect()->route('users.ad.index');
+        }
     }
 
     public function updateAdministrative(EditUserADRequest $request, $id)
     {
-        $user = User::find($id);
+        /*$user = User::find($id);
         $user->it = $request->it;
         $user->nid = $request->nid;
         $user->first_name = $request->first_name;
@@ -463,15 +609,71 @@ class UsersController extends Controller
         $displayname->save();
 
         Flash::success('Se ha actualizado el usuario '.$user->first_name.' '.$user->last_name.'.');
-        return redirect()->route('users.ad.show', $user->id);
+        return redirect()->route('users.ad.show', $user->id);*/
+        if (!$request->ajax()) {
+            abort(403, 'Unauthorized action.');
+        }
+        $user = User::find($id);
+        if($user->it != $request->it) $user->it = $request->it;
+        if($user->nid != $request->nid) $user->nid = $request->nid;
+        if($user->first_name != $request->first_name) $user->first_name = $request->first_name;
+        if($user->last_name != $request->last_name) $user->last_name = $request->last_name;
+        if($request->filled('email') && $user->email != $request->email) $user->email = $request->email;
+        if($request->filled('password') && $user->password != Hash::make($request->password)) $user->password = Hash::make($request->password);
+        if($user->birth_date != $request->birth_date) $user->birth_date = $request->birth_date;
+        if($user->gender != $request->gender) $user->gender = $request->gender;
+        if($user->phone_number != $request->phone_number) $user->phone_number = $request->phone_number;
+        if ($request->filled('cellphone_number') && $user->cellphone_number != $request->cellphone_number) $user->cellphone_number = $request->cellphone_number;
+        if($user->nacionality != $request->nacionality) $user->nacionality = $request->nacionality;
+        if($user->location != $request->location) $user->location = $request->location;
+        if($user->address != $request->address) $user->address = $request->address;
+        if($user->status != $request->status) $user->status = $request->status;
+        if($request->hasFile('photo')){
+            $file = $request->file('photo');
+            $name=basename($file->getClientOriginalName(),'.'.$file->getClientOriginalExtension());
+            $imgname = $name.'_'.time().'.'.$file->getClientOriginalExtension();
+            Image::make($request->file('photo')->getRealPath())->fit(200, 266)->save('storage/images/photos/'.$imgname);
+            $user->photo = 'storage/images/photos/'.$imgname;
+        }
+        $user->save();
+        if($request->filled('roles')) {
+            $rolesNames = array_pluck(json_decode($request->roles), ['name']);
+            $user->syncRoles($rolesNames);
+        }
+        
+        if($user->first_name != $request->first_name || $user->last_name != $request->last_name){
+            $display_name = $user->first_name . ' '. $user->last_name;
+            $display_name = explode(" ",$display_name);
+            $countnames = count($display_name);
+            if($countnames == 1){
+                $display_name = $display_name[0];
+            }elseif($countnames == 2){
+                $display_name = $display_name[0].' '.$display_name[1];
+            }elseif($countnames == 3 || $countnames == 4){
+                $display_name = $display_name[0].' '.$display_name[2];
+            }
+
+            $displayname = Usermeta::where('user_id', $user->id)->where('name', 'display_name')->first();
+            $displayname->value = $display_name;
+            $displayname->save();
+        }
+
+        return response()->json(null, 200);
     }
 
-    public function destroyAdministrative($id)
+    public function destroyAdministrative(Request $request, $id)
     {
-        $user = User::find($id);
+        /*$user = User::find($id);
         Flash::success('Se ha eliminado al usuario '.$user->first_name.' '.$user->last_name);
         $user->delete();
-        return redirect()->route('users.ad.index');
+        return redirect()->route('users.ad.index');*/
+        if (!$request->ajax()) {
+            abort(403, 'Unauthorized action.');
+        }
+        $user = User::find(intval($id));
+        $name = $user->first_name.' '.$user->last_name;
+        $user->delete();
+        return response()->json(['message' => 'Se ha eliminado al usuario '.$name], 200);
     }
 
     public function indexCoordinator(Request $request)

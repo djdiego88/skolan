@@ -20,6 +20,7 @@ class CreateSchooltermsTable extends Migration
             $table->dateTime('start_date');
             $table->dateTime('end_date');
             $table->string('status',20);
+            $table->string('qualifications_blocked',20);
             $table->foreign('year_id')->references('id')->on('years')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
         });

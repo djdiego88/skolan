@@ -11,7 +11,7 @@ class Year extends Model
 
     protected $table = 'years';
 
-    protected $fillable = ['value', 'status'];
+    protected $fillable = ['name', 'status', 'start_date', 'end_date'];
 
     protected static $logFillable = true;
 

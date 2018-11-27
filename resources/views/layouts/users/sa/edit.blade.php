@@ -1,14 +1,10 @@
-<?php
-	foreach($user->usermeta as $displayname){
-		$name = $displayname->value;
-	}
-?>
 @extends('layouts.app')
 @section('title', 'Editar Super Administrador')
 @section('breadcrumbs-seo', Breadcrumbs::view('breadcrumbs::json-ld', 'edit-sa', $user))
 @section('breadcrumbs', Breadcrumbs::render('edit-sa', $user))
 @section('content')
-<div class="user-buttons clearfix">
+	<sa-edit :user-info="{{ json_encode($user) }}" :countries="{{ json_encode($countries) }}"></sa-edit>
+{{--<div class="user-buttons clearfix">
 	<a href="{{route('users.sa.add')}}" class="btn btn-secondary active btn-sm"><i class="fas fa-user-plus"></i> {{ __('Añadir usuario') }}</a>
 </div>
 {!! Form::open(['route' => ['users.sa.update', $user], 'method' => 'PUT', 'files' => true]); !!}
@@ -110,40 +106,17 @@
 			{!! Form::select('status',['enabled'=>'Habilitado', 'disabled'=>'Inhabilitado'],$user->status,['class'=>'form-control form-control-sm', 'placeholder'=>'Estado', 'required']); !!}
 		</div>
 	</div>
+	<div class="form-group required row">
+		{!! Form::label('roles','Roles:',['class'=>'col-sm-3 col-md-2 col-form-label']); !!}
+		<div class="col-sm-5 col-md-2">
+			{!! Form::select('roles',['superadmin'=>'Super Admin', 'admin'=>'Admin'],null,['class'=>'form-control form-control-sm', 'placeholder'=>'Roles', 'required']); !!}
+		</div>
+	</div>
 	<div class="form-group">
 		{!! Form::submit('Actualizar usuario',['class'=>'btn btn-primary btn-sm']); !!}
 		<a href="{{route('users.sa.destroy', $user->id)}}" onclick="return confirm('¿Deseas eliminar a {{$name}}?');" class="btn btn-secondary active btn-sm"><i class="fa fa-times" aria-hidden="true"></i> Eliminar a {{$name}}</a>
 	</div>
 {!! Form::close(); !!}
+--}}
 @endsection
-@section('css')
-<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-@endsection
-@section('js')
-<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
-<script>
-	$(function() {
-		var today = new Date();
-		var dd = today.getDate();
-		var mm = today.getMonth();
-		var yyyy = today.getFullYear();
 
-		$( "#datepicker" ).datepicker({
-			maxDate: new Date(yyyy, mm, dd),
-			dateFormat: "yy-mm-dd",
-			monthNames: [ "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre" ],
-			monthNamesShort: [ "Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic" ],
-			closeText: "Cerrar",
-			nextText: "Siguiente",
-			prevText: "Anterior",
-			currentText: "Ahora",
-			dayNames: [ "Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado" ],
-			dayNamesMin: [ "Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sá" ],
-			dayNamesShort: [ "Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb" ],
-			weekHeader: "Sm",
-			changeMonth: true,
-      		changeYear: true
-		});
-	});
-</script>
-@endsection

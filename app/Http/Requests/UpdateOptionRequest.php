@@ -36,6 +36,16 @@ class UpdateOptionRequest extends FormRequest
             'google_url' => 'url',
             'instagram_account' => 'max:30|alpha_dash',
             'youtube_url' => 'url',
+            'nit' => 'min:3|max:30|string',
+            'telephone' => 'min:7|max:12|string',
+            'state' => 'min:3|max:80|string|required',
+            'city' => 'min:3|max:80|string|required',
+            'principal' => 'min:4|max:150|string',
+            'secretary' => 'min:4|max:150|string',
+            'min_qualification' => 'integer|min:1|max:100|required',
+            'max_qualification' => 'integer|min:1|max:100|required',
+            'min_qualification_pass' => 'numeric|min:1|max:100|required',
+            'decimal_positions' => 'numeric|min:0|max:5|required',
         ];
     }
 }

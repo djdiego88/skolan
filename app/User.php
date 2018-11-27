@@ -55,9 +55,6 @@ class User extends Authenticatable
     public function classroom() {
         return $this->hasOne('App\Classroom');
     }
-    public function watchdog() {
-        return $this->hasMany('App\Watchdog');
-    }
     public function scopeSearchByName($query,$name){
         return $query->join('usermeta', function ($join) {
                         $join->on('users.id', '=', 'usermeta.user_id')

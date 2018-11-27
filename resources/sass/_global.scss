@@ -1,11 +1,47 @@
 /*
  * Estilos Generales
  */
-
-/*body {
-	padding-top: 50px;
+/**
+ * Breadcrumbs
+ */
+.breadcrumb {
+    background-color: transparent;
+    border-radius: 0;
 }
-h1.page-header {
-	font-size: 1.5rem;
-	font-weight: 400;
-}*/
+.breadcrumb-menu {
+    & .btn-outline-success, 
+    & .btn-outline-primary,
+    & .btn-outline-secondary,
+    & .btn-outline-danger,
+    & .btn-outline-warning,
+    & .btn-outline-info,
+    & .btn-outline-light,
+    & .btn-outline-dark {
+        border: 1px solid transparent;
+        border-color: inherit;
+        padding: 0 0.55rem;
+    }
+    .btn-primary {
+        padding: 0 0.55rem;
+    }
+    .btn {
+        color: $white;
+    }
+    .btn-link {
+        color: $gray-600;
+    }
+}
+
+/**
+ * Multiselect
+ */
+
+.multiselect {
+    .multiselect__tags {
+        border-color: $gray-400 !important;
+        .multiselect__placeholder {
+            margin-bottom: 0 !important;
+            padding-top: 0 !important;
+        }
+    }
+}

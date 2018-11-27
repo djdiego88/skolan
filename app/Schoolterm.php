@@ -11,7 +11,7 @@ class Schoolterm extends Model
 
     protected $table = 'schoolterms';
 
-    protected $fillable = ['year_id', 'name', 'start_date', 'end_date', 'status'];
+    protected $fillable = ['year_id', 'name', 'start_date', 'end_date', 'status', 'qualifications_blocked'];
 
     protected static $logFillable = true;
 

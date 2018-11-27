@@ -1,25 +1,37 @@
-
-// Body
-$body-bg: #e4e5e6;
-
-// Typography
-//$font-family-sans-serif: "Lato", sans-serif;
-$font-family-sans-serif: 'Roboto', sans-serif;;
-$font-size-base: 0.9rem;//0.875rem;
-$line-height-base: 1.6;
-$headings-font-weight: 500;
-
 // Colors
-$blue: #3490dc;
+$white:    #fff !default;
+$gray-100: #f8f9fa !default;
+$gray-200: #e9ecef !default;
+$gray-300: #dee2e6 !default;
+$gray-400: #ced4da !default;
+$gray-500: #adb5bd !default;
+$gray-600: #6c757d !default;
+$gray-700: #495057 !default;
+$gray-800: #343a40 !default;
+$gray-900: #212529 !default;
+$black:    #000 !default;
+
+$blue: #20a8d8;
 $indigo: #6574cd;
 $purple: #9561e2;
 $pink: #f66D9b;
 $red: #e3342f;
 $orange: #f6993f;
-$yellow: #ffed4a;
+$yellow: #ffc107;
 $green: #38c172;
 $teal: #4dc0b5;
 $cyan: #6cb2eb;
+
+// Body
+$body-bg: $white;
+
+// Typography
+//$font-family-sans-serif: "Lato", sans-serif;
+$font-family-sans-serif: "Nunito", sans-serif;
+$font-size-base: 0.9rem;
+$line-height-base: 1.6;
+$input-placeholder-color: $gray-400;
+$headings-font-weight: 700;
 
 //Breadcrumbs
 $breadcrumb-bg: #fff;

@@ -12,6 +12,10 @@
 @import '~@coreui/coreui/scss/coreui-standalone';
 //@import '~@coreui/coreui/scss/coreui';
 
+// multiselect
+@import "~vue-multiselect/dist/vue-multiselect.min.css";
+
+
 // Estilos globales
 @import "global";
 // Estilos de componentes

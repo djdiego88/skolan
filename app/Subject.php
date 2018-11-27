@@ -23,4 +23,8 @@ class Subject extends Model
     public function schedules() {
         return $this->hasMany('App\Schedule');
     }
+    /*public function classrooms()
+    {
+        return $this->belongsToMany('App\Classroom')->withPivot('teacher_id', 'day', 'start_time', 'end_time')->withTimestamps();
+    }*/
 }

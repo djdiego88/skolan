@@ -16,6 +16,7 @@ class CreateStudentsTable extends Migration
         Schema::create('students', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('user_id')->unsigned();
+            $table->integer('classroom_id')->unsigned();
             $table->string('neighborhood')->nullable();
             $table->integer('socioeconomic_level')->nullable();
             $table->string('commune')->nullable();
@@ -24,6 +25,7 @@ class CreateStudentsTable extends Migration
             $table->longText('allergies')->nullable();
             $table->longText('diseases')->nullable();
             $table->foreign('user_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('classroom_id')->references('id')->on('classrooms')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
         });
     }

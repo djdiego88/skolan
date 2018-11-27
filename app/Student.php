@@ -11,7 +11,7 @@ class Student extends Model
 
     protected $table = 'students';
 
-    protected $fillable = ['user_id', 'neighborhood', 'socioeconomic_level', 'commune', 'health_care', 'blood_type', 'allergies', 'diseases'];
+    protected $fillable = ['user_id', 'classroom_id', 'neighborhood', 'socioeconomic_level', 'commune', 'health_care', 'blood_type', 'allergies', 'diseases'];
 
     protected static $logFillable = true;
 
@@ -40,5 +40,9 @@ class Student extends Model
     }
     public function preenrollments() {
         return $this->hasMany('App\Preenrollment');
+    }
+    public function classroom()
+    {
+        return $this->belongsTo('App\Classroom');
     }
 }

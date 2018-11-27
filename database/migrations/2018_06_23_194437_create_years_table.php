@@ -17,6 +17,8 @@ class CreateYearsTable extends Migration
             $table->increments('id');
             $table->integer('value')->length(4);
             $table->string('status',20);
+            $table->dateTime('start_date');
+            $table->dateTime('end_date');
             $table->timestamps();
         });
     }

@@ -20,7 +20,7 @@ Breadcrumbs::for('users', function ($trail) {
 // Inicio > Usuarios > Super Administradores
 Breadcrumbs::for('superadmins', function ($trail) {
     $trail->parent('users');
-    $trail->push(__('Super Administradores'), route('users.sa.index'));
+    $trail->push(__('Super Administradores'), route('users.sa'));
 });
 
 // Inicio > Usuarios > Super Administradores > Añadir Usuario
@@ -49,18 +49,18 @@ Breadcrumbs::for('admins', function ($trail) {
 
 // Inicio > Usuarios > Personal Administrativo > Añadir Usuario
 Breadcrumbs::for('add-ad', function ($trail) {
-    $trail->parent('superadmins');
+    $trail->parent('admins');
     $trail->push(__('Añadir Usuario'), route('users.ad.add'));
 });
 
 // Inicio > Usuarios > Personal Administrativo > <Usuario>
 Breadcrumbs::for('show-ad', function ($trail, $user) {
-    $trail->parent('superadmins');
+    $trail->parent('admins');
     $trail->push($user->first_name.' '.$user->last_name, route('users.ad.show', $user->id));
 });
 
 // Inicio > Usuarios > Personal Administrativo > Editar: <Usuario>
 Breadcrumbs::for('edit-ad', function ($trail, $user) {
-    $trail->parent('superadmins');
+    $trail->parent('admins');
     $trail->push('Editar: '.$user->first_name.' '.$user->last_name, route('users.ad.edit', $user->id));
 });

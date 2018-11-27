@@ -23,8 +23,11 @@ class OptionsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+        if (!$request->ajax()) {
+            abort(403, 'Unauthorized action.');
+        }
         $options = Option::all();
         //dd($options);
         $styles = [
@@ -34,10 +37,6 @@ class OptionsController extends Controller
             'style4'=>'Estilo 4'
         ];
         return ['options'=> $options, 'styles' => $styles];
-
-    /*return view('layouts.options.index')
-            ->with('options', $options)
-            ->with('styles', $styles);*/
     }
 
     /**
@@ -73,6 +72,9 @@ class OptionsController extends Controller
      */
     public function update(UpdateOptionRequest $request)
     {   
+        if (!$request->ajax()) {
+            abort(403, 'Unauthorized action.');
+        }
         $data = $request->all();
         foreach ($data as $name => $valor) {
             if($name != '_method' && $name != '_token' && $name != 'site_logo'){

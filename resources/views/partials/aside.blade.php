@@ -20,7 +20,7 @@
 					</li>
 					@hasrole('superadmin')
 					<li class="nav-item">
-						<a class="nav-link" href="{{route('users.sa.index')}}">{{ __('Super Administradores') }}</a>
+						<a class="nav-link" href="{{route('users.sa')}}">{{ __('Super Administradores') }}</a>
 					</li>
 					@endhasrole
 					@hasanyrole('superadmin|administrative')
