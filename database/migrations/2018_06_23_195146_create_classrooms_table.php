@@ -28,6 +28,7 @@ class CreateClassroomsTable extends Migration
             $table->foreign('director_id')->references('id')->on('teachers')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('grade_id')->references('id')->on('grades')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
+            $table->index('name');
         });
     }
 

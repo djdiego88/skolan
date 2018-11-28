@@ -1,6 +1,7 @@
 <?php
 
 use Faker\Generator as Faker;
+use Illuminate\Support\Facades\Hash;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,10 +15,29 @@ use Faker\Generator as Faker;
 */
 
 $factory->define(App\User::class, function (Faker $faker) {
+    $its = ['RC','TI','CC','CE','PB' ,'NI'];
+    $genders = ['male', 'female'];
+    $gender = $faker->randomElement($genders);
+    $genderabbr = ($gender === 'male') ? 'm' : 'f';
+    $statuses = ['enabled', 'disabled'];
     return [
-        'name' => $faker->name,
-        'email' => $faker->unique()->safeEmail,
-        'password' => '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', // secret
-        'remember_token' => str_random(10),
+        'it' => $faker->randomElement($its),
+        'nid' => $faker->unique()->numerify('##########'),
+        'first_name' => $faker->firstName($gender),
+        'last_name' => $faker->lastName,
+        'email' => $faker->optional($weight = 0.7)->safeEmail,
+        'password' => Hash::make($faker->password), // secret
+        'birth_date' => $faker->date('Y-m-d'),
+        'gender' => $genderabbr,
+        'phone_number' => $faker->e164PhoneNumber,
+        'cellphone_number' => $faker->optional($weight = 0.7)->e164PhoneNumber,
+        'nacionality' => 'CO',
+        'location' => 'Bogotá D.C.',
+        'address' => $faker->address,
+        'photo' => $faker->optional($weight = 0.7)->image('public/storage/images/photos',200,200, 'people', false),
+        //->imageUrl(200, 200, 'people'),
+        'status' => $faker->randomElement($statuses),
+        'last_access' => $faker->dateTimeThisMonth(),
+        'remember_token' => str_random(15),
     ];
 });

@@ -33,7 +33,7 @@
                         <div class="tab-content border-left-0 border-bottom-0 border-right-0">
                             <div class="tab-pane fade show active" id="general" role="tabpanel">
                                 <div class="form-group" v-for="option in options" :key="option.id">
-                                    <div class="row" v-if="option.name == 'site_name'">
+                                    <div class="row required" v-if="option.name == 'site_name'">
                                         <label :for="option.name" class="col-sm-3 col-form-label">{{option.display_name}}</label>
                                         <div class="col-sm-9">
                                             <input type="text" :name="option.name" :id="option.name" v-model="site_name" class="form-control" :class="{'is-invalid': errors.site_name}" required>
@@ -41,7 +41,7 @@
                                             <div class="invalid-feedback" v-if="errors.site_name">{{errors.site_name[0]}}</div>
                                         </div>
                                     </div>
-                                    <div class="row" v-if="option.name == 'site_description'">
+                                    <div class="row required" v-if="option.name == 'site_description'">
                                         <label :for="option.name" class="col-sm-3 col-form-label">{{option.display_name}}</label>
                                         <div class="col-sm-9">
                                             <textarea class="form-control" :class="{'is-invalid': errors.site_description}" :name="option.name" :id="option.name" v-model="site_description" rows="4" required></textarea>
@@ -57,7 +57,7 @@
                                             <div class="invalid-feedback" v-if="errors.nit">{{errors.nit[0]}}</div>
                                         </div>
                                     </div>
-                                    <div class="row" v-if="option.name == 'admin_email'">
+                                    <div class="row required" v-if="option.name == 'admin_email'">
                                         <label :for="option.name" class="col-sm-3 col-form-label">{{option.display_name}}</label>
                                         <div class="col-sm-9">
                                             <input type="email" :name="option.name" :id="option.name" v-model="admin_email" class="form-control" :class="{'is-invalid': errors.admin_email}" required>
@@ -73,7 +73,7 @@
                                             <div class="invalid-feedback" v-if="errors.telephone">{{errors.telephone[0]}}</div>
                                         </div>
                                     </div>
-                                    <div class="row" v-if="option.name == 'state'">
+                                    <div class="row required" v-if="option.name == 'state'">
                                         <label :for="option.name" class="col-sm-3 col-form-label">{{option.display_name}}</label>
                                         <div class="col-sm-9">
                                             <input type="text" :name="option.name" :id="option.name" v-model="state" class="form-control" :class="{'is-invalid': errors.state}" required>
@@ -81,7 +81,7 @@
                                             <div class="invalid-feedback" v-if="errors.state">{{errors.state[0]}}</div>
                                         </div>
                                     </div>
-                                    <div class="row" v-if="option.name == 'city'">
+                                    <div class="row required" v-if="option.name == 'city'">
                                         <label :for="option.name" class="col-sm-3 col-form-label">{{option.display_name}}</label>
                                         <div class="col-sm-9">
                                             <input type="text" :name="option.name" :id="option.name" v-model="city" class="form-control" :class="{'is-invalid': errors.city}" required>
@@ -118,7 +118,7 @@
                                             <div class="invalid-feedback" v-if="errors.site_logo">{{errors.site_logo[0]}}</div>
                                         </div>
                                     </div>
-                                    <div class="row" v-if="option.name == 'site_style'">
+                                    <div class="row required" v-if="option.name == 'site_style'">
                                         <label :for="option.name" class="col-sm-3 col-form-label">{{option.display_name}}</label>
                                         <div class="col-sm-9">
                                             <div class="row">
@@ -131,7 +131,7 @@
                                             <div class="invalid-feedback" v-if="errors.site_logo">{{errors.site_logo[0]}}</div>
                                         </div>
                                     </div>
-                                    <div class="row" v-if="option.name == 'items_per_page'">
+                                    <div class="row required" v-if="option.name == 'items_per_page'">
                                         <label :for="option.name" class="col-sm-3 col-form-label">{{option.display_name}}</label>
                                         <div class="col-sm-9">
                                             <input type="number" min="1" max="70" :name="option.name" :id="option.name" v-model="items_per_page" class="form-control" :class="{'is-invalid': errors.items_per_page}" required>
@@ -193,9 +193,9 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="tab-pane fade" id="social" role="tabpanel">
+                            <div class="tab-pane fade" id="academics" role="tabpanel">
                                 <div class="form-group" v-for="option in options" :key="option.id">
-                                    <div class="row" v-if="option.name == 'min_qualification'">
+                                    <div class="row required" v-if="option.name == 'min_qualification'">
                                         <label :for="option.name" class="col-sm-3 col-form-label">{{option.display_name}}</label>
                                         <div class="col-sm-9">
                                             <input type="number" min="1" max="100" :name="option.name" :id="option.name" v-model="min_qualification" class="form-control" :class="{'is-invalid': errors.min_qualification}" required>
@@ -203,7 +203,7 @@
                                             <div class="invalid-feedback" v-if="errors.min_qualification">{{errors.min_qualification[0]}}</div>
                                         </div>
                                     </div>
-                                    <div class="row" v-if="option.name == 'max_qualification'">
+                                    <div class="row required" v-if="option.name == 'max_qualification'">
                                         <label :for="option.name" class="col-sm-3 col-form-label">{{option.display_name}}</label>
                                         <div class="col-sm-9">
                                             <input type="number" min="1" max="100" :name="option.name" :id="option.name" v-model="max_qualification" class="form-control" :class="{'is-invalid': errors.max_qualification}" required>
@@ -211,7 +211,7 @@
                                             <div class="invalid-feedback" v-if="errors.max_qualification">{{errors.max_qualification[0]}}</div>
                                         </div>
                                     </div>
-                                    <div class="row" v-if="option.name == 'min_qualification_pass'">
+                                    <div class="row required" v-if="option.name == 'min_qualification_pass'">
                                         <label :for="option.name" class="col-sm-3 col-form-label">{{option.display_name}}</label>
                                         <div class="col-sm-9">
                                             <input type="number" min="1" max="100" :name="option.name" :id="option.name" v-model="min_qualification_pass" class="form-control" :class="{'is-invalid': errors.min_qualification_pass}" required>
@@ -219,7 +219,7 @@
                                             <div class="invalid-feedback" v-if="errors.min_qualification_pass">{{errors.min_qualification_pass[0]}}</div>
                                         </div>
                                     </div>
-                                    <div class="row" v-if="option.name == 'decimal_positions'">
+                                    <div class="row required" v-if="option.name == 'decimal_positions'">
                                         <label :for="option.name" class="col-sm-3 col-form-label">{{option.display_name}}</label>
                                         <div class="col-sm-9">
                                             <multiselect
@@ -316,7 +316,7 @@
                                 me.google_analytics_id = val.value;
                                 break;
                             case 'site_logo':
-                                me.site_logo_preview = val.value;
+                                me.site_logo_preview = '/storage/images/logo/'+val.value;
                                 break;
                             case 'site_style':
                                 me.site_style = val.value;

@@ -19,6 +19,7 @@ class CreateSubjectsTable extends Migration
             $table->string('name');
             $table->foreign('area_id')->references('id')->on('areas')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
+            $table->index('name');
         });
         Schema::create('classroom_subject', function (Blueprint $table) {
             $table->increments('id');

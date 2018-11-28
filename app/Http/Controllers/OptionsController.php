@@ -94,7 +94,7 @@ class OptionsController extends Controller
                 file_get_contents($request->file('site_logo')->getRealPath())
             );
             $logo = Option::where('name', 'site_logo')->get()->first();
-            $logo->value = 'storage/images/logo/'.$imgname;
+            $logo->value = /*'storage/images/logo/'.*/$imgname;
             $logo->save();
         }
     }

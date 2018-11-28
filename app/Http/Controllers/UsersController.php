@@ -133,7 +133,7 @@ class UsersController extends Controller
             if($request->status != ""){
                 foreach ($usersids as $userid) {
                     if($userid != "1"){
-                        $user = User::find(intval($userid));
+                        $user = User::role('superadmin')->find(intval($userid));
                         $user->status = $request->status;
                         $user->save();
                     }else{
@@ -145,7 +145,7 @@ class UsersController extends Controller
                 if($request->action == 'delete'){
                     foreach ($usersids as $userid) {
                         if($userid != "1"){
-                            $user = User::find(intval($userid));
+                            $user = User::role('superadmin')->find(intval($userid));
                             $user->delete();
                         }else{
                             return response()->json(['message' => 'No tienes los permisos suficientes para eliminar este usuario'], 200);
@@ -197,7 +197,7 @@ class UsersController extends Controller
             $name=basename($file->getClientOriginalName(),'.'.$file->getClientOriginalExtension());
             $imgname = $name.'_'.time().'.'.$file->getClientOriginalExtension();
             Image::make($request->file('photo')->getRealPath())->fit(200)->save('storage/images/photos/'.$imgname);
-            $user->photo = 'storage/images/photos/'.$imgname;
+            $user->photo = /*'storage/images/photos/'.*/$imgname;
         }
         $user->save();
 
@@ -228,7 +228,7 @@ class UsersController extends Controller
     public function showSuperAdmin($id)
     {
         if($id != "1" || Auth::id() == 1){
-            $user = User::with(['usermeta' => function ($query) {
+            $user = User::role('superadmin')->with(['usermeta' => function ($query) {
                         $query->where('name', '=', 'display_name');
                     }])->find($id);
             $user->load('roles');
@@ -245,7 +245,7 @@ class UsersController extends Controller
     {
         if($id != "1" || Auth::id() == 1){
             $countries = $this->countriesArray();
-            $user = User::with(['usermeta' => function ($query) {
+            $user = User::role('superadmin')->with(['usermeta' => function ($query) {
                         $query->where('name', '=', 'display_name');
                     }])->find($id);
             $user->load('roles');
@@ -263,7 +263,7 @@ class UsersController extends Controller
         if (!$request->ajax()) {
             abort(403, 'Unauthorized action.');
         }
-        $user = User::find($id);
+        $user = User::role('superadmin')->find($id);
         if($user->it != $request->it) $user->it = $request->it;
         if($user->nid != $request->nid) $user->nid = $request->nid;
         if($user->first_name != $request->first_name) $user->first_name = $request->first_name;
@@ -283,7 +283,7 @@ class UsersController extends Controller
             $name=basename($file->getClientOriginalName(),'.'.$file->getClientOriginalExtension());
             $imgname = $name.'_'.time().'.'.$file->getClientOriginalExtension();
             Image::make($request->file('photo')->getRealPath())->fit(200, 266)->save('storage/images/photos/'.$imgname);
-            $user->photo = 'storage/images/photos/'.$imgname;
+            $user->photo = /*'storage/images/photos/'.*/$imgname;
         }
         $user->save();
 
@@ -318,7 +318,7 @@ class UsersController extends Controller
         if (!$request->ajax()) {
             abort(403, 'Unauthorized action.');
         }
-        $user = User::find(intval($id));
+        $user = User::role('superadmin')->find(intval($id));
         $name = $user->first_name.' '.$user->last_name;
         $user->delete();
         return response()->json(['message' => 'Se ha eliminado al usuario '.$name], 200);
@@ -379,7 +379,7 @@ class UsersController extends Controller
             if($request->status != ""){
                 foreach ($usersids as $userid) {
                     if($userid != "1"){
-                        $user = User::find(intval($userid));
+                        $user = User::role('administrative')->find(intval($userid));
                         $user->status = $request->status;
                         $user->save();
                     }else{
@@ -391,7 +391,7 @@ class UsersController extends Controller
                 if($request->action == 'delete'){
                     foreach ($usersids as $userid) {
                         if($userid != "1"){
-                            $user = User::find(intval($userid));
+                            $user = User::role('administrative')->find(intval($userid));
                             $user->delete();
                         }else{
                             return response()->json(['message' => 'No tienes los permisos suficientes para eliminar este usuario'], 200);
@@ -491,7 +491,7 @@ class UsersController extends Controller
             $name=basename($file->getClientOriginalName(),'.'.$file->getClientOriginalExtension());
             $imgname = $name.'_'.time().'.'.$file->getClientOriginalExtension();
             Image::make($request->file('photo')->getRealPath())->fit(200)->save('storage/images/photos/'.$imgname);
-            $user->photo = 'storage/images/photos/'.$imgname;
+            $user->photo = /*'storage/images/photos/'.*/$imgname;
         }
         $user->save();
 
@@ -528,7 +528,7 @@ class UsersController extends Controller
         ->with('user', $user)
         ->with('countries', $this->countries);*/
         if($id != "1" || Auth::id() == 1){
-            $user = User::with(['usermeta' => function ($query) {
+            $user = User::role('administrative')->with(['usermeta' => function ($query) {
                         $query->where('name', '=', 'display_name');
                     }])->find($id);
             $user->load('roles');
@@ -551,7 +551,7 @@ class UsersController extends Controller
         ->with('countries', $this->countries);*/
         if($id != "1" || Auth::id() == 1){
             $countries = $this->countriesArray();
-            $user = User::with(['usermeta' => function ($query) {
+            $user = User::role('administrative')->with(['usermeta' => function ($query) {
                         $query->where('name', '=', 'display_name');
                     }])->find($id);
             $user->load('roles');
@@ -613,7 +613,7 @@ class UsersController extends Controller
         if (!$request->ajax()) {
             abort(403, 'Unauthorized action.');
         }
-        $user = User::find($id);
+        $user = User::role('administrative')->find($id);
         if($user->it != $request->it) $user->it = $request->it;
         if($user->nid != $request->nid) $user->nid = $request->nid;
         if($user->first_name != $request->first_name) $user->first_name = $request->first_name;
@@ -633,7 +633,7 @@ class UsersController extends Controller
             $name=basename($file->getClientOriginalName(),'.'.$file->getClientOriginalExtension());
             $imgname = $name.'_'.time().'.'.$file->getClientOriginalExtension();
             Image::make($request->file('photo')->getRealPath())->fit(200, 266)->save('storage/images/photos/'.$imgname);
-            $user->photo = 'storage/images/photos/'.$imgname;
+            $user->photo = /*'storage/images/photos/'.*/$imgname;
         }
         $user->save();
         if($request->filled('roles')) {
@@ -670,7 +670,7 @@ class UsersController extends Controller
         if (!$request->ajax()) {
             abort(403, 'Unauthorized action.');
         }
-        $user = User::find(intval($id));
+        $user = User::role('administrative')->find(intval($id));
         $name = $user->first_name.' '.$user->last_name;
         $user->delete();
         return response()->json(['message' => 'Se ha eliminado al usuario '.$name], 200);

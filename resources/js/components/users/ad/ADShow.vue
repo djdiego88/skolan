@@ -10,8 +10,8 @@
                     </div>
                 </div>
                 <div class="card-body px-0">
-                    <img v-if="user.photo == ''" src="/storage/images/photos/default-avatar.png" class="rounded-circle mx-auto d-block" width="200" height="200" alt="#">
-                    <img v-else :src="'/'+user.photo" class="rounded-circle mx-auto d-block" width="200" height="200" alt="#">
+                    <img v-if="!user.photo" src="/storage/images/photos/default-avatar.png" class="rounded-circle mx-auto d-block" width="200" height="200" alt="#">
+                    <img v-else :src="'/storage/images/photos/'+user.photo" class="rounded-circle mx-auto d-block" width="200" height="200" alt="#">
                     <h2 class="text-center mt-3 mb-1">{{user.first_name}} {{user.last_name}}</h2>
                     <h3 class="text-center mb-4">
                         <span v-if="user.status == 'enabled'" class="badge badge-success"><i class="far fa-check-circle"></i> Habilitado</span>

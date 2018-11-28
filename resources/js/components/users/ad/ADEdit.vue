@@ -228,7 +228,7 @@
         },
         mounted () {
             this.getRoles();
-            this.photo_preview = (this.user.photo) ? '/'+this.user.photo : null;
+            this.photo_preview = (this.user.photo) ? '/storage/images/photos/'+this.user.photo : null;
             this.user.photo = null;
         },
         methods: {

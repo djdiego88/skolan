@@ -90,7 +90,7 @@ class DatabaseSeeder extends Seeder
 		$superAdminUser->address = 'Calle 6C # 82A - 25';
 		$superAdminUser->status = 'enabled';
 		$superAdminUser->last_access = date('Y-m-d H:i:s');
-		$superAdminUser->photo = 'storage/images/photos/foto-documento-grande--cuadrado.jpg';
+		$superAdminUser->photo = 'foto-documento-grande--cuadrado.jpg';
 		$superAdminUser->save();
 		//Asociar rol al superadmin
 		$superAdminUser->assignRole($superadmin);
@@ -129,7 +129,7 @@ class DatabaseSeeder extends Seeder
 		$optionSiteLogo->name = 'site_logo';
 		$optionSiteLogo->display_name = 'Logo de la Institución';
 		$optionSiteLogo->description = 'Aquí va el archivo de imagen o logo de la Institución Educativa';
-		$optionSiteLogo->value = 'storage/images/logo/logo-default.png';
+		$optionSiteLogo->value = 'logo-default.png';
 		$optionSiteLogo->save();
 
 		$optionAdminEmail = new Option();
@@ -195,75 +195,75 @@ class DatabaseSeeder extends Seeder
 		$optionYoutubePage->value = '';
 		$optionYoutubePage->save();
 
-        $optionYoutubePage = new Option();
-        $optionYoutubePage->name = 'nit';
-        $optionYoutubePage->display_name = 'N.I.T.';
-        $optionYoutubePage->description = 'N.I.T. de la institución educativa.';
-        $optionYoutubePage->value = '';
-        $optionYoutubePage->save();
+        $optionNit = new Option();
+        $optionNit->name = 'nit';
+        $optionNit->display_name = 'N.I.T.';
+        $optionNit->description = 'N.I.T. de la institución educativa.';
+        $optionNit->value = '';
+        $optionNit->save();
 
-        $optionYoutubePage = new Option();
-        $optionYoutubePage->name = 'telephone';
-        $optionYoutubePage->display_name = 'Teléfono';
-        $optionYoutubePage->description = 'Número telefónico de la institución educativa.';
-        $optionYoutubePage->value = '';
-        $optionYoutubePage->save();
+        $optionTel = new Option();
+        $optionTel->name = 'telephone';
+        $optionTel->display_name = 'Teléfono';
+        $optionTel->description = 'Número telefónico de la institución educativa.';
+        $optionTel->value = '';
+        $optionTel->save();
 
-        $optionYoutubePage = new Option();
-        $optionYoutubePage->name = 'state';
-        $optionYoutubePage->display_name = 'Departamento';
-        $optionYoutubePage->description = 'Departamento de la institución educativa.';
-        $optionYoutubePage->value = 'Bogotá D.C.';
-        $optionYoutubePage->save();
+        $optionState = new Option();
+        $optionState->name = 'state';
+        $optionState->display_name = 'Departamento';
+        $optionState->description = 'Departamento de la institución educativa.';
+        $optionState->value = 'Bogotá D.C.';
+        $optionState->save();
 
-        $optionYoutubePage = new Option();
-        $optionYoutubePage->name = 'city';
-        $optionYoutubePage->display_name = 'Ciudad';
-        $optionYoutubePage->description = 'Ciudad de la institución educativa.';
-        $optionYoutubePage->value = 'Bogotá D.C.';
-        $optionYoutubePage->save();
+        $optionCity = new Option();
+        $optionCity->name = 'city';
+        $optionCity->display_name = 'Ciudad';
+        $optionCity->description = 'Ciudad de la institución educativa.';
+        $optionCity->value = 'Bogotá D.C.';
+        $optionCity->save();
 
-        $optionYoutubePage = new Option();
-        $optionYoutubePage->name = 'principal';
-        $optionYoutubePage->display_name = 'Rector(a)';
-        $optionYoutubePage->description = 'Nombre del rector(a) de la institución educativa.';
-        $optionYoutubePage->value = '';
-        $optionYoutubePage->save();
+        $optionPrinc = new Option();
+        $optionPrinc->name = 'principal';
+        $optionPrinc->display_name = 'Rector(a)';
+        $optionPrinc->description = 'Nombre del rector(a) de la institución educativa.';
+        $optionPrinc->value = '';
+        $optionPrinc->save();
 
-        $optionYoutubePage = new Option();
-        $optionYoutubePage->name = 'secretary';
-        $optionYoutubePage->display_name = 'Secretario(a)';
-        $optionYoutubePage->description = 'Nombre del secretario(a) de la institución educativa.';
-        $optionYoutubePage->value = '';
-        $optionYoutubePage->save();
+        $optionSecr = new Option();
+        $optionSecr->name = 'secretary';
+        $optionSecr->display_name = 'Secretario(a)';
+        $optionSecr->description = 'Nombre del secretario(a) de la institución educativa.';
+        $optionSecr->value = '';
+        $optionSecr->save();
 
-        $optionYoutubePage = new Option();
-        $optionYoutubePage->name = 'min_qualification';
-        $optionYoutubePage->display_name = 'Calificación mínima';
-        $optionYoutubePage->description = 'Calificación mínima del sistema de notas.';
-        $optionYoutubePage->value = 1;
-        $optionYoutubePage->save();
+        $optionMinQ = new Option();
+        $optionMinQ->name = 'min_qualification';
+        $optionMinQ->display_name = 'Calificación mínima';
+        $optionMinQ->description = 'Calificación mínima del sistema de notas.';
+        $optionMinQ->value = 1;
+        $optionMinQ->save();
 
-        $optionYoutubePage = new Option();
-        $optionYoutubePage->name = 'max_qualification';
-        $optionYoutubePage->display_name = 'Calificación máxima';
-        $optionYoutubePage->description = 'Calificación mínima del sistema de notas.';
-        $optionYoutubePage->value = 5;
-        $optionYoutubePage->save();
+        $optionMaxQ = new Option();
+        $optionMaxQ->name = 'max_qualification';
+        $optionMaxQ->display_name = 'Calificación máxima';
+        $optionMaxQ->description = 'Calificación máxima del sistema de notas.';
+        $optionMaxQ->value = 5;
+        $optionMaxQ->save();
 
-        $optionYoutubePage = new Option();
-        $optionYoutubePage->name = 'min_qualification_pass';
-        $optionYoutubePage->display_name = 'Calificación mínima para aprobar';
-        $optionYoutubePage->description = 'Calificación mínima para que un estudiante apruebe';
-        $optionYoutubePage->value = 3;
-        $optionYoutubePage->save();
+        $optionMinQP = new Option();
+        $optionMinQP->name = 'min_qualification_pass';
+        $optionMinQP->display_name = 'Calificación mínima para aprobar';
+        $optionMinQP->description = 'Calificación mínima para que un estudiante apruebe';
+        $optionMinQP->value = 3;
+        $optionMinQP->save();
 
-        $optionYoutubePage = new Option();
-        $optionYoutubePage->name = 'decimal_positions';
-        $optionYoutubePage->display_name = 'Posiciones decimales';
-        $optionYoutubePage->description = 'Posiciones decimales para las notas registradas en el sistema de evaluación.';
-        $optionYoutubePage->value = 2;
-        $optionYoutubePage->save();
+        $optionDec = new Option();
+        $optionDec->name = 'decimal_positions';
+        $optionDec->display_name = 'Posiciones decimales';
+        $optionDec->description = 'Posiciones decimales para las notas registradas en el sistema de evaluación.';
+        $optionDec->value = 2;
+        $optionDec->save();
 
         $firstGrade = new Grade();
         $firstGrade->name = 'Primero';
@@ -419,5 +419,65 @@ class DatabaseSeeder extends Seeder
         $soc->name = 'Sociales';
         $soc->area_id = $social->id;
         $soc->save();
+
+        /**
+         * Usuarios superadmin
+         */
+        factory(App\User::class, 50)->create()->each(function($user) {
+            $user->assignRole('superadmin');
+            //Añadir usermeta
+            $display_name = $user->first_name . ' '. $user->last_name;
+            $display_name = explode(" ",$display_name);
+            $countnames = count($display_name);
+            if($countnames == 1){
+                $display_name = $display_name[0];
+            }elseif($countnames == 2){
+                $display_name = $display_name[0].' '.$display_name[1];
+            }elseif($countnames == 3 || $countnames == 4){
+                $display_name = $display_name[0].' '.$display_name[2];
+            }
+            $username = new Usermeta(['name' => 'display_name', 'value' => $display_name]);
+            $user->usermeta()->save($username);
+        });
+
+        /**
+         * Usuarios administrative
+         */
+        factory(App\User::class, 50)->create()->each(function($user) {
+            $user->assignRole('administrative');
+            //Añadir usermeta
+            $display_name = $user->first_name . ' '. $user->last_name;
+            $display_name = explode(" ",$display_name);
+            $countnames = count($display_name);
+            if($countnames == 1){
+                $display_name = $display_name[0];
+            }elseif($countnames == 2){
+                $display_name = $display_name[0].' '.$display_name[1];
+            }elseif($countnames == 3 || $countnames == 4){
+                $display_name = $display_name[0].' '.$display_name[2];
+            }
+            $username = new Usermeta(['name' => 'display_name', 'value' => $display_name]);
+            $user->usermeta()->save($username);
+        });
+
+        /**
+         * Usuarios coordinator
+         */
+        factory(App\User::class, 25)->create()->each(function($user) {
+            $user->assignRole('coordinator');
+            //Añadir usermeta
+            $display_name = $user->first_name . ' '. $user->last_name;
+            $display_name = explode(" ",$display_name);
+            $countnames = count($display_name);
+            if($countnames == 1){
+                $display_name = $display_name[0];
+            }elseif($countnames == 2){
+                $display_name = $display_name[0].' '.$display_name[1];
+            }elseif($countnames == 3 || $countnames == 4){
+                $display_name = $display_name[0].' '.$display_name[2];
+            }
+            $username = new Usermeta(['name' => 'display_name', 'value' => $display_name]);
+            $user->usermeta()->save($username);
+        });
     }
 }

@@ -109,7 +109,7 @@
                 <div class="col pt-2">
                     {{filters.pagination.from}}-{{filters.pagination.to}} de {{filters.pagination.total}}
                 </div>
-                <div class="col" v-if="filters.pagination.last_page>1">
+                <div class="col d-flex justify-content-end" v-if="filters.pagination.last_page>1">
                     <pagination :data="filters.pagination" @pagination-change-page="getUsers"></pagination>
                 </div>
             </div>

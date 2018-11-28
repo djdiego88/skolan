@@ -19,6 +19,7 @@ class CreateHeadquartersTable extends Migration
             $table->string('location');
             $table->string('address');
             $table->timestamps();
+            $table->index('name');
         });
     }
 

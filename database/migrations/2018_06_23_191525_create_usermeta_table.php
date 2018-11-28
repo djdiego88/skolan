@@ -20,6 +20,7 @@ class CreateUsermetaTable extends Migration
             $table->longText('value');
             $table->foreign('user_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
+            $table->index('name');
         });
     }
 

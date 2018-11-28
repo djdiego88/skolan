@@ -24,6 +24,7 @@ class CreateAbsencesTable extends Migration
             $table->foreign('classroom_subject_id')->references('id')->on('classroom_subject')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('student_id')->references('id')->on('students')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
+            $table->index('date');
         });
     }
 

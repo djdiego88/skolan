@@ -6,7 +6,8 @@ label {
 	cursor: pointer;
 	font-weight: 600;
 }
-.form-group.required .col-form-label:after { 
+.form-group.required .col-form-label:after,
+.form-group .row.required .col-form-label:after { 
 	content:"*";
 	color:red;
 }

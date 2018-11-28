@@ -21,6 +21,7 @@ class CreateHomeworksTable extends Migration
             $table->date('deadline');
             $table->foreign('classroom_subject_id')->references('id')->on('classroom_subject')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
+            $table->index('deadline');
         });
     }
 
