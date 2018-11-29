@@ -64,3 +64,27 @@ Breadcrumbs::for('edit-ad', function ($trail, $user) {
     $trail->parent('admins');
     $trail->push('Editar: '.$user->first_name.' '.$user->last_name, route('users.ad.edit', $user->id));
 });
+
+// Inicio > Usuarios > Coordinadores
+Breadcrumbs::for('coordinators', function ($trail) {
+    $trail->parent('users');
+    $trail->push(__('Coordinadores'), route('users.co.index'));
+});
+
+// Inicio > Usuarios > Coordinadores > Añadir Usuario
+Breadcrumbs::for('add-co', function ($trail) {
+    $trail->parent('coordinators');
+    $trail->push(__('Añadir Usuario'), route('users.co.add'));
+});
+
+// Inicio > Usuarios > Coordinadores > <Usuario>
+Breadcrumbs::for('show-co', function ($trail, $user) {
+    $trail->parent('coordinators');
+    $trail->push($user->first_name.' '.$user->last_name, route('users.co.show', $user->id));
+});
+
+// Inicio > Usuarios > Coordinadores > Editar: <Usuario>
+Breadcrumbs::for('edit-co', function ($trail, $user) {
+    $trail->parent('coordinators');
+    $trail->push('Editar: '.$user->first_name.' '.$user->last_name, route('users.co.edit', $user->id));
+});

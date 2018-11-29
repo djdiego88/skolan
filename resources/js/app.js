@@ -47,6 +47,10 @@ Vue.component('ad-index', require('./components/users/ad/ADIndex.vue'));
 Vue.component('ad-show', require('./components/users/ad/ADShow.vue'));
 Vue.component('ad-add', require('./components/users/ad/ADAdd.vue'));
 Vue.component('ad-edit', require('./components/users/ad/ADEdit.vue'));
+Vue.component('co-index', require('./components/users/co/COIndex.vue'));
+Vue.component('co-show', require('./components/users/co/COShow.vue'));
+Vue.component('co-add', require('./components/users/co/COAdd.vue'));
+Vue.component('co-edit', require('./components/users/co/COEdit.vue'));
 
 const app = new Vue({
     el: '#app'

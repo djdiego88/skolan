@@ -19,13 +19,6 @@
                     {{ Auth::user()->first_name }}<br>
                     <small class="text-muted">{{ Auth::user()->email }}</small>
                 </a>
-                {{--<a class="dropdown-item" href="/profile">
-                    <i class="fas fa-user"></i> Profile
-                </a>
-                <div class="divider"></div>
-                <a class="dropdown-item" href="/password">
-                    <i class="fas fa-key"></i> Password
-                </a>--}}
                 <div class="divider"></div>
                 <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                     <i class="fas fa-sign-out-alt"></i> {{ __('Logout') }}

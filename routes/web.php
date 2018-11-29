@@ -39,10 +39,10 @@ Route::middleware(['auth', 'enabled'])->group(function () {
     });
     //Options
     Route::view('options', 'layouts.options.index')->name('options');
-    Route::get('api/options/index', 'OptionsController@index')->name('options.index');
+    Route::get('options/index', 'OptionsController@index')->name('options.index');
     Route::get('options/create', 'OptionsController@create')->name('options.create');
-    Route::post('api/options/create', 'OptionsController@store')->name('options.store');
-    Route::put('api/options/update', 'OptionsController@update')->name('options.update');
+    Route::post('options/create', 'OptionsController@store')->name('options.store');
+    Route::put('options/update', 'OptionsController@update')->name('options.update');
     //Roles
     Route::prefix('roles')->group(function () {
         Route::get('/all', 'RoleController@all')->name('roles.all');
@@ -53,14 +53,14 @@ Route::middleware(['auth', 'enabled'])->group(function () {
         //Superadmins
         Route::prefix('superadmins')->group(function () {
             Route::view('/', 'layouts.users.sa.index')->name('users.sa');
-            Route::post('api/index', 'UsersController@indexSuperAdmin')->name('users.sa.index');
-            Route::post('api/masschanges', 'UsersController@massChangesSuperAdmin')->name('users.sa.masschanges');
+            Route::post('index', 'UsersController@indexSuperAdmin')->name('users.sa.index');
+            Route::post('masschanges', 'UsersController@massChangesSuperAdmin')->name('users.sa.masschanges');
             Route::get('add', 'UsersController@createSuperAdmin')->name('users.sa.add');
             Route::post('add', 'UsersController@storeSuperAdmin')->name('api.users.sa.store');
             Route::get('{userid}', 'UsersController@showSuperAdmin')->name('users.sa.show');
             Route::get('edit/{userid}', 'UsersController@editSuperAdmin')->name('users.sa.edit');
             Route::put('edit/{userid}', 'UsersController@updateSuperAdmin')->name('api.users.sa.update');
-            Route::post('api/destroy/{userid}', 'UsersController@destroySuperAdmin')->name('users.sa.destroy');
+            Route::post('destroy/{userid}', 'UsersController@destroySuperAdmin')->name('users.sa.destroy');
         });
         //Administratives
         Route::prefix('admins')->group(function () {
@@ -73,6 +73,18 @@ Route::middleware(['auth', 'enabled'])->group(function () {
             Route::get('edit/{userid}', 'UsersController@editAdministrative')->name('users.ad.edit');
             Route::put('edit/{userid}', 'UsersController@updateAdministrative')->name('api.users.ad.update');
             Route::get('destroy/{userid}', 'UsersController@destroyAdministrative')->name('api.users.ad.destroy');
+        });
+        //Coordinators
+        Route::prefix('coordinators')->group(function () {
+            Route::view('/', 'layouts.users.co.index')->name('users.co.index');
+            Route::post('/index', 'UsersController@indexCoordinator')->name('api.users.co.index');
+            Route::post('masschanges', 'UsersController@massChangesCoordinator')->name('api.users.co.masschanges');
+            Route::get('add', 'UsersController@createCoordinator')->name('users.co.add');
+            Route::post('/', 'UsersController@storeCoordinator')->name('api.users.co.store');
+            Route::get('{userid}', 'UsersController@showCoordinator')->name('users.co.show');
+            Route::get('edit/{userid}', 'UsersController@editCoordinator')->name('users.co.edit');
+            Route::put('edit/{userid}', 'UsersController@updateCoordinator')->name('api.users.co.update');
+            Route::get('destroy/{userid}', 'UsersController@destroyCoordinator')->name('api.users.co.destroy');
         });
     });
 });
