@@ -5,13 +5,13 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
 
-class Parent extends Model
+class Guardian extends Model
 {
     use LogsActivity;
 
-    protected $table = 'parents';
+    protected $table = 'guardians';
 
-    protected $fillable = ['user_id', 'occupation', 'civil_status', 'studies', 'neighborhood', 'socioeconomic_level', 'commune'];
+    protected $fillable = ['user_id', 'occupation', 'marital_status', 'studies', 'neighborhood', 'socioeconomic_level', 'commune'];
 
     protected static $logFillable = true;
 

@@ -58,9 +58,9 @@
 							<p class="card-text">{{ __('Docentes de la institución') }}</p>
 						</div>
 						<div class="card-footer bg-transparent d-flex justify-content-between">
-							<a href="#" class="btn btn-sm btn-outline-primary"><i class="fas fa-users"></i> {{ __('Ver usuarios') }}</a>
+							<a href="{{route('users.te.index')}}" class="btn btn-sm btn-outline-primary"><i class="fas fa-users"></i> {{ __('Ver usuarios') }}</a>
 							@hasanyrole('superadmin|administrative')
-								<a href="#" class="btn btn-sm btn-outline-success"><i class="fas fa-user-plus"></i> {{ __('Añadir usuario') }}</a>
+								<a href="{{route('users.te.add')}}" class="btn btn-sm btn-outline-success"><i class="fas fa-user-plus"></i> {{ __('Añadir usuario') }}</a>
 							@endhasanyrole
 						</div>
 					</div>

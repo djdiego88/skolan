@@ -46,8 +46,8 @@ class User extends Authenticatable
     public function student() {
         return $this->hasOne('App\Student');
     }
-    public function parent() {
-        return $this->hasOne('App\Parent');
+    public function guardian() {
+        return $this->hasOne('App\Guardian');
     }
     public function teacher() {
         return $this->hasOne('App\Teacher');

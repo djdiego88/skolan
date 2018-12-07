@@ -86,5 +86,21 @@ Route::middleware(['auth', 'enabled'])->group(function () {
             Route::put('edit/{userid}', 'UsersController@updateCoordinator')->name('api.users.co.update');
             Route::get('destroy/{userid}', 'UsersController@destroyCoordinator')->name('api.users.co.destroy');
         });
+        //Teachers
+        Route::prefix('teachers')->group(function () {
+            Route::view('/', 'layouts.users.te.index')->name('users.te.index');
+            Route::post('/index', 'UsersController@indexTeacher')->name('api.users.te.index');
+            Route::post('masschanges', 'UsersController@massChangesTeacher')->name('api.users.te.masschanges');
+            Route::get('add', 'UsersController@createTeacher')->name('users.te.add');
+            Route::post('/', 'UsersController@storeTeacher')->name('api.users.te.store');
+            Route::get('{userid}', 'UsersController@showTeacher')->name('users.te.show');
+            Route::get('edit/{userid}', 'UsersController@editTeacher')->name('users.te.edit');
+            Route::put('edit/{userid}', 'UsersController@updateTeacher')->name('api.users.te.update');
+            Route::get('destroy/{userid}', 'UsersController@destroyTeacher')->name('api.users.te.destroy');
+        });
+    });
+    //Areas
+    Route::prefix('areas')->group(function () {
+        Route::get('/all', 'AreasController@all')->name('areas.all');
     });
 });

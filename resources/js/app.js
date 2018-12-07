@@ -51,6 +51,10 @@ Vue.component('co-index', require('./components/users/co/COIndex.vue'));
 Vue.component('co-show', require('./components/users/co/COShow.vue'));
 Vue.component('co-add', require('./components/users/co/COAdd.vue'));
 Vue.component('co-edit', require('./components/users/co/COEdit.vue'));
+Vue.component('te-index', require('./components/users/te/TEIndex.vue'));
+Vue.component('te-show', require('./components/users/te/TEShow.vue'));
+Vue.component('te-add', require('./components/users/te/TEAdd.vue'));
+Vue.component('te-edit', require('./components/users/te/TEEdit.vue'));
 
 const app = new Vue({
     el: '#app'

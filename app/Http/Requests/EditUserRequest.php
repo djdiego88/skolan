@@ -3,9 +3,12 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
+use Waavi\Sanitizer\Laravel\SanitizesInput;
 
 class EditUserRequest extends FormRequest
 {
+    use SanitizesInput;
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -30,7 +33,7 @@ class EditUserRequest extends FormRequest
             'it' => 'min:2|max:2|alpha|required',
             'nid' => [
                 'min:4',
-                'integer',
+                'string',
                 Rule::unique('users')->ignore($userId),
                 'required'
             ],
@@ -41,7 +44,7 @@ class EditUserRequest extends FormRequest
                 Rule::unique('users')->ignore($userId),
                 'email'
             ],
-            'birth_date' => 'date_format:Y-m-d|before:-1 year|required',
+            'birth_date' => 'date_format:Y-m-d|before:-17 year|required',
             'gender' => 'max:1|alpha|required',
             'phone_number' => 'min:3|alpha_num|required',
             'cellphone_number' => 'min:3|alpha_num',
@@ -51,6 +54,31 @@ class EditUserRequest extends FormRequest
             'photo' => 'mimes:jpeg,jpg,png|max:2048',
             'status' => 'max:20|alpha|required',
             'roles' => 'json'
+        ];
+    }
+
+    /**
+     *  Filters to be applied to the input.
+     *  https://github.com/Waavi/Sanitizer#available-filters
+     *
+     * @return array
+     */
+    public function filters()
+    {
+        return [
+            'first_name' => 'trim|capitalize|escape',
+            'last_name' => 'trim|capitalize|escape',
+            'it' => 'trim',
+            'nid' => 'trim',
+            'email' => 'trim|lowercase',
+            'birth_date' => 'trim',
+            'gender' => 'trim',
+            'phone_number' => 'trim|escape',
+            'cellphone_number' => 'trim|escape',
+            'nacionality' => 'trim',
+            'location' => 'trim|escape',
+            'address' => 'trim|escape',
+            'status' => 'trim|escape',
         ];
     }
 }

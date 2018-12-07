@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Waavi\Sanitizer\Laravel\SanitizesInput;
 
-class CreateUserRequest extends FormRequest
+class StoreTeacher extends FormRequest
 {
     use SanitizesInput;
     /**
@@ -40,10 +40,16 @@ class CreateUserRequest extends FormRequest
             'location' => 'min:4|string|required',
             'address' => 'min:4|string|required',
             'photo' => 'mimes:jpeg,jpg,png|max:2048',
-            'status' => 'max:20|alpha|required'
+            'status' => 'max:20|alpha|required',
+            'area' => 'json|required',
+            'acronym' => 'min:3|max:8|string|required',
+            'experience' => 'min:5|string',
+            'applied_studies' => 'min:5|string',
+            'scale' => 'max:60|string',
+            'resolution' => 'max:60|string',
+            'profession' => 'min:4|string|required'
         ];
     }
-
     /**
      *  Filters to be applied to the input.
      *  https://github.com/Waavi/Sanitizer#available-filters
@@ -66,6 +72,12 @@ class CreateUserRequest extends FormRequest
             'location' => 'trim|escape',
             'address' => 'trim|escape',
             'status' => 'trim|escape',
+            'acronym' => 'trim|escape',
+            'experience' => 'trim',
+            'applied_studies' => 'trim',
+            'scale' => 'trim|escape',
+            'resolution' => 'trim|escape',
+            'profession' => 'trim|escape'
         ];
     }
 }

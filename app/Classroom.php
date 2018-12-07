@@ -38,10 +38,10 @@ class Classroom extends Model
     public function enrollments() {
         return $this->hasMany('App\Enrollment');
     }
-    public function students()
+    /*public function students()
     {
         return $this->hasMany('App\Student');
-    }
+    }*/
     /*public function subjects()
     {
         return $this->belongsToMany('App\Subject')->withPivot('teacher_id', 'day', 'start_time', 'end_time')->withTimestamps();

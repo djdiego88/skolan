@@ -10,6 +10,10 @@ use App\Option;
 use App\Grade;
 use App\Area;
 use App\Subject;
+use App\Year;
+use App\Headquarter;
+use App\Schoolday;
+use App\Classroom;
 
 class DatabaseSeeder extends Seeder
 {
@@ -28,7 +32,7 @@ class DatabaseSeeder extends Seeder
         $coordinator = Role::create(['name' => 'coordinator', 'display_name'=> 'Coordinador']);
         $teacher = Role::create(['name' => 'teacher', 'display_name'=> 'Docente']);
         $student = Role::create(['name' => 'student', 'display_name'=> 'Alumno']);
-        $parent = Role::create(['name' => 'parent', 'display_name'=> 'Acudiente']);
+        $guardian = Role::create(['name' => 'guardian', 'display_name'=> 'Acudiente']);
         //$candidate = Role::create(['name' => 'candidate', 'display_name'=> 'Candidato']);
         //Creación de permisos
         $adminOptions = Permission::create(['name' => 'admin-options', 'display_name'=> 'Opciones de configuración']);
@@ -36,10 +40,10 @@ class DatabaseSeeder extends Seeder
         $adminRole = Permission::create(['name' => 'admin-role', 'display_name'=> 'Administrar roles']);
         $adminPermission = Permission::create(['name' => 'admin-permission', 'display_name'=> 'Administrar permisos']);
         $adminStudent = Permission::create(['name' => 'admin-student', 'display_name'=> 'Administrar estudiantes']);
-        $adminParent = Permission::create(['name' => 'admin-parent', 'display_name'=> 'Administrar acudientes']);
+        $adminGuardian = Permission::create(['name' => 'admin-guardian', 'display_name'=> 'Administrar acudientes']);
         $adminTeacher = Permission::create(['name' => 'admin-teacher', 'display_name'=> 'Administrar docentes']);
         $editStudent = Permission::create(['name' => 'edit-student', 'display_name'=> 'Editar estudiantes']);
-        $editParent = Permission::create(['name' => 'edit-parent', 'display_name'=> 'Editar acudientes']);
+        $editGuardian = Permission::create(['name' => 'edit-guardian', 'display_name'=> 'Editar acudientes']);
         $editTeacher = Permission::create(['name' => 'edit-teacher', 'display_name'=> 'Editar docentes']);
         $adminGrade = Permission::create(['name' => 'admin-grade', 'display_name'=> 'Administrar niveles']);
         $adminClassroom = Permission::create(['name' => 'admin-classroom', 'display_name'=> 'Administrar salones']);
@@ -67,11 +71,11 @@ class DatabaseSeeder extends Seeder
         $viewActivityLog = Permission::create(['name' => 'view-activitylog', 'display_name'=> 'Ver registro de actividades']);
         //Asignar permisos a roles
         $superadmin->givePermissionTo(Permission::all());
-		$administrative->givePermissionTo([$adminStudent,$adminParent,$adminTeacher,$adminGrade,$adminClassroom,$adminSubject,$adminSchedule,$adminArea,$adminHQ,$adminSchoolday,$adminYear,$adminSchoolterm,$adminEnrollment,$adminAbsence,$adminAnnotation,$adminHomework,$adminQualification, $viewActivityLog, $adminTests, $editTests, $viewTests]);
+		$administrative->givePermissionTo([$adminStudent,$adminGuardian,$adminTeacher,$adminGrade,$adminClassroom,$adminSubject,$adminSchedule,$adminArea,$adminHQ,$adminSchoolday,$adminYear,$adminSchoolterm,$adminEnrollment,$adminAbsence,$adminAnnotation,$adminHomework,$adminQualification, $viewActivityLog, $adminTests, $editTests, $viewTests]);
 		$coordinator->givePermissionTo([$adminSchedule,$adminEnrollment,$adminAbsence,$adminAnnotation,$viewHomework,$viewQualification, $adminTests, $editTests, $viewTests]);
 		$teacher->givePermissionTo([$adminAbsence,$adminAnnotation,$viewHomework,$viewQualification, $adminTests, $editTests, $viewTests]);
 		$student->givePermissionTo([$viewAbsence,$viewAnnotation,$viewHomework,$viewQualification, $viewTests]);
-		$parent->givePermissionTo([$viewAbsence,$viewAnnotation,$viewHomework,$viewQualification]);
+		$guardian->givePermissionTo([$viewAbsence,$viewAnnotation,$viewHomework,$viewQualification]);
 		//$candidate->givePermissionTo([$createPost, $editUser]);
 		//Añadir Super Administrador
 		$superAdminUser = new User();
@@ -420,6 +424,69 @@ class DatabaseSeeder extends Seeder
         $soc->area_id = $social->id;
         $soc->save();
 
+        $mus = new Subject();
+        $mus->name = 'Música';
+        $mus->area_id = $artist->id;
+        $mus->save();
+
+        $year1 = new Year();
+        $year1->name = '2018';
+        $year1->status = 'inactive';
+        $year1->start_date = '2018-01-15 00:00:00';
+        $year1->end_date = '2018-12-15 23:59:59';
+        $year1->save();
+
+        $year2 = new Year();
+        $year2->name = '2019';
+        $year2->status = 'active';
+        $year2->start_date = '2019-01-15 00:00:00';
+        $year2->end_date = '2019-12-15 23:59:59';
+        $year2->save();
+
+        $year3 = new Year();
+        $year3->name = '2020';
+        $year3->status = 'pre-active';
+        $year3->start_date = '2020-01-15 00:00:00';
+        $year3->end_date = '2020-12-15 23:59:59';
+        $year3->save();
+
+        $year4 = new Year();
+        $year4->name = '2021';
+        $year4->status = 'inactive';
+        $year4->start_date = '2021-01-15 00:00:00';
+        $year4->end_date = '2021-12-15 23:59:59';
+        $year4->save();
+
+        $hq1 = new Headquarter();
+        $hq1->name = 'La principal';
+        $hq1->location = 'Soacha, Cundinamarca';
+        $hq1->address = 'Evergreen 123';
+        $hq1->save();
+
+        $hq2 = new Headquarter();
+        $hq2->name = 'El progreso';
+        $hq2->location = 'Soacha, Cundinamarca';
+        $hq2->address = 'Av. Siempre viva 1234';
+        $hq2->save();
+
+        $hq2 = new Headquarter();
+        $hq2->name = 'La Isla';
+        $hq2->location = 'Soacha, Cundinamarca';
+        $hq2->address = 'Av.Cartón papel 1234';
+        $hq2->save();
+
+        $schd1 = new Schoolday();
+        $schd1->name = 'Mañana';
+        $schd1->save();
+
+        $schd2 = new Schoolday();
+        $schd2->name = 'Tarde';
+        $schd2->save();
+
+        $schd3 = new Schoolday();
+        $schd3->name = 'Única';
+        $schd3->save();
+
         /**
          * Usuarios superadmin
          */
@@ -479,5 +546,171 @@ class DatabaseSeeder extends Seeder
             $username = new Usermeta(['name' => 'display_name', 'value' => $display_name]);
             $user->usermeta()->save($username);
         });
+
+        /**
+         * Usuarios teacher
+         */
+        factory(App\User::class, 30)->create()->each(function($user) {
+            $user->assignRole('teacher');
+            //Añadir usermeta
+            $display_name = $user->first_name . ' '. $user->last_name;
+            $display_name = explode(" ",$display_name);
+            $countnames = count($display_name);
+            if($countnames == 1){
+                $display_name = $display_name[0];
+            }elseif($countnames == 2){
+                $display_name = $display_name[0].' '.$display_name[1];
+            }elseif($countnames == 3 || $countnames == 4){
+                $display_name = $display_name[0].' '.$display_name[2];
+            }
+            $username = new Usermeta(['name' => 'display_name', 'value' => $display_name]);
+            $user->usermeta()->save($username);
+            //Crear teacher
+            $user->teacher()->save(factory(App\Teacher::class)->make());
+        });
+
+        /**
+         * Usuarios guardian
+         */
+        factory(App\User::class, 50)->create()->each(function($user) {
+            $user->assignRole('guardian');
+            //Añadir usermeta
+            $display_name = $user->first_name . ' '. $user->last_name;
+            $display_name = explode(" ",$display_name);
+            $countnames = count($display_name);
+            if($countnames == 1){
+                $display_name = $display_name[0];
+            }elseif($countnames == 2){
+                $display_name = $display_name[0].' '.$display_name[1];
+            }elseif($countnames == 3 || $countnames == 4){
+                $display_name = $display_name[0].' '.$display_name[2];
+            }
+            $username = new Usermeta(['name' => 'display_name', 'value' => $display_name]);
+            $user->usermeta()->save($username);
+            //Crear guardian
+            $user->guardian()->save(factory(App\Guardian::class)->make());
+        });
+
+        /**
+         * Usuarios student
+         */
+        factory(App\User::class, 100)->create()->each(function($user) {
+            $user->assignRole('student');
+            //Añadir usermeta
+            $display_name = $user->first_name . ' '. $user->last_name;
+            $display_name = explode(" ",$display_name);
+            $countnames = count($display_name);
+            if($countnames == 1){
+                $display_name = $display_name[0];
+            }elseif($countnames == 2){
+                $display_name = $display_name[0].' '.$display_name[1];
+            }elseif($countnames == 3 || $countnames == 4){
+                $display_name = $display_name[0].' '.$display_name[2];
+            }
+            $username = new Usermeta(['name' => 'display_name', 'value' => $display_name]);
+            $user->usermeta()->save($username);
+            //Crear student
+            $user->student()->save(factory(App\Student::class)->make());
+        });
+
+        $class1a = new Classroom();
+        $class1a->year_id = 2;
+        $class1a->headquarter_id = 2;
+        $class1a->schoolday_id = 3;
+        $class1a->director_id = rand(1,30);
+        $class1a->grade_id = 1;
+        $class1a->name = 'Primero A';
+        $class1a->quota = rand(28,35);
+        $class1a->save();
+
+        $class1b = new Classroom();
+        $class1b->year_id = 2;
+        $class1b->headquarter_id = 2;
+        $class1b->schoolday_id = 3;
+        $class1b->director_id = rand(1,30);
+        $class1b->grade_id = 1;
+        $class1b->name = 'Primero B';
+        $class1b->quota = rand(28,35);
+        $class1b->save();
+
+        $class2a = new Classroom();
+        $class2a->year_id = 2;
+        $class2a->headquarter_id = 2;
+        $class2a->schoolday_id = 3;
+        $class2a->director_id = rand(1,30);
+        $class2a->grade_id = 2;
+        $class2a->name = 'Segundo A';
+        $class2a->quota = rand(28,35);
+        $class2a->save();
+
+        $class2b = new Classroom();
+        $class2b->year_id = 2;
+        $class2b->headquarter_id = 2;
+        $class2b->schoolday_id = 3;
+        $class2b->director_id = rand(1,30);
+        $class2b->grade_id = 2;
+        $class2b->name = 'Segundo B';
+        $class2b->quota = rand(28,35);
+        $class2b->save();
+
+        $class3a = new Classroom();
+        $class3a->year_id = 2;
+        $class3a->headquarter_id = 2;
+        $class3a->schoolday_id = 3;
+        $class3a->director_id = rand(1,30);
+        $class3a->grade_id = 3;
+        $class3a->name = 'Tercero A';
+        $class3a->quota = rand(28,35);
+        $class3a->save();
+
+        $class3b = new Classroom();
+        $class3b->year_id = 2;
+        $class3b->headquarter_id = 2;
+        $class3b->schoolday_id = 3;
+        $class3b->director_id = rand(1,30);
+        $class3b->grade_id = 3;
+        $class3b->name = 'Tercero B';
+        $class3b->quota = rand(28,35);
+        $class3b->save();
+
+        $class4a = new Classroom();
+        $class4a->year_id = 2;
+        $class4a->headquarter_id = 2;
+        $class4a->schoolday_id = 3;
+        $class4a->director_id = rand(1,30);
+        $class4a->grade_id = 4;
+        $class4a->name = 'Cuarto A';
+        $class4a->quota = rand(28,35);
+        $class4a->save();
+
+        $class4b = new Classroom();
+        $class4b->year_id = 2;
+        $class4b->headquarter_id = 2;
+        $class4b->schoolday_id = 3;
+        $class4b->director_id = rand(1,30);
+        $class4b->grade_id = 4;
+        $class4b->name = 'Cuarto B';
+        $class4b->quota = rand(28,35);
+        $class4b->save();
+
+        $class5a = new Classroom();
+        $class5a->year_id = 2;
+        $class5a->headquarter_id = 2;
+        $class5a->schoolday_id = 3;
+        $class5a->director_id = rand(1,30);
+        $class5a->grade_id = 5;
+        $class5a->name = 'Quinto A';
+        $class5a->quota = rand(28,35);
+        $class5a->save();
+
+        $class5b = new Classroom();
+        $class5b->year_id = 2;
+        $class5b->headquarter_id = 2;
+        $class5b->schoolday_id = 3;
+        $class5b->director_id = rand(1,30);
+        $class5b->grade_id = 5;
+        $class5b->name = 'Quinto B';
+        $class5b->quota = rand(28,35);
+        $class5b->save();
     }
 }

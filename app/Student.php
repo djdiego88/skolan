@@ -11,7 +11,7 @@ class Student extends Model
 
     protected $table = 'students';
 
-    protected $fillable = ['user_id', 'classroom_id', 'neighborhood', 'socioeconomic_level', 'commune', 'health_care', 'blood_type', 'allergies', 'diseases'];
+    protected $fillable = ['user_id', 'neighborhood', 'socioeconomic_level', 'commune', 'health_care', 'blood_type', 'allergies', 'diseases'];
 
     protected static $logFillable = true;
 
@@ -20,8 +20,8 @@ class Student extends Model
     public function user() {
     	return $this->belongsTo('App\User');
     }
-    public function parents() {
-        return $this->belongsToMany('App\Parent')->withPivot('relation')->withTimestamps();
+    public function guardians() {
+        return $this->belongsToMany('App\Guardian')->withPivot('relation')->withTimestamps();
     }
     public function absences() {
         return $this->hasMany('App\Absence');
@@ -41,8 +41,8 @@ class Student extends Model
     public function preenrollments() {
         return $this->hasMany('App\Preenrollment');
     }
-    public function classroom()
+    /*public function classroom()
     {
         return $this->belongsTo('App\Classroom');
-    }
+    }*/
 }

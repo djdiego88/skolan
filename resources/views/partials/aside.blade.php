@@ -34,7 +34,7 @@
 					</li>
 					@endhasanyrole
 					<li class="nav-item">
-						<a class="nav-link" href="#"><i class="nav-icon fas fa-chalkboard-teacher"></i> {{ __('Docentes') }}</a>
+						<a class="nav-link" href="{{route('users.te.index')}}"><i class="nav-icon fas fa-chalkboard-teacher"></i> {{ __('Docentes') }}</a>
 					</li>
 					<li class="nav-item">
 						<a class="nav-link" href="#"><i class="nav-icon fas fa-user-graduate"></i> {{ __('Alumnos') }}</a>

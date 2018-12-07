@@ -3,18 +3,23 @@
 namespace App\Http\Controllers;
 
 use App\User;
+use App\Option;
+use App\Usermeta;
+use App\Teacher;
+use App\Area;
 use Illuminate\Http\Request;
 use App\Http\Requests\CreateUserRequest;
 use App\Http\Requests\EditUserRequest;
+use App\Http\Requests\StoreTeacher;
+use App\Http\Requests\EditTeacher;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Laracasts\Flash\Flash;
-use App\Option;
-use App\Usermeta;
 use Spatie\Permission\Models\Role;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\ImageManagerStatic as Image;
+use Illuminate\Support\Facades\Log;
 
 class UsersController extends Controller
 {
@@ -27,6 +32,7 @@ class UsersController extends Controller
         $countryjson = 'https://cdn.jsdelivr.net/gh/umpirsky/country-list/data/es_CO/country.json';
         $json = file_get_contents($countryjson);
         $this->countries = json_decode($json, TRUE);
+        $this->allowedTags = '<p><ol><ul><li><strong><em><br>';
 
         $this->middleware(['role:superadmin'])->only([
             'indexSuperAdmin',
@@ -66,12 +72,12 @@ class UsersController extends Controller
             'updateStudent',
             'destroyStudent',
             'massChangesStudent',
-            'createParent',
-            'storeParent',
-            'editParent',
-            'updateParent',
-            'destroyParent',
-            'massChangesParent',
+            'createGuardian',
+            'storeGuardian',
+            'editGuardian',
+            'updateGuardian',
+            'destroyGuardian',
+            'massChangesGuardian',
             
         ]);
         $this->middleware(['role:superadmin|administrative|coordinator'])->only([
@@ -82,9 +88,9 @@ class UsersController extends Controller
             'index',
             'indexTeacher',
             'indexStudent',
-            'indexParent',
+            'indexGuardian',
             'showStudent',
-            'showParent',
+            'showGuardian',
         ]);
 
     }
@@ -335,6 +341,7 @@ class UsersController extends Controller
         }
         $user = User::role('superadmin')->find(intval($id));
         $name = $user->first_name.' '.$user->last_name;
+        $user->removeRole('superadmin');
         $user->delete();
         return response()->json(['message' => 'Se ha eliminado al usuario '.$name], 200);
     }
@@ -421,6 +428,7 @@ class UsersController extends Controller
         }
         $user = User::role('administrative')->find(intval($id));
         $name = $user->first_name.' '.$user->last_name;
+        $user->removeRole('administrative');
         $user->delete();
         return response()->json(['message' => 'Se ha eliminado al usuario '.$name], 200);
     }
@@ -508,43 +516,118 @@ class UsersController extends Controller
         }
         $user = User::role('coordinator')->find(intval($id));
         $name = $user->first_name.' '.$user->last_name;
+        $user->removeRole('coordinator');
         $user->delete();
         return response()->json(['message' => 'Se ha eliminado al usuario '.$name], 200);
     }
 
     public function indexTeacher(Request $request)
     {
-        //
+        if (!$request->ajax()) {
+            abort(403, 'Unauthorized action.');
+        }
+        return $this->indexUser($request, 'teacher');
     }
 
     public function massChangesTeacher(Request $request)
     {
-        //
+        if (!$request->ajax()) {
+            abort(403, 'Unauthorized action.');
+        }
+        return $this->massChangesUser($request, 'teacher');
     }
 
     public function createTeacher()
     {
-        //
+        $countries = $this->countriesArray();
+        return view('layouts.users.te.add')
+            ->with('countries', $countries);
     }
 
-    public function storeTeacher(Request $request)
+    public function storeTeacher(StoreTeacher $request)
     {
-        //
+        if (!$request->ajax()) {
+            abort(403, 'Unauthorized action.');
+        }
+        $user = $this->storeUser($request, 'teacher');
+
+        $areaid = data_get(json_decode($request->area), 'id');
+        
+        $area = Area::find($areaid);
+
+        $teacher = new Teacher();
+        $teacher->acronym = $request->acronym;
+        $teacher->profession = $request->profession;
+        $teacher->experience = ($request->filled('experience')) ? strip_tags($request->experience, $this->allowedTags) : null;
+        $teacher->applied_studies = ($request->filled('applied_studies')) ? strip_tags($request->applied_studies, $this->allowedTags) : null;
+        $teacher->scale = ($request->filled('scale')) ? $request->scale : null;
+        $teacher->resolution = ($request->filled('resolution')) ? $request->resolution : null;
+        $teacher->user()->associate($user);
+        $teacher->area()->associate($area);
+        $teacher->save();
+        
+        return response()->json(null, 200);
     }
 
     public function showTeacher($id)
     {
-        //
+        if($id != "1" || Auth::id() == 1){
+            $user = User::role('teacher')->with(['usermeta' => function ($query) {
+                        $query->where('name', '=', 'display_name');
+                    }])->find($id);
+            $user->load('roles', 'teacher.area');
+            return view('layouts.users.te.show')
+            ->with('user', $user)
+            ->with('countries', $this->countries);
+        }else {
+            Flash::error('No tienes los permisos suficientes para ver esta información.');
+            return redirect()->route('users.te.index');
+        }
     }
 
     public function editTeacher($id)
     {
-        //
+        if($id != "1" || Auth::id() == 1){
+            $countries = $this->countriesArray();
+            $user = User::role('teacher')->with(['usermeta' => function ($query) {
+                        $query->where('name', '=', 'display_name');
+                    }])->find($id);
+            $user->load('roles');
+            $teacher = Teacher::where('user_id', $user->id)->first();
+            $teacher->load('area');
+            return view('layouts.users.te.edit')
+            ->with('user', $user)
+            ->with('teacher', $teacher)
+            ->with('countries', $countries);
+        }else {
+            Flash::error('No tienes los permisos suficientes para editar a este usuario.');
+            return redirect()->route('users.te.index');
+        }
     }
 
-    public function updateTeacher(Request $request, $id)
+    public function updateTeacher(EditTeacher $request, $id)
     {
-        //
+        if (!$request->ajax()) {
+            abort(403, 'Unauthorized action.');
+        }
+        $user = $this->updateUser($request, $id, 'teacher');
+
+        $areaid = data_get(json_decode($request->area), 'id');
+        
+        $teacher = Teacher::where('user_id', $user->id)->first();
+        if($teacher->acronym != $request->acronym) $teacher->acronym = $request->acronym;
+        if($teacher->profession != $request->profession) $teacher->profession = $request->profession;
+        if($request->filled('experience') && $teacher->experience != $request->experience) $teacher->experience = strip_tags($request->experience, $this->allowedTags);
+        if($request->filled('applied_studies') && $teacher->applied_studies != $request->applied_studies) $teacher->applied_studies = strip_tags($request->applied_studies, $this->allowedTags);
+        if($request->filled('scale') && $teacher->scale != $request->scale) $teacher->scale = $request->scale;
+        if($request->filled('resolution') && $teacher->resolution != $request->resolution) $teacher->resolution = $request->resolution;
+        if($teacher->area_id != $areaid) {
+            $area = Area::find($areaid);
+            $teacher->area()->associate($area);
+        }
+        $teacher->save();
+                
+        return response()->json(null, 200);
     }
 
     public function destroyTeacher(Request $request,$id)
@@ -592,42 +675,42 @@ class UsersController extends Controller
         //
     }
 
-    public function indexParent(Request $request)
+    public function indexGuardian(Request $request)
     {
         //
     }
 
-    public function massChangesParent(Request $request)
+    public function massChangesGuardian(Request $request)
     {
         //
     }
 
-    public function createParent()
+    public function createGuardian()
     {
         //
     }
 
-    public function storeParent(Request $request)
+    public function storeGuardian(Request $request)
     {
         //
     }
 
-    public function showParent($id)
+    public function showGuardian($id)
     {
         //
     }
 
-    public function editParent($id)
+    public function editGuardian($id)
     {
         //
     }
 
-    public function updateParent(Request $request, $id)
+    public function updateGuardian(Request $request, $id)
     {
         //
     }
 
-    public function destroyParent(Request $request,$id)
+    public function destroyGuardian(Request $request,$id)
     {
         //
     }
