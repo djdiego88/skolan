@@ -11,7 +11,7 @@ class Headquarter extends Model
 
     protected $table = 'headquarters';
 
-    protected $fillable = ['name', 'location', 'address'];
+    protected $fillable = ['name', 'location', 'address', 'dane', 'telephone'];
 
     protected static $logFillable = true;
 

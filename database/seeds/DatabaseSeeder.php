@@ -461,19 +461,25 @@ class DatabaseSeeder extends Seeder
         $hq1->name = 'La principal';
         $hq1->location = 'Soacha, Cundinamarca';
         $hq1->address = 'Evergreen 123';
+        $hq1->telephone = '3584963';
+        $hq1->dane = '168003476534';
         $hq1->save();
 
         $hq2 = new Headquarter();
         $hq2->name = 'El progreso';
         $hq2->location = 'Soacha, Cundinamarca';
         $hq2->address = 'Av. Siempre viva 1234';
+        $hq2->telephone = '5305763';
+        $hq2->dane = '168004576354';
         $hq2->save();
 
-        $hq2 = new Headquarter();
-        $hq2->name = 'La Isla';
-        $hq2->location = 'Soacha, Cundinamarca';
-        $hq2->address = 'Av.Cartón papel 1234';
-        $hq2->save();
+        $hq3 = new Headquarter();
+        $hq3->name = 'La Isla';
+        $hq3->location = 'Soacha, Cundinamarca';
+        $hq3->address = 'Av.Cartón papel 1234';
+        $hq3->telephone = '3765486';
+        $hq3->dane = '168003067465';
+        $hq3->save();
 
         $schd1 = new Schoolday();
         $schd1->name = 'Mañana';
