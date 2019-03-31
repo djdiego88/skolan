@@ -14,12 +14,12 @@ class CreateClassroomsTable extends Migration
     public function up()
     {
         Schema::create('classrooms', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('year_id')->unsigned();
-            $table->integer('headquarter_id')->unsigned();
-            $table->integer('schoolday_id')->unsigned();
-            $table->integer('director_id')->unsigned();
-            $table->integer('grade_id')->unsigned();
+            $table->bigIncrements('id');
+            $table->unsignedBigInteger('year_id');
+            $table->unsignedBigInteger('headquarter_id');
+            $table->unsignedBigInteger('schoolday_id');
+            $table->unsignedBigInteger('director_id');
+            $table->unsignedBigInteger('grade_id');
             $table->string('name');
             $table->integer('quota')->length(5)->nullable();
             $table->foreign('year_id')->references('id')->on('years')->onUpdate('cascade')->onDelete('cascade');

@@ -14,11 +14,11 @@ class CreateAnnotationsTable extends Migration
     public function up()
     {
         Schema::create('annotations', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('student_id')->unsigned();
-            $table->integer('teacher_id')->unsigned();
-            $table->integer('year_id')->unsigned();
-            $table->integer('schoolterm_id')->unsigned();
+            $table->bigIncrements('id');
+            $table->unsignedBigInteger('student_id');
+            $table->unsignedBigInteger('teacher_id');
+            $table->unsignedBigInteger('year_id');
+            $table->unsignedBigInteger('schoolterm_id');
             $table->string('type',30);
             $table->string('name');
             $table->longText('description');

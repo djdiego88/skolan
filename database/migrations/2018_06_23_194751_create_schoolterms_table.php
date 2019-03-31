@@ -14,8 +14,8 @@ class CreateSchooltermsTable extends Migration
     public function up()
     {
         Schema::create('schoolterms', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('year_id')->unsigned();
+            $table->bigIncrements('id');
+            $table->unsignedBigInteger('year_id');
             $table->string('name');
             $table->dateTime('start_date');
             $table->dateTime('end_date');

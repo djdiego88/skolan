@@ -14,8 +14,8 @@ class CreateGuardiansTable extends Migration
     public function up()
     {
         Schema::create('guardians', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('user_id')->unsigned();
+            $table->bigIncrements('id');
+            $table->unsignedBigInteger('user_id');
             $table->string('occupation')->nullable();
             $table->string('marital_status', 60)->nullable();
             $table->string('studies')->nullable();
@@ -26,9 +26,9 @@ class CreateGuardiansTable extends Migration
             $table->timestamps();
         });
         Schema::create('guardian_student', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('guardian_id')->unsigned();
-            $table->integer('student_id')->unsigned();
+            $table->bigIncrements('id');
+            $table->unsignedBigInteger('guardian_id');
+            $table->unsignedBigInteger('student_id');
             $table->string('relation',60);
             $table->foreign('guardian_id')->references('id')->on('guardians')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('student_id')->references('id')->on('students')->onUpdate('cascade')->onDelete('cascade');

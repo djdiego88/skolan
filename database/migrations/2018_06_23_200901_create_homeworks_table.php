@@ -14,8 +14,8 @@ class CreateHomeworksTable extends Migration
     public function up()
     {
         Schema::create('homeworks', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('classroom_subject_id')->unsigned();
+            $table->bigIncrements('id');
+            $table->unsignedBigInteger('classroom_subject_id');
             $table->string('name');
             $table->longText('description');
             $table->date('deadline');

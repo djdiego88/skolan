@@ -14,7 +14,7 @@ class CreateSchooldaysTable extends Migration
     public function up()
     {
         Schema::create('schooldays', function (Blueprint $table) {
-            $table->increments('id');
+            $table->bigIncrements('id');
             $table->string('name');
             $table->timestamps();
             $table->index('name');

@@ -14,11 +14,11 @@ class CreateQualificationsTable extends Migration
     public function up()
     {
         Schema::create('qualifications', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('classroom_subject_id')->unsigned();
-            $table->integer('student_id')->unsigned();
-            $table->integer('year_id')->unsigned();
-            $table->integer('schoolterm_id')->unsigned();
+            $table->bigIncrements('id');
+            $table->unsignedBigInteger('classroom_subject_id');
+            $table->unsignedBigInteger('student_id');
+            $table->unsignedBigInteger('year_id');
+            $table->unsignedBigInteger('schoolterm_id');
             $table->integer('number')->length(4);
             $table->float('value');
             $table->foreign('classroom_subject_id')->references('id')->on('classroom_subject')->onUpdate('cascade')->onDelete('cascade');
@@ -28,11 +28,11 @@ class CreateQualificationsTable extends Migration
             $table->timestamps();
         });
         Schema::create('final_qualifications', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('classroom_subject_id')->unsigned();
-            $table->integer('student_id')->unsigned();
-            $table->integer('year_id')->unsigned();
-            $table->integer('schoolterm_id')->unsigned();
+            $table->bigIncrements('id');
+            $table->unsignedBigInteger('classroom_subject_id');
+            $table->unsignedBigInteger('student_id');
+            $table->unsignedBigInteger('year_id');
+            $table->unsignedBigInteger('schoolterm_id');
             $table->float('value');
             $table->foreign('classroom_subject_id')->references('id')->on('classroom_subject')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('student_id')->references('id')->on('students')->onUpdate('cascade')->onDelete('cascade');

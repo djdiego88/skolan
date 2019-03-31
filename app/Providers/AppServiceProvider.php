@@ -21,7 +21,7 @@ class AppServiceProvider extends ServiceProvider
         //Share options values with all views
         $options = Option::all();
         $configs = [];
-        foreach($options as $option) {
+        foreach ($options as $option) {
             $configs[$option->name] = $option->value;
         }
         View::share('configs', $configs);
