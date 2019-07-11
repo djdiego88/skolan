@@ -167,14 +167,6 @@
                                             <div class="invalid-feedback" v-if="errors.facebook_url">{{errors.facebook_url[0]}}</div>
                                         </div>
                                     </div>
-                                    <div class="row" v-if="option.name == 'google_url'">
-                                        <label :for="option.name" class="col-sm-3 col-form-label">{{option.display_name}}</label>
-                                        <div class="col-sm-9">
-                                            <input type="text" :name="option.name" :id="option.name" v-model="google_url" class="form-control" :class="{'is-invalid': errors.google_url}" required>
-                                            <small class="form-text text-muted">{{option.description}}</small>
-                                            <div class="invalid-feedback" v-if="errors.google_url">{{errors.google_url[0]}}</div>
-                                        </div>
-                                    </div>
                                     <div class="row" v-if="option.name == 'instagram_account'">
                                         <label :for="option.name" class="col-sm-3 col-form-label">{{option.display_name}}</label>
                                         <div class="col-sm-9">

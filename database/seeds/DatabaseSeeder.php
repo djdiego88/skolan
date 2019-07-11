@@ -178,13 +178,6 @@ class DatabaseSeeder extends Seeder
 		$optionFacebookPage->value = '';
 		$optionFacebookPage->save();
 
-		$optionGooglePage = new Option();
-		$optionGooglePage->name = 'google_url';
-		$optionGooglePage->display_name = 'Página de Google+';
-		$optionGooglePage->description = 'Ingresa la URL de la página oficial en Google+ de la Institución.';
-		$optionGooglePage->value = '';
-		$optionGooglePage->save();
-
 		$optionInstagramAccount = new Option();
 		$optionInstagramAccount->name = 'instagram_account';
 		$optionInstagramAccount->display_name = 'Cuenta de Instagram';
@@ -430,31 +423,31 @@ class DatabaseSeeder extends Seeder
         $mus->save();
 
         $year1 = new Year();
-        $year1->name = '2018';
+        $year1->name = '2019';
         $year1->status = 'inactive';
-        $year1->start_date = '2018-01-15 00:00:00';
-        $year1->end_date = '2018-12-15 23:59:59';
+        $year1->start_date = '2019-01-15 00:00:00';
+        $year1->end_date = '2019-12-15 23:59:59';
         $year1->save();
 
         $year2 = new Year();
-        $year2->name = '2019';
+        $year2->name = '2020';
         $year2->status = 'active';
-        $year2->start_date = '2019-01-15 00:00:00';
-        $year2->end_date = '2019-12-15 23:59:59';
+        $year2->start_date = '2020-01-15 00:00:00';
+        $year2->end_date = '2020-12-15 23:59:59';
         $year2->save();
 
         $year3 = new Year();
-        $year3->name = '2020';
+        $year3->name = '2021';
         $year3->status = 'pre-active';
-        $year3->start_date = '2020-01-15 00:00:00';
-        $year3->end_date = '2020-12-15 23:59:59';
+        $year3->start_date = '2021-01-15 00:00:00';
+        $year3->end_date = '2021-12-15 23:59:59';
         $year3->save();
 
         $year4 = new Year();
-        $year4->name = '2021';
+        $year4->name = '2022';
         $year4->status = 'inactive';
-        $year4->start_date = '2021-01-15 00:00:00';
-        $year4->end_date = '2021-12-15 23:59:59';
+        $year4->start_date = '2022-01-15 00:00:00';
+        $year4->end_date = '2022-12-15 23:59:59';
         $year4->save();
 
         $hq1 = new Headquarter();
@@ -582,7 +575,7 @@ class DatabaseSeeder extends Seeder
             $user->assignRole('guardian');
             //Añadir usermeta
             $display_name = $user->first_name . ' '. $user->last_name;
-            $display_name = explode(" ",$display_name);
+            $display_name = explode( " ", $display_name );
             $countnames = count($display_name);
             if($countnames == 1){
                 $display_name = $display_name[0];

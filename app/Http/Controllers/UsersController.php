@@ -165,10 +165,10 @@ class UsersController extends Controller
 
     private function updateUser($request, $id, $rol)
     {
-        $user = User::role($rol)->find($id);
+        $user = User::role($rol)->findOrFail($id);
         if($user->first_name != $request->first_name || $user->last_name != $request->last_name){
             $display_name = $this->getDisplayName($request->first_name,$request->last_name);
-            $displayname = Usermeta::where('user_id', $user->id)->where('name', 'display_name')->first();
+            $displayname = Usermeta::where('user_id', $user->id)->where('name', 'display_name')->firstOrFail();
             $displayname->value = $display_name;
             $displayname->save();
         }
@@ -221,7 +221,7 @@ class UsersController extends Controller
             if($request->status != ""){
                 foreach ($usersids as $userid) {
                     if($userid != "1"){
-                        $user = User::role($rol)->find(intval($userid));
+                        $user = User::role($rol)->findOrFail(intval($userid));
                         $user->status = $request->status;
                         $user->save();
                     }else{
@@ -233,7 +233,7 @@ class UsersController extends Controller
                 if($request->action == 'delete'){
                     foreach ($usersids as $userid) {
                         if($userid != "1"){
-                            $user = User::role($rol)->find(intval($userid));
+                            $user = User::role($rol)->findOrFail(intval($userid));
                             $user->delete();
                         }else{
                             return response()->json(['message' => 'No tienes los permisos suficientes para eliminar este usuario'], 200);
@@ -296,7 +296,7 @@ class UsersController extends Controller
         if($id != "1" || Auth::id() == 1){
             $user = User::role('superadmin')->with(['usermeta' => function ($query) {
                         $query->where('name', '=', 'display_name');
-                    }])->find($id);
+                    }])->findOrFail($id);
             $user->load('roles');
             return view('layouts.users.sa.show')
             ->with('user', $user)
@@ -313,7 +313,7 @@ class UsersController extends Controller
             $countries = $this->countriesArray();
             $user = User::role('superadmin')->with(['usermeta' => function ($query) {
                         $query->where('name', '=', 'display_name');
-                    }])->find($id);
+                    }])->findOrFail($id);
             $user->load('roles');
             return view('layouts.users.sa.edit')
             ->with('user', $user)
@@ -383,7 +383,7 @@ class UsersController extends Controller
         if($id != "1" || Auth::id() == 1){
             $user = User::role('administrative')->with(['usermeta' => function ($query) {
                         $query->where('name', '=', 'display_name');
-                    }])->find($id);
+                    }])->findOrFail($id);
             $user->load('roles');
             return view('layouts.users.ad.show')
             ->with('user', $user)
@@ -400,7 +400,7 @@ class UsersController extends Controller
             $countries = $this->countriesArray();
             $user = User::role('administrative')->with(['usermeta' => function ($query) {
                         $query->where('name', '=', 'display_name');
-                    }])->find($id);
+                    }])->findOrFail($id);
             $user->load('roles');
             return view('layouts.users.ad.edit')
             ->with('user', $user)
@@ -426,7 +426,7 @@ class UsersController extends Controller
         if (!$request->ajax()) {
             abort(403, 'Unauthorized action.');
         }
-        $user = User::role('administrative')->find(intval($id));
+        $user = User::role('administrative')->findOrFail(intval($id));
         $name = $user->first_name.' '.$user->last_name;
         $user->removeRole('administrative');
         $user->delete();
@@ -471,7 +471,7 @@ class UsersController extends Controller
         if($id != "1" || Auth::id() == 1){
             $user = User::role('coordinator')->with(['usermeta' => function ($query) {
                         $query->where('name', '=', 'display_name');
-                    }])->find($id);
+                    }])->findOrFail($id);
             $user->load('roles');
             return view('layouts.users.co.show')
             ->with('user', $user)
@@ -488,7 +488,7 @@ class UsersController extends Controller
             $countries = $this->countriesArray();
             $user = User::role('coordinator')->with(['usermeta' => function ($query) {
                         $query->where('name', '=', 'display_name');
-                    }])->find($id);
+                    }])->findOrFail($id);
             $user->load('roles');
             return view('layouts.users.co.edit')
             ->with('user', $user)
@@ -514,7 +514,7 @@ class UsersController extends Controller
         if (!$request->ajax()) {
             abort(403, 'Unauthorized action.');
         }
-        $user = User::role('coordinator')->find(intval($id));
+        $user = User::role('coordinator')->findOrFail(intval($id));
         $name = $user->first_name.' '.$user->last_name;
         $user->removeRole('coordinator');
         $user->delete();
@@ -553,7 +553,7 @@ class UsersController extends Controller
 
         $areaid = data_get(json_decode($request->area), 'id');
         
-        $area = Area::find($areaid);
+        $area = Area::findOrFail($areaid);
 
         $teacher = new Teacher();
         $teacher->acronym = $request->acronym;
@@ -574,7 +574,7 @@ class UsersController extends Controller
         if($id != "1" || Auth::id() == 1){
             $user = User::role('teacher')->with(['usermeta' => function ($query) {
                         $query->where('name', '=', 'display_name');
-                    }])->find($id);
+                    }])->findOrFail($id);
             $user->load('roles', 'teacher.area');
             return view('layouts.users.te.show')
             ->with('user', $user)
@@ -591,9 +591,9 @@ class UsersController extends Controller
             $countries = $this->countriesArray();
             $user = User::role('teacher')->with(['usermeta' => function ($query) {
                         $query->where('name', '=', 'display_name');
-                    }])->find($id);
+                    }])->findOrFail($id);
             $user->load('roles');
-            $teacher = Teacher::where('user_id', $user->id)->first();
+            $teacher = Teacher::where('user_id', $user->id)->firstOrFail();
             $teacher->load('area');
             return view('layouts.users.te.edit')
             ->with('user', $user)
@@ -614,7 +614,7 @@ class UsersController extends Controller
 
         $areaid = data_get(json_decode($request->area), 'id');
         
-        $teacher = Teacher::where('user_id', $user->id)->first();
+        $teacher = Teacher::where('user_id', $user->id)->firstOrFail();
         if($teacher->acronym != $request->acronym) $teacher->acronym = $request->acronym;
         if($teacher->profession != $request->profession) $teacher->profession = $request->profession;
         if($request->filled('experience') && $teacher->experience != $request->experience) $teacher->experience = strip_tags($request->experience, $this->allowedTags);
@@ -622,7 +622,7 @@ class UsersController extends Controller
         if($request->filled('scale') && $teacher->scale != $request->scale) $teacher->scale = $request->scale;
         if($request->filled('resolution') && $teacher->resolution != $request->resolution) $teacher->resolution = $request->resolution;
         if($teacher->area_id != $areaid) {
-            $area = Area::find($areaid);
+            $area = Area::findOrFail($areaid);
             $teacher->area()->associate($area);
         }
         $teacher->save();
