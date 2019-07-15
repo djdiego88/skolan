@@ -17,25 +17,32 @@ class Schedule extends Model
 
     protected static $logOnlyDirty = true;
 
-    public function teacher() {
-    	return $this->belongsTo('App\Teacher');
+    public function teacher()
+    {
+        return $this->belongsTo('App\Teacher');
     }
-    public function classroom() {
-    	return $this->belongsTo('App\Classroom');
+    public function classroom()
+    {
+        return $this->belongsTo('App\Classroom');
     }
-    public function subject() {
-    	return $this->belongsTo('App\Subject');
+    public function subject()
+    {
+        return $this->belongsTo('App\Subject');
     }
-    public function absences() {
+    public function absences()
+    {
         return $this->hasMany('App\Absence');
     }
-    public function homeworks() {
+    public function homeworks()
+    {
         return $this->hasMany('App\Homework');
     }
-    public function qualifications() {
+    public function qualifications()
+    {
         return $this->hasMany('App\Qualification');
     }
-    public function finalqualifications() {
+    public function finalqualifications()
+    {
         return $this->hasMany('App\FinalQualification');
     }
 }

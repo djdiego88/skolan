@@ -72,7 +72,7 @@ Route::middleware(['auth', 'enabled'])->group(function () {
             Route::get('{userid}', 'UsersController@showAdministrative')->name('users.ad.show');
             Route::get('edit/{userid}', 'UsersController@editAdministrative')->name('users.ad.edit');
             Route::put('edit/{userid}', 'UsersController@updateAdministrative')->name('api.users.ad.update');
-            Route::get('destroy/{userid}', 'UsersController@destroyAdministrative')->name('api.users.ad.destroy');
+            Route::post('destroy/{userid}', 'UsersController@destroyAdministrative')->name('api.users.ad.destroy');
         });
         //Coordinators
         Route::prefix('coordinators')->group(function () {
@@ -84,7 +84,7 @@ Route::middleware(['auth', 'enabled'])->group(function () {
             Route::get('{userid}', 'UsersController@showCoordinator')->name('users.co.show');
             Route::get('edit/{userid}', 'UsersController@editCoordinator')->name('users.co.edit');
             Route::put('edit/{userid}', 'UsersController@updateCoordinator')->name('api.users.co.update');
-            Route::get('destroy/{userid}', 'UsersController@destroyCoordinator')->name('api.users.co.destroy');
+            Route::post('destroy/{userid}', 'UsersController@destroyCoordinator')->name('api.users.co.destroy');
         });
         //Teachers
         Route::prefix('teachers')->group(function () {
@@ -96,7 +96,7 @@ Route::middleware(['auth', 'enabled'])->group(function () {
             Route::get('{userid}', 'UsersController@showTeacher')->name('users.te.show');
             Route::get('edit/{userid}', 'UsersController@editTeacher')->name('users.te.edit');
             Route::put('edit/{userid}', 'UsersController@updateTeacher')->name('api.users.te.update');
-            Route::get('destroy/{userid}', 'UsersController@destroyTeacher')->name('api.users.te.destroy');
+            Route::post('destroy/{userid}', 'UsersController@destroyTeacher')->name('api.users.te.destroy');
         });
     });
     //Areas

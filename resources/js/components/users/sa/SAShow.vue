@@ -136,9 +136,13 @@
                             if (willDelete) {
                                 axios.post(route('users.sa.destroy', userid))
                                 .then(response => {
-                                    this.getUsers();
                                     this.submiting = false;
-                                    this.$toasted.global.error(response.data.message);
+                                    this.$toasted.global.error(response.data.message,
+                                        { 
+                                            duration: 2500,
+                                            onComplete: window.location.assign(route('users.sa'))
+                                        }
+                                    );
                                 });
                             }else {
                                 this.submiting = false;

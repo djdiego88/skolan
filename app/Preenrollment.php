@@ -17,13 +17,16 @@ class Preenrollment extends Model
 
     protected static $logOnlyDirty = true;
 
-    public function grade() {
-    	return $this->belongsTo('App\Grade');
+    public function grade()
+    {
+        return $this->belongsTo('App\Grade');
     }
-    public function student() {
-    	return $this->belongsTo('App\Student');
+    public function student()
+    {
+        return $this->belongsTo('App\Student');
     }
-    public function year() {
-    	return $this->belongsTo('App\Year');
+    public function year()
+    {
+        return $this->belongsTo('App\Year');
     }
 }

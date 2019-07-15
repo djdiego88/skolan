@@ -17,25 +17,32 @@ class Classroom extends Model
 
     protected static $logOnlyDirty = true;
 
-    public function year() {
-    	return $this->belongsTo('App\Year');
+    public function year()
+    {
+        return $this->belongsTo('App\Year');
     }
-    public function headquarter() {
-    	return $this->belongsTo('App\Headquarter');
+    public function headquarter()
+    {
+        return $this->belongsTo('App\Headquarter');
     }
-    public function schoolday() {
-    	return $this->belongsTo('App\Schoolday');
+    public function schoolday()
+    {
+        return $this->belongsTo('App\Schoolday');
     }
-    public function director() {
-    	return $this->belongsTo('App\User');
+    public function director()
+    {
+        return $this->belongsTo('App\User');
     }
-    public function grade() {
-    	return $this->belongsTo('App\Grade');
+    public function grade()
+    {
+        return $this->belongsTo('App\Grade');
     }
-    public function schedules() {
+    public function schedules()
+    {
         return $this->hasMany('App\Schedule');
     }
-    public function enrollments() {
+    public function enrollments()
+    {
         return $this->hasMany('App\Enrollment');
     }
     /*public function students()

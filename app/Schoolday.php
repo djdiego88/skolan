@@ -17,7 +17,8 @@ class Schoolday extends Model
 
     protected static $logOnlyDirty = true;
 
-    public function classrooms() {
+    public function classrooms()
+    {
         return $this->hasMany('App\Classroom');
     }
 }

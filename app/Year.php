@@ -17,22 +17,28 @@ class Year extends Model
 
     protected static $logOnlyDirty = true;
 
-    public function schoolterms() {
+    public function schoolterms()
+    {
         return $this->hasMany('App\Schoolterm');
     }
-    public function classrooms() {
+    public function classrooms()
+    {
         return $this->hasMany('App\Classroom');
     }
-    public function annotations() {
+    public function annotations()
+    {
         return $this->hasMany('App\Annotation');
     }
-    public function qualifications() {
+    public function qualifications()
+    {
         return $this->hasMany('App\Qualification');
     }
-    public function finalqualifications() {
+    public function finalqualifications()
+    {
         return $this->hasMany('App\FinalQualification');
     }
-    public function preenrollments() {
+    public function preenrollments()
+    {
         return $this->hasMany('App\Preenrollment');
     }
 }

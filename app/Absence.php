@@ -17,13 +17,16 @@ class Absence extends Model
 
     protected static $logOnlyDirty = true;
 
-    public function schoolterm() {
-    	return $this->belongsTo('App\Schoolterm');
+    public function schoolterm()
+    {
+        return $this->belongsTo('App\Schoolterm');
     }
-    public function schedule() {
-    	return $this->belongsTo('App\Schedule');
+    public function schedule()
+    {
+        return $this->belongsTo('App\Schedule');
     }
-    public function student() {
-    	return $this->belongsTo('App\Student');
+    public function student()
+    {
+        return $this->belongsTo('App\Student');
     }
 }

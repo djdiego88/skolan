@@ -17,16 +17,20 @@ class Annotation extends Model
 
     protected static $logOnlyDirty = true;
 
-    public function teacher() {
-    	return $this->belongsTo('App\Teacher');
+    public function teacher()
+    {
+        return $this->belongsTo('App\Teacher');
     }
-    public function student() {
-    	return $this->belongsTo('App\Student');
+    public function student()
+    {
+        return $this->belongsTo('App\Student');
     }
-    public function year() {
-    	return $this->belongsTo('App\Year');
+    public function year()
+    {
+        return $this->belongsTo('App\Year');
     }
-    public function schoolterm() {
-    	return $this->belongsTo('App\Schoolterm');
+    public function schoolterm()
+    {
+        return $this->belongsTo('App\Schoolterm');
     }
 }

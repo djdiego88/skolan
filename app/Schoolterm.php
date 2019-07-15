@@ -17,19 +17,24 @@ class Schoolterm extends Model
 
     protected static $logOnlyDirty = true;
 
-    public function year() {
-    	return $this->belongsTo('App\Year');
+    public function year()
+    {
+        return $this->belongsTo('App\Year');
     }
-    public function absences() {
+    public function absences()
+    {
         return $this->hasMany('App\Absence');
     }
-    public function annotations() {
+    public function annotations()
+    {
         return $this->hasMany('App\Annotation');
     }
-    public function qualifications() {
+    public function qualifications()
+    {
         return $this->hasMany('App\Qualification');
     }
-    public function finalqualifications() {
+    public function finalqualifications()
+    {
         return $this->hasMany('App\FinalQualification');
     }
 }

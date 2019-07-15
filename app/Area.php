@@ -17,10 +17,12 @@ class Area extends Model
 
     protected static $logOnlyDirty = true;
 
-    public function teachers() {
+    public function teachers()
+    {
         return $this->hasMany('App\Teacher');
     }
-    public function subjects() {
+    public function subjects()
+    {
         return $this->hasMany('App\Subject');
     }
 }

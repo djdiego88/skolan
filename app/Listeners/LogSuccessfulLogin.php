@@ -29,7 +29,7 @@ class LogSuccessfulLogin
     public function handle(Login $event)
     {
         $user = Auth::user();
-        if($user->status !== 'disabled'){
+        if ($user->status !== 'disabled') {
             $user->last_access = Carbon::now();
             $user->save();
         }

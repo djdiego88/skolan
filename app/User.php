@@ -40,31 +40,38 @@ class User extends Authenticatable
 
     protected static $logOnlyDirty = true;
 
-    public function usermeta() {
+    public function usermeta()
+    {
         return $this->hasMany('App\Usermeta');
     }
-    public function student() {
+    public function student()
+    {
         return $this->hasOne('App\Student');
     }
-    public function guardian() {
+    public function guardian()
+    {
         return $this->hasOne('App\Guardian');
     }
-    public function teacher() {
+    public function teacher()
+    {
         return $this->hasOne('App\Teacher');
     }
-    public function classroom() {
+    public function classroom()
+    {
         return $this->hasOne('App\Classroom');
     }
-    public function scopeSearchByName($query,$name){
+    public function scopeSearchByName($query, $name)
+    {
         return $query->join('usermeta', function ($join) {
                         $join->on('users.id', '=', 'usermeta.user_id')
                              ->where('usermeta.name', '=', 'display_name');
-                    })
-                    ->where('users.first_name', 'LIKE', "%$name%")
-                    ->orWhere('users.last_name', 'LIKE', "%$name%")
-                    ->orWhere('usermeta.value', 'LIKE', "%$name%");
+        })
+        ->where('users.first_name', 'LIKE', "%$name%")
+        ->orWhere('users.last_name', 'LIKE', "%$name%")
+        ->orWhere('usermeta.value', 'LIKE', "%$name%");
     }
-    public function enabled() {
+    public function enabled()
+    {
         return $this->status === 'enabled';
     }
 }

@@ -17,28 +17,36 @@ class Student extends Model
 
     protected static $logOnlyDirty = true;
 
-    public function user() {
-    	return $this->belongsTo('App\User');
+    public function user()
+    {
+        return $this->belongsTo('App\User');
     }
-    public function guardians() {
+    public function guardians()
+    {
         return $this->belongsToMany('App\Guardian')->withPivot('relation')->withTimestamps();
     }
-    public function absences() {
+    public function absences()
+    {
         return $this->hasMany('App\Absence');
     }
-    public function enrollments() {
+    public function enrollments()
+    {
         return $this->hasMany('App\Enrollment');
     }
-    public function annotations() {
+    public function annotations()
+    {
         return $this->hasMany('App\Annotation');
     }
-    public function qualifications() {
+    public function qualifications()
+    {
         return $this->hasMany('App\Qualification');
     }
-    public function finalqualifications() {
+    public function finalqualifications()
+    {
         return $this->hasMany('App\FinalQualification');
     }
-    public function preenrollments() {
+    public function preenrollments()
+    {
         return $this->hasMany('App\Preenrollment');
     }
     /*public function classroom()

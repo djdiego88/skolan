@@ -17,10 +17,12 @@ class Subject extends Model
 
     protected static $logOnlyDirty = true;
 
-    public function area() {
-    	return $this->belongsTo('App\Area');
+    public function area()
+    {
+        return $this->belongsTo('App\Area');
     }
-    public function schedules() {
+    public function schedules()
+    {
         return $this->hasMany('App\Schedule');
     }
     /*public function classrooms()

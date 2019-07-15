@@ -16,9 +16,9 @@ class UserEnabled
      */
     public function handle($request, Closure $next, $guard = null)
     {
-        if(Auth::guard($guard)->user()->enabled()){
+        if (Auth::guard($guard)->user()->enabled()) {
             return $next($request);
-        }else {
+        } else {
             Auth::logout();
             abort(401);
         }

@@ -17,10 +17,12 @@ class Grade extends Model
 
     protected static $logOnlyDirty = true;
 
-    public function classrooms() {
+    public function classrooms()
+    {
         return $this->hasMany('App\Classroom');
     }
-    public function preenrollments() {
+    public function preenrollments()
+    {
         return $this->hasMany('App\Preenrollment');
     }
 }

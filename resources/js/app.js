@@ -37,7 +37,7 @@ Vue.mixin({
     }
 });
 Vue.component('multiselect', Multiselect);
-Vue.component('pagination', require('laravel-vue-pagination').default);
+Vue.component('pagination', require('laravel-vue-pagination'));
 Vue.component('options', require('./components/options/Options.vue').default);
 Vue.component('sa-index', require('./components/users/sa/SAIndex.vue').default);
 Vue.component('sa-show', require('./components/users/sa/SAShow.vue').default);

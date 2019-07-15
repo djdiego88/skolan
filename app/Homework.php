@@ -17,7 +17,8 @@ class Homework extends Model
 
     protected static $logOnlyDirty = true;
 
-    public function schedule() {
-    	return $this->belongsTo('App\Schedule');
+    public function schedule()
+    {
+        return $this->belongsTo('App\Schedule');
     }
 }

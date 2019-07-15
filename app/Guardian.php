@@ -17,10 +17,12 @@ class Guardian extends Model
 
     protected static $logOnlyDirty = true;
 
-    public function user() {
-    	return $this->belongsTo('App\User');
+    public function user()
+    {
+        return $this->belongsTo('App\User');
     }
-    public function students() {
+    public function students()
+    {
         return $this->belongsToMany('App\Student')->withPivot('relation')->withTimestamps();
     }
 }

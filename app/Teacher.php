@@ -17,16 +17,20 @@ class Teacher extends Model
 
     protected static $logOnlyDirty = true;
 
-    public function user() {
-    	return $this->belongsTo('App\User');
+    public function user()
+    {
+        return $this->belongsTo('App\User');
     }
-    public function area() {
-    	return $this->belongsTo('App\Area');
+    public function area()
+    {
+        return $this->belongsTo('App\Area');
     }
-    public function schedules() {
+    public function schedules()
+    {
         return $this->hasMany('App\Schedule');
     }
-    public function annotations() {
+    public function annotations()
+    {
         return $this->hasMany('App\Annotation');
     }
 }

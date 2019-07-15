@@ -5643,11 +5643,12 @@ __webpack_require__.r(__webpack_exports__);
         }).then(function (willDelete) {
           if (willDelete) {
             axios.post(route('api.users.ad.destroy', _self.user.id)).then(function (response) {
-              _this3.getUsers();
-
               _this3.submiting = false;
 
-              _this3.$toasted.global.error(response.data.message);
+              _this3.$toasted.global.error(response.data.message, {
+                duration: 2500,
+                onComplete: window.location.assign(route('users.ad.index'))
+              });
             });
           } else {
             _this3.submiting = false;
@@ -6160,11 +6161,12 @@ __webpack_require__.r(__webpack_exports__);
         }).then(function (willDelete) {
           if (willDelete) {
             axios.post(route('api.users.ad.destroy', userid)).then(function (response) {
-              _this.getUsers();
-
               _this.submiting = false;
 
-              _this.$toasted.global.error(response.data.message);
+              _this.$toasted.global.error(response.data.message, {
+                duration: 2500,
+                onComplete: window.location.assign(route('users.ad.index'))
+              });
             });
           } else {
             _this.submiting = false;
@@ -6820,11 +6822,12 @@ __webpack_require__.r(__webpack_exports__);
         }).then(function (willDelete) {
           if (willDelete) {
             axios.post(route('api.users.co.destroy', _self.user.id)).then(function (response) {
-              _this3.getUsers();
-
               _this3.submiting = false;
 
-              _this3.$toasted.global.error(response.data.message);
+              _this3.$toasted.global.error(response.data.message, {
+                duration: 2500,
+                onComplete: window.location.assign(route('users.co.index'))
+              });
             });
           } else {
             _this3.submiting = false;
@@ -7337,11 +7340,12 @@ __webpack_require__.r(__webpack_exports__);
         }).then(function (willDelete) {
           if (willDelete) {
             axios.post(route('api.users.co.destroy', userid)).then(function (response) {
-              _this.getUsers();
-
               _this.submiting = false;
 
-              _this.$toasted.global.error(response.data.message);
+              _this.$toasted.global.error(response.data.message, {
+                duration: 2500,
+                onComplete: window.location.assign(route('users.co.index'))
+              });
             });
           } else {
             _this.submiting = false;
@@ -7997,11 +8001,12 @@ __webpack_require__.r(__webpack_exports__);
         }).then(function (willDelete) {
           if (willDelete) {
             axios.post(route('users.sa.destroy', _self.user.id)).then(function (response) {
-              _this3.getUsers();
-
               _this3.submiting = false;
 
-              _this3.$toasted.global.error(response.data.message);
+              _this3.$toasted.global.error(response.data.message, {
+                duration: 2500,
+                onComplete: window.location.assign(route('users.sa'))
+              });
             });
           } else {
             _this3.submiting = false;
@@ -8514,11 +8519,12 @@ __webpack_require__.r(__webpack_exports__);
         }).then(function (willDelete) {
           if (willDelete) {
             axios.post(route('users.sa.destroy', userid)).then(function (response) {
-              _this.getUsers();
-
               _this.submiting = false;
 
-              _this.$toasted.global.error(response.data.message);
+              _this.$toasted.global.error(response.data.message, {
+                duration: 2500,
+                onComplete: window.location.assign(route('users.sa'))
+              });
             });
           } else {
             _this.submiting = false;
@@ -9380,11 +9386,12 @@ __webpack_require__.r(__webpack_exports__);
         }).then(function (willDelete) {
           if (willDelete) {
             axios.post(route('api.users.te.destroy', _self.user.id)).then(function (response) {
-              _this4.getUsers();
-
               _this4.submiting = false;
 
-              _this4.$toasted.global.error(response.data.message);
+              _this4.$toasted.global.error(response.data.message, {
+                duration: 2500,
+                onComplete: window.location.assign(route('users.te.index'))
+              });
             });
           } else {
             _this4.submiting = false;
@@ -9931,11 +9938,12 @@ __webpack_require__.r(__webpack_exports__);
         }).then(function (willDelete) {
           if (willDelete) {
             axios.post(route('api.users.te.destroy', userid)).then(function (response) {
-              _this.getUsers();
-
               _this.submiting = false;
 
-              _this.$toasted.global.error(response.data.message);
+              _this.$toasted.global.error(response.data.message, {
+                duration: 2500,
+                onComplete: window.location.assign(route('users.te.index'))
+              });
             });
           } else {
             _this.submiting = false;
@@ -114479,7 +114487,7 @@ Vue.mixin({
   }
 });
 Vue.component('multiselect', vue_multiselect__WEBPACK_IMPORTED_MODULE_2___default.a);
-Vue.component('pagination', __webpack_require__(/*! laravel-vue-pagination */ "./node_modules/laravel-vue-pagination/dist/laravel-vue-pagination.common.js")["default"]);
+Vue.component('pagination', __webpack_require__(/*! laravel-vue-pagination */ "./node_modules/laravel-vue-pagination/dist/laravel-vue-pagination.common.js"));
 Vue.component('options', __webpack_require__(/*! ./components/options/Options.vue */ "./resources/js/components/options/Options.vue")["default"]);
 Vue.component('sa-index', __webpack_require__(/*! ./components/users/sa/SAIndex.vue */ "./resources/js/components/users/sa/SAIndex.vue")["default"]);
 Vue.component('sa-show', __webpack_require__(/*! ./components/users/sa/SAShow.vue */ "./resources/js/components/users/sa/SAShow.vue")["default"]);

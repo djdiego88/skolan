@@ -7,7 +7,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
 
 class Option extends Model
 {
-	use LogsActivity;
+    use LogsActivity;
 
     protected $table = 'options';
 

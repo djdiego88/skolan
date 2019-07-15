@@ -17,7 +17,8 @@ class Usermeta extends Model
 
     protected static $logOnlyDirty = true;
 
-    public function user() {
-    	return $this->belongsTo('App\User');
+    public function user()
+    {
+        return $this->belongsTo('App\User');
     }
 }

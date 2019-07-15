@@ -27,11 +27,11 @@ class UsersController extends Controller
     {
         Carbon::setLocale('es');
 
-        $this->pagination = Option::where('name', 'items_per_page')->first();
+        $this->pagination = Option::where('name', 'items_per_page')->firstOrFail();
 
         $countryjson = 'https://cdn.jsdelivr.net/gh/umpirsky/country-list/data/es_CO/country.json';
         $json = file_get_contents($countryjson);
-        $this->countries = json_decode($json, TRUE);
+        $this->countries = json_decode($json, true);
         $this->allowedTags = '<p><ol><ul><li><strong><em><br>';
 
         $this->middleware(['role:superadmin'])->only([
@@ -92,12 +92,11 @@ class UsersController extends Controller
             'showStudent',
             'showGuardian',
         ]);
-
     }
     
     private function countriesArray()
     {
-        $callback = function($key, $value) {
+        $callback = function ($key, $value) {
             return ['value'=> $key, 'label'=> $value];
         };
         return array_map($callback, array_keys($this->countries), $this->countries);
@@ -111,13 +110,13 @@ class UsersController extends Controller
     private function getDisplayName(string $firstname, string $lastname): string
     {
         $display_name = $firstname . ' '. $lastname;
-        $display_name = explode(" ",$display_name);
+        $display_name = explode(" ", $display_name);
         $countnames = count($display_name);
-        if($countnames == 1){
+        if ($countnames == 1) {
             $display_name = $display_name[0];
-        }elseif($countnames == 2){
+        } elseif ($countnames == 2) {
             $display_name = $display_name[0].' '.$display_name[1];
-        }elseif($countnames == 3 || $countnames == 4){
+        } elseif ($countnames == 3 || $countnames == 4) {
             $display_name = $display_name[0].' '.$display_name[2];
         }
         return $display_name;
@@ -145,9 +144,9 @@ class UsersController extends Controller
         $user->address = $request->address;
         $user->status = $request->status;
         $user->last_access = date('Y-m-d H:i:s');
-        if($request->hasFile('photo')){
+        if ($request->hasFile('photo')) {
             $file = $request->file('photo');
-            $name=basename($file->getClientOriginalName(),'.'.$file->getClientOriginalExtension());
+            $name=basename($file->getClientOriginalName(), '.'.$file->getClientOriginalExtension());
             $imgname = $name.'_'.time().'.'.$file->getClientOriginalExtension();
             Image::make($request->file('photo')->getRealPath())->fit(200)->save('storage/images/photos/'.$imgname);
             $user->photo = $imgname;
@@ -156,7 +155,7 @@ class UsersController extends Controller
 
         $user->assignRole($rol);
         
-        $display_name = $this->getDisplayName($user->first_name,$user->last_name);
+        $display_name = $this->getDisplayName($user->first_name, $user->last_name);
         $displayname = new Usermeta(['name' => 'display_name', 'value' => $display_name]);
         $user->usermeta()->save($displayname);
 
@@ -166,36 +165,36 @@ class UsersController extends Controller
     private function updateUser($request, $id, $rol)
     {
         $user = User::role($rol)->findOrFail($id);
-        if($user->first_name != $request->first_name || $user->last_name != $request->last_name){
-            $display_name = $this->getDisplayName($request->first_name,$request->last_name);
+        if ($user->first_name != $request->first_name || $user->last_name != $request->last_name) {
+            $display_name = $this->getDisplayName($request->first_name, $request->last_name);
             $displayname = Usermeta::where('user_id', $user->id)->where('name', 'display_name')->firstOrFail();
             $displayname->value = $display_name;
             $displayname->save();
         }
-        if($user->it != $request->it) $user->it = $request->it;
-        if($user->nid != $request->nid) $user->nid = $request->nid;
-        if($user->first_name != $request->first_name) $user->first_name = $request->first_name;
-        if($user->last_name != $request->last_name) $user->last_name = $request->last_name;
-        if($request->filled('email') && $user->email != $request->email) $user->email = $request->email;
-        if($request->filled('password') && $user->password != Hash::make($request->password)) $user->password = Hash::make($request->password);
-        if($user->birth_date != $request->birth_date) $user->birth_date = $request->birth_date;
-        if($user->gender != $request->gender) $user->gender = $request->gender;
-        if($user->phone_number != $request->phone_number) $user->phone_number = $request->phone_number;
-        if ($request->filled('cellphone_number') && $user->cellphone_number != $request->cellphone_number) $user->cellphone_number = $request->cellphone_number;
-        if($user->nacionality != $request->nacionality) $user->nacionality = $request->nacionality;
-        if($user->location != $request->location) $user->location = $request->location;
-        if($user->address != $request->address) $user->address = $request->address;
-        if($user->status != $request->status) $user->status = $request->status;
-        if($request->hasFile('photo')){
+        $user->it = ($user->it != $request->it) ? $request->it : $user->it;
+        $user->nid = ($user->nid != $request->nid) ? $request->nid : $user->nid;
+        $user->first_name = ($user->first_name != $request->first_name) ? $request->first_name : $user->first_name;
+        $user->last_name = ($user->last_name != $request->last_name) ? $request->last_name : $user->last_name;
+        $user->email = ($request->filled('email') && $user->email != $request->email) ? $request->email : $user->email;
+        $user->password = ($request->filled('password') && $user->password != Hash::make($request->password)) ? Hash::make($request->password) : $user->password;
+        $user->birth_date = ($user->birth_date != $request->birth_date) ? $request->birth_date : $user->birth_date;
+        $user->gender = ($user->gender != $request->gender) ? $request->gender : $user->gender;
+        $user->phone_number = ($user->phone_number != $request->phone_number) ? $request->phone_number : $user->phone_number;
+        $user->cellphone_number = ($request->filled('cellphone_number') && $user->cellphone_number != $request->cellphone_number) ? $request->cellphone_number : $user->cellphone_number;
+        $user->nacionality = ($user->nacionality != $request->nacionality) ? $request->nacionality : $user->nacionality;
+        $user->location = ($user->location != $request->location) ? $request->location : $user->location;
+        $user->address = ($user->address != $request->address) ? $request->address : $user->address;
+        $user->status = ($user->status != $request->status) ? $request->status : $user->status;
+        if ($request->hasFile('photo')) {
             $file = $request->file('photo');
-            $name=basename($file->getClientOriginalName(),'.'.$file->getClientOriginalExtension());
+            $name=basename($file->getClientOriginalName(), '.'.$file->getClientOriginalExtension());
             $imgname = $name.'_'.time().'.'.$file->getClientOriginalExtension();
             Image::make($request->file('photo')->getRealPath())->fit(200, 266)->save('storage/images/photos/'.$imgname);
             $user->photo = $imgname;
         }
         $user->save();
 
-        if($request->filled('roles')){
+        if ($request->filled('roles')) {
             $rolesNames = array_pluck(json_decode($request->roles), ['name']);
             $user->syncRoles($rolesNames);
         }
@@ -206,8 +205,8 @@ class UsersController extends Controller
     {
         $query = User::role($rol)->with(['usermeta' => function ($query1) {
                         $query1->where('name', '=', 'display_name');
-                    }]);
-        if($request->search) {
+        }]);
+        if ($request->search) {
             $query->searchByName($request->search);
         }
         $users = $query->orderBy($request->input('orderBy.column'), $request->input('orderBy.direction'))
@@ -216,33 +215,33 @@ class UsersController extends Controller
     }
     private function massChangesUser($request, $rol)
     {
-        if(!empty($request->users)){
+        if (!empty($request->users)) {
             $usersids = $request->users;
-            if($request->status != ""){
+            if ($request->status != "") {
                 foreach ($usersids as $userid) {
-                    if($userid != "1"){
+                    if ($userid != "1") {
                         $user = User::role($rol)->findOrFail(intval($userid));
                         $user->status = $request->status;
                         $user->save();
-                    }else{
+                    } else {
                         return response()->json(['message' => 'No tienes los permisos suficientes para actualizar el estado de este usuario'], 200);
                     }
                 }
                 return response()->json(['message' => 'Se ha actualizado el estado de los usuarios seleccionados'], 200);
-            }elseif($request->action != ""){
-                if($request->action == 'delete'){
+            } elseif ($request->action != "") {
+                if ($request->action == 'delete') {
                     foreach ($usersids as $userid) {
-                        if($userid != "1"){
+                        if ($userid != "1") {
                             $user = User::role($rol)->findOrFail(intval($userid));
                             $user->delete();
-                        }else{
+                        } else {
                             return response()->json(['message' => 'No tienes los permisos suficientes para eliminar este usuario'], 200);
                         }
                     }
                     return response()->json(['message' => 'Se han eliminado los usuarios seleccionados'], 200);
                 }
             }
-        }else {
+        } else {
             return response()->json(['message' => 'Debes seleccionar al menos un usuario para realizar esta acción'], 200);
         }
         return response()->json($request->all(), 200);
@@ -293,15 +292,15 @@ class UsersController extends Controller
 
     public function showSuperAdmin($id)
     {
-        if($id != "1" || Auth::id() == 1){
+        if ($id != "1" || Auth::id() == 1) {
             $user = User::role('superadmin')->with(['usermeta' => function ($query) {
                         $query->where('name', '=', 'display_name');
-                    }])->findOrFail($id);
+            }])->findOrFail($id);
             $user->load('roles');
             return view('layouts.users.sa.show')
             ->with('user', $user)
             ->with('countries', $this->countries);
-        }else {
+        } else {
             Flash::error('No tienes los permisos suficientes para ver esta información.');
             return redirect()->route('users.sa');
         }
@@ -309,16 +308,16 @@ class UsersController extends Controller
 
     public function editSuperAdmin($id)
     {
-        if($id != "1" || Auth::id() == 1){
+        if ($id != "1" || Auth::id() == 1) {
             $countries = $this->countriesArray();
             $user = User::role('superadmin')->with(['usermeta' => function ($query) {
                         $query->where('name', '=', 'display_name');
-                    }])->findOrFail($id);
+            }])->findOrFail($id);
             $user->load('roles');
             return view('layouts.users.sa.edit')
             ->with('user', $user)
             ->with('countries', $countries);
-        }else {
+        } else {
             Flash::error('No tienes los permisos suficientes para editar a este usuario.');
             return redirect()->route('users.sa');
         }
@@ -339,7 +338,7 @@ class UsersController extends Controller
         if (!$request->ajax()) {
             abort(403, 'Unauthorized action.');
         }
-        $user = User::role('superadmin')->find(intval($id));
+        $user = User::role('superadmin')->findOrFail(intval($id));
         $name = $user->first_name.' '.$user->last_name;
         $user->removeRole('superadmin');
         $user->delete();
@@ -380,15 +379,15 @@ class UsersController extends Controller
 
     public function showAdministrative($id)
     {
-        if($id != "1" || Auth::id() == 1){
+        if ($id != "1" || Auth::id() == 1) {
             $user = User::role('administrative')->with(['usermeta' => function ($query) {
                         $query->where('name', '=', 'display_name');
-                    }])->findOrFail($id);
+            }])->findOrFail($id);
             $user->load('roles');
             return view('layouts.users.ad.show')
             ->with('user', $user)
             ->with('countries', $this->countries);
-        }else {
+        } else {
             Flash::error('No tienes los permisos suficientes para ver esta información.');
             return redirect()->route('users.ad.index');
         }
@@ -396,16 +395,16 @@ class UsersController extends Controller
 
     public function editAdministrative($id)
     {
-        if($id != "1" || Auth::id() == 1){
+        if ($id != "1" || Auth::id() == 1) {
             $countries = $this->countriesArray();
             $user = User::role('administrative')->with(['usermeta' => function ($query) {
                         $query->where('name', '=', 'display_name');
-                    }])->findOrFail($id);
+            }])->findOrFail($id);
             $user->load('roles');
             return view('layouts.users.ad.edit')
             ->with('user', $user)
             ->with('countries', $countries);
-        }else {
+        } else {
             Flash::error('No tienes los permisos suficientes para editar a este usuario.');
             return redirect()->route('users.ad.index');
         }
@@ -468,15 +467,15 @@ class UsersController extends Controller
 
     public function showCoordinator($id)
     {
-        if($id != "1" || Auth::id() == 1){
+        if ($id != "1" || Auth::id() == 1) {
             $user = User::role('coordinator')->with(['usermeta' => function ($query) {
                         $query->where('name', '=', 'display_name');
-                    }])->findOrFail($id);
+            }])->findOrFail($id);
             $user->load('roles');
             return view('layouts.users.co.show')
             ->with('user', $user)
             ->with('countries', $this->countries);
-        }else {
+        } else {
             Flash::error('No tienes los permisos suficientes para ver esta información.');
             return redirect()->route('users.co.index');
         }
@@ -484,16 +483,16 @@ class UsersController extends Controller
 
     public function editCoordinator($id)
     {
-        if($id != "1" || Auth::id() == 1){
+        if ($id != "1" || Auth::id() == 1) {
             $countries = $this->countriesArray();
             $user = User::role('coordinator')->with(['usermeta' => function ($query) {
                         $query->where('name', '=', 'display_name');
-                    }])->findOrFail($id);
+            }])->findOrFail($id);
             $user->load('roles');
             return view('layouts.users.co.edit')
             ->with('user', $user)
             ->with('countries', $countries);
-        }else {
+        } else {
             Flash::error('No tienes los permisos suficientes para editar a este usuario.');
             return redirect()->route('users.co.index');
         }
@@ -509,7 +508,7 @@ class UsersController extends Controller
         return response()->json(null, 200);
     }
 
-    public function destroyCoordinator(Request $request,$id)
+    public function destroyCoordinator(Request $request, $id)
     {
         if (!$request->ajax()) {
             abort(403, 'Unauthorized action.');
@@ -571,15 +570,15 @@ class UsersController extends Controller
 
     public function showTeacher($id)
     {
-        if($id != "1" || Auth::id() == 1){
+        if ($id != "1" || Auth::id() == 1) {
             $user = User::role('teacher')->with(['usermeta' => function ($query) {
                         $query->where('name', '=', 'display_name');
-                    }])->findOrFail($id);
+            }])->findOrFail($id);
             $user->load('roles', 'teacher.area');
             return view('layouts.users.te.show')
             ->with('user', $user)
             ->with('countries', $this->countries);
-        }else {
+        } else {
             Flash::error('No tienes los permisos suficientes para ver esta información.');
             return redirect()->route('users.te.index');
         }
@@ -587,11 +586,11 @@ class UsersController extends Controller
 
     public function editTeacher($id)
     {
-        if($id != "1" || Auth::id() == 1){
+        if ($id != "1" || Auth::id() == 1) {
             $countries = $this->countriesArray();
             $user = User::role('teacher')->with(['usermeta' => function ($query) {
                         $query->where('name', '=', 'display_name');
-                    }])->findOrFail($id);
+            }])->findOrFail($id);
             $user->load('roles');
             $teacher = Teacher::where('user_id', $user->id)->firstOrFail();
             $teacher->load('area');
@@ -599,7 +598,7 @@ class UsersController extends Controller
             ->with('user', $user)
             ->with('teacher', $teacher)
             ->with('countries', $countries);
-        }else {
+        } else {
             Flash::error('No tienes los permisos suficientes para editar a este usuario.');
             return redirect()->route('users.te.index');
         }
@@ -615,13 +614,13 @@ class UsersController extends Controller
         $areaid = data_get(json_decode($request->area), 'id');
         
         $teacher = Teacher::where('user_id', $user->id)->firstOrFail();
-        if($teacher->acronym != $request->acronym) $teacher->acronym = $request->acronym;
-        if($teacher->profession != $request->profession) $teacher->profession = $request->profession;
-        if($request->filled('experience') && $teacher->experience != $request->experience) $teacher->experience = strip_tags($request->experience, $this->allowedTags);
-        if($request->filled('applied_studies') && $teacher->applied_studies != $request->applied_studies) $teacher->applied_studies = strip_tags($request->applied_studies, $this->allowedTags);
-        if($request->filled('scale') && $teacher->scale != $request->scale) $teacher->scale = $request->scale;
-        if($request->filled('resolution') && $teacher->resolution != $request->resolution) $teacher->resolution = $request->resolution;
-        if($teacher->area_id != $areaid) {
+        $teacher->acronym = ($teacher->acronym != $request->acronym) ? $request->acronym : $teacher->acronym;
+        $teacher->profession = ($teacher->profession != $request->profession) ? $request->profession : $teacher->profession;
+        $teacher->experience = ($request->filled('experience') && $teacher->experience != $request->experience) ? strip_tags($request->experience, $this->allowedTags) : $teacher->experience;
+        $teacher->applied_studies = ($request->filled('applied_studies') && $teacher->applied_studies != $request->applied_studies) ? strip_tags($request->applied_studies, $this->allowedTags) : $teacher->applied_studies;
+        $teacher->scale = ($request->filled('scale') && $teacher->scale != $request->scale) ? $request->scale : $teacher->scale;
+        $teacher->resolution = ($request->filled('resolution') && $teacher->resolution != $request->resolution) ? $request->resolution : $teacher->resolution;
+        if ($teacher->area_id != $areaid) {
             $area = Area::findOrFail($areaid);
             $teacher->area()->associate($area);
         }
@@ -630,9 +629,18 @@ class UsersController extends Controller
         return response()->json(null, 200);
     }
 
-    public function destroyTeacher(Request $request,$id)
+    public function destroyTeacher(Request $request, $id)
     {
-        //
+        if (!$request->ajax()) {
+            abort(403, 'Unauthorized action.');
+        }
+        $user = User::role('teacher')->findOrFail(intval($id));
+        $name = $user->first_name.' '.$user->last_name;
+        $teacher = Teacher::where('user_id', $user->id)->firstOrFail();
+        $teacher->delete();
+        $user->removeRole('teacher');
+        $user->delete();
+        return response()->json(['message' => 'Se ha eliminado al usuario '.$name], 200);
     }
 
     public function indexStudent(Request $request)
@@ -670,7 +678,7 @@ class UsersController extends Controller
         //
     }
 
-    public function destroyStudent(Request $request,$id)
+    public function destroyStudent(Request $request, $id)
     {
         //
     }
@@ -710,7 +718,7 @@ class UsersController extends Controller
         //
     }
 
-    public function destroyGuardian(Request $request,$id)
+    public function destroyGuardian(Request $request, $id)
     {
         //
     }

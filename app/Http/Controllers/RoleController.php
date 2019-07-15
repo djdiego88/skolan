@@ -8,7 +8,7 @@ use Spatie\Permission\Models\Role;
 class RoleController extends Controller
 {
     public function all(Request $request)
-    {   
+    {
         if (!$request->ajax()) {
             abort(403, 'Unauthorized action.');
         }

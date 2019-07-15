@@ -17,10 +17,12 @@ class Enrollment extends Model
 
     protected static $logOnlyDirty = true;
 
-    public function classroom() {
-    	return $this->belongsTo('App\Classroom');
+    public function classroom()
+    {
+        return $this->belongsTo('App\Classroom');
     }
-    public function student() {
-    	return $this->belongsTo('App\Student');
+    public function student()
+    {
+        return $this->belongsTo('App\Student');
     }
 }

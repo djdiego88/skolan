@@ -10,7 +10,6 @@ use App\Http\Requests\OptionRequest;
 use App\Http\Requests\UpdateOptionRequest;
 use Laracasts\Flash\Flash;
 
-
 class OptionsController extends Controller
 {
     public function __construct()
@@ -32,8 +31,8 @@ class OptionsController extends Controller
         //dd($options);
         $styles = [
             'primary'=>'Principal',
-            'style2'=>'Estilo 2', 
-            'style3'=>'Estilo 3', 
+            'style2'=>'Estilo 2',
+            'style3'=>'Estilo 3',
             'style4'=>'Estilo 4'
         ];
         return ['options'=> $options, 'styles' => $styles];
@@ -71,23 +70,23 @@ class OptionsController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(UpdateOptionRequest $request)
-    {   
+    {
         if (!$request->ajax()) {
             abort(403, 'Unauthorized action.');
         }
         $data = $request->all();
         foreach ($data as $name => $valor) {
-            if($name != '_method' && $name != '_token' && $name != 'site_logo'){
+            if ($name != '_method' && $name != '_token' && $name != 'site_logo') {
                 $option = Option::where('name', $name)->get()->first();
-                if($option->value != $valor){
+                if ($option->value != $valor) {
                     $option->value = $valor;
                     $option->save();
                 }
             }
         }
-        if($request->file('site_logo')){
+        if ($request->file('site_logo')) {
             $file = $request->file('site_logo');
-            $name=basename($file->getClientOriginalName(),'.'.$file->getClientOriginalExtension());
+            $name=basename($file->getClientOriginalName(), '.'.$file->getClientOriginalExtension());
             $imgname = $name.'_'.time().'.'.$file->getClientOriginalExtension();
             Storage::put(
                 'public/images/logo/'.$imgname,
