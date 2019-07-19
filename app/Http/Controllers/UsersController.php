@@ -6,12 +6,15 @@ use App\User;
 use App\Option;
 use App\Usermeta;
 use App\Teacher;
+use App\Student;
 use App\Area;
 use Illuminate\Http\Request;
 use App\Http\Requests\CreateUserRequest;
 use App\Http\Requests\EditUserRequest;
 use App\Http\Requests\StoreTeacher;
 use App\Http\Requests\EditTeacher;
+use App\Http\Requests\StoreStudent;
+use App\Http\Requests\EditStudent;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Laracasts\Flash\Flash;
@@ -645,42 +648,116 @@ class UsersController extends Controller
 
     public function indexStudent(Request $request)
     {
-        //
+        if (!$request->ajax()) {
+            abort(403, 'Unauthorized action.');
+        }
+        return $this->indexUser($request, 'student');
     }
 
     public function massChangesStudent(Request $request)
     {
-        //
+        if (!$request->ajax()) {
+            abort(403, 'Unauthorized action.');
+        }
+        return $this->massChangesUser($request, 'student');
     }
 
     public function createStudent()
     {
-        //
+        $countries = $this->countriesArray();
+        return view('layouts.users.st.add')
+            ->with('countries', $countries);
     }
 
-    public function storeStudent(Request $request)
+    public function storeStudent(StoreStudent $request)
     {
-        //
+        if (!$request->ajax()) {
+            abort(403, 'Unauthorized action.');
+        }
+        $user = $this->storeUser($request, 'student');
+
+        $student = new Student();
+        $student->neighborhood = ($request->filled('neighborhood')) ? $request->neighborhood : null;
+        $student->commune = ($request->filled('commune')) ? $request->commune : null;
+        $student->socioeconomic_level = ($request->filled('socioeconomic_level')) ? $request->socioeconomic_level : null;
+        $student->health_care = ($request->filled('health_care')) ? $request->health_care : null;
+        $student->blood_type = ($request->filled('blood_type')) ? $request->blood_type : null;
+        $student->allergies = ($request->filled('allergies')) ? strip_tags($request->allergies, $this->allowedTags) : null;
+        $student->diseases = ($request->filled('diseases')) ? strip_tags($request->diseases, $this->allowedTags) : null;
+        $student->user()->associate($user);
+        $student->save();
+        
+        return response()->json(null, 200);
     }
 
     public function showStudent($id)
     {
-        //
+        if ($id != "1" || Auth::id() == 1) {
+            $user = User::role('student')->with(['usermeta' => function ($query) {
+                        $query->where('name', '=', 'display_name');
+            }])->findOrFail($id);
+            $user->load('roles', 'student.guardians');
+            return view('layouts.users.st.show')
+            ->with('user', $user)
+            ->with('countries', $this->countries);
+        } else {
+            Flash::error('No tienes los permisos suficientes para ver esta información.');
+            return redirect()->route('users.st.index');
+        }
     }
 
     public function editStudent($id)
     {
-        //
+        if ($id != "1" || Auth::id() == 1) {
+            $countries = $this->countriesArray();
+            $user = User::role('student')->with(['usermeta' => function ($query) {
+                        $query->where('name', '=', 'display_name');
+            }])->findOrFail($id);
+            $user->load('roles');
+            $student = Student::where('user_id', $user->id)->firstOrFail();
+            $student->load('guardians');
+            return view('layouts.users.st.edit')
+            ->with('user', $user)
+            ->with('student', $student)
+            ->with('countries', $countries);
+        } else {
+            Flash::error('No tienes los permisos suficientes para editar a este usuario.');
+            return redirect()->route('users.st.index');
+        }
     }
 
-    public function updateStudent(Request $request, $id)
+    public function updateStudent(EditStudent $request, $id)
     {
-        //
+        if (!$request->ajax()) {
+            abort(403, 'Unauthorized action.');
+        }
+        $user = $this->updateUser($request, $id, 'student');
+
+        $student = Student::where('user_id', $user->id)->firstOrFail();
+        $student->neighborhood = ($student->neighborhood != $request->neighborhood) ? $request->neighborhood : $student->neighborhood;
+        $student->commune = ($student->commune != $request->commune) ? $request->commune : $student->commune;
+        $student->socioeconomic_level = ($student->socioeconomic_level != $request->socioeconomic_level) ? $request->socioeconomic_level : $student->socioeconomic_level;
+        $student->health_care = ($student->health_care != $request->health_care) ? $request->health_care : $student->health_care;
+        $student->blood_type = ($student->blood_type != $request->blood_type) ? $request->blood_type : $student->blood_type;
+        $student->allergies = ($request->filled('allergies') && $student->allergies != $request->allergies) ? strip_tags($request->allergies, $this->allowedTags) : $student->allergies;
+        $student->diseases = ($request->filled('diseases') && $student->diseases != $request->diseases) ? strip_tags($request->diseases, $this->allowedTags) : $student->diseases;
+        $student->save();
+                
+        return response()->json(null, 200);
     }
 
     public function destroyStudent(Request $request, $id)
     {
-        //
+        if (!$request->ajax()) {
+            abort(403, 'Unauthorized action.');
+        }
+        $user = User::role('student')->findOrFail(intval($id));
+        $name = $user->first_name.' '.$user->last_name;
+        $student = Student::where('user_id', $user->id)->firstOrFail();
+        $student->delete();
+        $user->removeRole('student');
+        $user->delete();
+        return response()->json(['message' => 'Se ha eliminado al usuario '.$name], 200);
     }
 
     public function indexGuardian(Request $request)

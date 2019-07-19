@@ -37,7 +37,7 @@
 						<a class="nav-link" href="{{route('users.te.index')}}"><i class="nav-icon fas fa-chalkboard-teacher"></i> {{ __('Docentes') }}</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link" href="#"><i class="nav-icon fas fa-user-graduate"></i> {{ __('Alumnos') }}</a>
+						<a class="nav-link" href="{{route('users.st.index')}}"><i class="nav-icon fas fa-user-graduate"></i> {{ __('Alumnos') }}</a>
 					</li>
 					<li class="nav-item">
 						<a class="nav-link" href="#"><i class="nav-icon fas fa-user-alt"></i> {{ __('Acudientes') }}</a>

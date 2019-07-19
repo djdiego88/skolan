@@ -55,6 +55,10 @@ Vue.component('te-index', require('./components/users/te/TEIndex.vue').default);
 Vue.component('te-show', require('./components/users/te/TEShow.vue').default);
 Vue.component('te-add', require('./components/users/te/TEAdd.vue').default);
 Vue.component('te-edit', require('./components/users/te/TEEdit.vue').default);
+Vue.component('st-index', require('./components/users/st/STIndex.vue').default);
+Vue.component('st-show', require('./components/users/st/STShow.vue').default);
+Vue.component('st-add', require('./components/users/st/STAdd.vue').default);
+Vue.component('st-edit', require('./components/users/st/STEdit.vue').default);
 
 const app = new Vue({
     el: '#app'

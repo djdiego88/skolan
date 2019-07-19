@@ -71,42 +71,42 @@ class DatabaseSeeder extends Seeder
         $viewActivityLog = Permission::create(['name' => 'view-activitylog', 'display_name'=> 'Ver registro de actividades']);
         //Asignar permisos a roles
         $superadmin->givePermissionTo(Permission::all());
-		$administrative->givePermissionTo([$adminStudent,$adminGuardian,$adminTeacher,$adminGrade,$adminClassroom,$adminSubject,$adminSchedule,$adminArea,$adminHQ,$adminSchoolday,$adminYear,$adminSchoolterm,$adminEnrollment,$adminAbsence,$adminAnnotation,$adminHomework,$adminQualification, $viewActivityLog, $adminTests, $editTests, $viewTests]);
-		$coordinator->givePermissionTo([$adminSchedule,$adminEnrollment,$adminAbsence,$adminAnnotation,$viewHomework,$viewQualification, $adminTests, $editTests, $viewTests]);
-		$teacher->givePermissionTo([$adminAbsence,$adminAnnotation,$viewHomework,$viewQualification, $adminTests, $editTests, $viewTests]);
-		$student->givePermissionTo([$viewAbsence,$viewAnnotation,$viewHomework,$viewQualification, $viewTests]);
-		$guardian->givePermissionTo([$viewAbsence,$viewAnnotation,$viewHomework,$viewQualification]);
-		//$candidate->givePermissionTo([$createPost, $editUser]);
-		//Añadir Super Administrador
-		$superAdminUser = new User();
-		$superAdminUser->it = 'CC';
-		$superAdminUser->nid = 1024484660;
-		$superAdminUser->first_name = 'Diego Alexander';
-		$superAdminUser->last_name = 'Castillo Jiménez';
-		$superAdminUser->email = 'djdiego88@gmail.com';
-		$superAdminUser->password = Hash::make('8d8j9D1i1e9Go');
-		$superAdminUser->birth_date = '1988-09-19';
-		$superAdminUser->gender = 'm';
-		$superAdminUser->phone_number = '0571-9059631';
-		$superAdminUser->cellphone_number = '3178042220';
-		$superAdminUser->nacionality = 'CO';
-		$superAdminUser->location = 'Bogotá D.C.';
-		$superAdminUser->address = 'Calle 6C # 82A - 25';
-		$superAdminUser->status = 'enabled';
-		$superAdminUser->last_access = date('Y-m-d H:i:s');
-		$superAdminUser->photo = 'foto-documento-grande--cuadrado.jpg';
-		$superAdminUser->save();
-		//Asociar rol al superadmin
-		$superAdminUser->assignRole($superadmin);
-		//Añadir usermeta
-		$display_name = $superAdminUser->first_name . ' '. $superAdminUser->last_name;
-        $display_name = explode(" ",$display_name);
+        $administrative->givePermissionTo([$adminStudent,$adminGuardian,$adminTeacher,$adminGrade,$adminClassroom,$adminSubject,$adminSchedule,$adminArea,$adminHQ,$adminSchoolday,$adminYear,$adminSchoolterm,$adminEnrollment,$adminAbsence,$adminAnnotation,$adminHomework,$adminQualification, $viewActivityLog, $adminTests, $editTests, $viewTests]);
+        $coordinator->givePermissionTo([$adminSchedule,$adminEnrollment,$adminAbsence,$adminAnnotation,$viewHomework,$viewQualification, $adminTests, $editTests, $viewTests]);
+        $teacher->givePermissionTo([$adminAbsence,$adminAnnotation,$viewHomework,$viewQualification, $adminTests, $editTests, $viewTests]);
+        $student->givePermissionTo([$viewAbsence,$viewAnnotation,$viewHomework,$viewQualification, $viewTests]);
+        $guardian->givePermissionTo([$viewAbsence,$viewAnnotation,$viewHomework,$viewQualification]);
+        //$candidate->givePermissionTo([$createPost, $editUser]);
+        //Añadir Super Administrador
+        $superAdminUser = new User();
+        $superAdminUser->it = 'CC';
+        $superAdminUser->nid = 1024484660;
+        $superAdminUser->first_name = 'Diego Alexander';
+        $superAdminUser->last_name = 'Castillo Jiménez';
+        $superAdminUser->email = 'djdiego88@gmail.com';
+        $superAdminUser->password = Hash::make('8d8j9D1i1e9Go');
+        $superAdminUser->birth_date = '1988-09-19';
+        $superAdminUser->gender = 'm';
+        $superAdminUser->phone_number = '0571-9059631';
+        $superAdminUser->cellphone_number = '3178042220';
+        $superAdminUser->nacionality = 'CO';
+        $superAdminUser->location = 'Bogotá D.C.';
+        $superAdminUser->address = 'Calle 6C # 82A - 25';
+        $superAdminUser->status = 'enabled';
+        $superAdminUser->last_access = date('Y-m-d H:i:s');
+        $superAdminUser->photo = 'foto-documento-grande--cuadrado.jpg';
+        $superAdminUser->save();
+        //Asociar rol al superadmin
+        $superAdminUser->assignRole($superadmin);
+        //Añadir usermeta
+        $display_name = $superAdminUser->first_name . ' '. $superAdminUser->last_name;
+        $display_name = explode(" ", $display_name);
         $countnames = count($display_name);
-        if($countnames == 1){
+        if ($countnames == 1) {
             $display_name = $display_name[0];
-        }elseif($countnames == 2){
+        } elseif ($countnames == 2) {
             $display_name = $display_name[0].' '.$display_name[1];
-        }elseif($countnames == 3 || $countnames == 4){
+        } elseif ($countnames == 3 || $countnames == 4) {
             $display_name = $display_name[0].' '.$display_name[2];
         }
         $displayname = new Usermeta();
@@ -115,82 +115,82 @@ class DatabaseSeeder extends Seeder
         $displayname->value = $display_name;
         $displayname->save();
 
-		$optionSiteName = new Option();
-		$optionSiteName->name = 'site_name';
-		$optionSiteName->display_name = 'Nombre de la Institución';
-		$optionSiteName->description = 'Aquí va el nombre de la Institución Educativa';
-		$optionSiteName->value = 'Skolan';
-		$optionSiteName->save();
+        $optionSiteName = new Option();
+        $optionSiteName->name = 'site_name';
+        $optionSiteName->display_name = 'Nombre de la Institución';
+        $optionSiteName->description = 'Aquí va el nombre de la Institución Educativa';
+        $optionSiteName->value = 'Skolan';
+        $optionSiteName->save();
 
-		$optionSiteDescr = new Option();
-		$optionSiteDescr->name = 'site_description';
-		$optionSiteDescr->display_name = 'Descripción de la Institución';
-		$optionSiteDescr->description = 'Aquí va una pequeña descripción corta de la Institución Educativa';
-		$optionSiteDescr->value = 'Otra institución apoyada por Skolan';
-		$optionSiteDescr->save();
+        $optionSiteDescr = new Option();
+        $optionSiteDescr->name = 'site_description';
+        $optionSiteDescr->display_name = 'Descripción de la Institución';
+        $optionSiteDescr->description = 'Aquí va una pequeña descripción corta de la Institución Educativa';
+        $optionSiteDescr->value = 'Otra institución apoyada por Skolan';
+        $optionSiteDescr->save();
 
-		$optionSiteLogo = new Option();
-		$optionSiteLogo->name = 'site_logo';
-		$optionSiteLogo->display_name = 'Logo de la Institución';
-		$optionSiteLogo->description = 'Aquí va el archivo de imagen o logo de la Institución Educativa';
-		$optionSiteLogo->value = 'logo-default.png';
-		$optionSiteLogo->save();
+        $optionSiteLogo = new Option();
+        $optionSiteLogo->name = 'site_logo';
+        $optionSiteLogo->display_name = 'Logo de la Institución';
+        $optionSiteLogo->description = 'Aquí va el archivo de imagen o logo de la Institución Educativa';
+        $optionSiteLogo->value = 'logo-default.png';
+        $optionSiteLogo->save();
 
-		$optionAdminEmail = new Option();
-		$optionAdminEmail->name = 'admin_email';
-		$optionAdminEmail->display_name = 'Correo Electrónico del Administrador';
-		$optionAdminEmail->description = 'Ingresa aquí el correo electrónico del administrador del sistema';
-		$optionAdminEmail->value = 'djdiego88@gmail.com';
-		$optionAdminEmail->save();
+        $optionAdminEmail = new Option();
+        $optionAdminEmail->name = 'admin_email';
+        $optionAdminEmail->display_name = 'Correo Electrónico del Administrador';
+        $optionAdminEmail->description = 'Ingresa aquí el correo electrónico del administrador del sistema';
+        $optionAdminEmail->value = 'djdiego88@gmail.com';
+        $optionAdminEmail->save();
 
-		$optionItemsPerPage = new Option();
-		$optionItemsPerPage->name = 'items_per_page';
-		$optionItemsPerPage->display_name = 'Items por Página';
-		$optionItemsPerPage->description = 'Ingresa aquí el número máximo de items a mostrar en una página con listado.';
-		$optionItemsPerPage->value = 25;
-		$optionItemsPerPage->save();
+        $optionItemsPerPage = new Option();
+        $optionItemsPerPage->name = 'items_per_page';
+        $optionItemsPerPage->display_name = 'Items por Página';
+        $optionItemsPerPage->description = 'Ingresa aquí el número máximo de items a mostrar en una página con listado.';
+        $optionItemsPerPage->value = 25;
+        $optionItemsPerPage->save();
 
-		$optionSiteStyle = new Option();
-		$optionSiteStyle->name = 'site_style';
-		$optionSiteStyle->display_name = 'Estilo del Sitio';
-		$optionSiteStyle->description = 'Escoge la gama de colores del Sistema.';
-		$optionSiteStyle->value = 'primary';
-		$optionSiteStyle->save();
+        $optionSiteStyle = new Option();
+        $optionSiteStyle->name = 'site_style';
+        $optionSiteStyle->display_name = 'Estilo del Sitio';
+        $optionSiteStyle->description = 'Escoge la gama de colores del Sistema.';
+        $optionSiteStyle->value = 'primary';
+        $optionSiteStyle->save();
 
-		$optionAnalytics = new Option();
-		$optionAnalytics->name = 'google_analytics_id';
-		$optionAnalytics->display_name = 'ID de Google Analytics';
-		$optionAnalytics->description = 'Ingresa aquí el "ID de propiedad Web" para las estadísticas de Google Analytics.';
-		$optionAnalytics->value = 'UA-XXXXXXX-X';
-		$optionAnalytics->save();
+        $optionAnalytics = new Option();
+        $optionAnalytics->name = 'google_analytics_id';
+        $optionAnalytics->display_name = 'ID de Google Analytics';
+        $optionAnalytics->description = 'Ingresa aquí el "ID de propiedad Web" para las estadísticas de Google Analytics.';
+        $optionAnalytics->value = 'UA-XXXXXXX-X';
+        $optionAnalytics->save();
 
-		$optionTwitterAccount = new Option();
-		$optionTwitterAccount->name = 'twitter_account';
-		$optionTwitterAccount->display_name = 'Cuenta de Twitter';
-		$optionTwitterAccount->description = 'Ingresa el "username" del perfil oficial en Twitter de la Institución.';
-		$optionTwitterAccount->value = '';
-		$optionTwitterAccount->save();
+        $optionTwitterAccount = new Option();
+        $optionTwitterAccount->name = 'twitter_account';
+        $optionTwitterAccount->display_name = 'Cuenta de Twitter';
+        $optionTwitterAccount->description = 'Ingresa el "username" del perfil oficial en Twitter de la Institución.';
+        $optionTwitterAccount->value = '';
+        $optionTwitterAccount->save();
 
-		$optionFacebookPage = new Option();
-		$optionFacebookPage->name = 'facebook_url';
-		$optionFacebookPage->display_name = 'Página de Facebook';
-		$optionFacebookPage->description = 'Ingresa la URL de la página oficial en Facebook de la Institución.';
-		$optionFacebookPage->value = '';
-		$optionFacebookPage->save();
+        $optionFacebookPage = new Option();
+        $optionFacebookPage->name = 'facebook_url';
+        $optionFacebookPage->display_name = 'Página de Facebook';
+        $optionFacebookPage->description = 'Ingresa la URL de la página oficial en Facebook de la Institución.';
+        $optionFacebookPage->value = '';
+        $optionFacebookPage->save();
 
-		$optionInstagramAccount = new Option();
-		$optionInstagramAccount->name = 'instagram_account';
-		$optionInstagramAccount->display_name = 'Cuenta de Instagram';
-		$optionInstagramAccount->description = 'Ingresa el "username" del perfil oficial en Instagram de la Institución.';
-		$optionInstagramAccount->value = '';
-		$optionInstagramAccount->save();
+        $optionInstagramAccount = new Option();
+        $optionInstagramAccount->name = 'instagram_account';
+        $optionInstagramAccount->display_name = 'Cuenta de Instagram';
+        $optionInstagramAccount->description = 'Ingresa el "username" del perfil oficial en Instagram de la Institución.';
+        $optionInstagramAccount->value = '';
+        $optionInstagramAccount->save();
 
-		$optionYoutubePage = new Option();
-		$optionYoutubePage->name = 'youtube_url';
-		$optionYoutubePage->display_name = 'Canal de Youtube';
-		$optionYoutubePage->description = 'Ingresa la URL del canal oficial en Youtube de la Institución.';
-		$optionYoutubePage->value = '';
-		$optionYoutubePage->save();
+        $optionYoutubePage = new Option();
+        $optionYoutubePage->name = 'youtube_url';
+        $optionYoutubePage->display_name = 'Canal de Youtube';
+        $optionYoutubePage->description = 'Ingresa la URL del canal oficial en Youtube de la Institución.';
+        $optionYoutubePage->value = '';
+        $optionYoutubePage->save();
 
         $optionNit = new Option();
         $optionNit->name = 'nit';
@@ -489,17 +489,17 @@ class DatabaseSeeder extends Seeder
         /**
          * Usuarios superadmin
          */
-        factory(App\User::class, 50)->create()->each(function($user) {
+        factory(App\User::class, 50)->create()->each(function ($user) {
             $user->assignRole('superadmin');
             //Añadir usermeta
             $display_name = $user->first_name . ' '. $user->last_name;
-            $display_name = explode(" ",$display_name);
+            $display_name = explode(" ", $display_name);
             $countnames = count($display_name);
-            if($countnames == 1){
+            if ($countnames == 1) {
                 $display_name = $display_name[0];
-            }elseif($countnames == 2){
+            } elseif ($countnames == 2) {
                 $display_name = $display_name[0].' '.$display_name[1];
-            }elseif($countnames == 3 || $countnames == 4){
+            } elseif ($countnames == 3 || $countnames == 4) {
                 $display_name = $display_name[0].' '.$display_name[2];
             }
             $username = new Usermeta(['name' => 'display_name', 'value' => $display_name]);
@@ -509,17 +509,17 @@ class DatabaseSeeder extends Seeder
         /**
          * Usuarios administrative
          */
-        factory(App\User::class, 50)->create()->each(function($user) {
+        factory(App\User::class, 50)->create()->each(function ($user) {
             $user->assignRole('administrative');
             //Añadir usermeta
             $display_name = $user->first_name . ' '. $user->last_name;
-            $display_name = explode(" ",$display_name);
+            $display_name = explode(" ", $display_name);
             $countnames = count($display_name);
-            if($countnames == 1){
+            if ($countnames == 1) {
                 $display_name = $display_name[0];
-            }elseif($countnames == 2){
+            } elseif ($countnames == 2) {
                 $display_name = $display_name[0].' '.$display_name[1];
-            }elseif($countnames == 3 || $countnames == 4){
+            } elseif ($countnames == 3 || $countnames == 4) {
                 $display_name = $display_name[0].' '.$display_name[2];
             }
             $username = new Usermeta(['name' => 'display_name', 'value' => $display_name]);
@@ -529,17 +529,17 @@ class DatabaseSeeder extends Seeder
         /**
          * Usuarios coordinator
          */
-        factory(App\User::class, 25)->create()->each(function($user) {
+        factory(App\User::class, 25)->create()->each(function ($user) {
             $user->assignRole('coordinator');
             //Añadir usermeta
             $display_name = $user->first_name . ' '. $user->last_name;
-            $display_name = explode(" ",$display_name);
+            $display_name = explode(" ", $display_name);
             $countnames = count($display_name);
-            if($countnames == 1){
+            if ($countnames == 1) {
                 $display_name = $display_name[0];
-            }elseif($countnames == 2){
+            } elseif ($countnames == 2) {
                 $display_name = $display_name[0].' '.$display_name[1];
-            }elseif($countnames == 3 || $countnames == 4){
+            } elseif ($countnames == 3 || $countnames == 4) {
                 $display_name = $display_name[0].' '.$display_name[2];
             }
             $username = new Usermeta(['name' => 'display_name', 'value' => $display_name]);
@@ -549,17 +549,17 @@ class DatabaseSeeder extends Seeder
         /**
          * Usuarios teacher
          */
-        factory(App\User::class, 30)->create()->each(function($user) {
+        factory(App\User::class, 30)->create()->each(function ($user) {
             $user->assignRole('teacher');
             //Añadir usermeta
             $display_name = $user->first_name . ' '. $user->last_name;
-            $display_name = explode(" ",$display_name);
+            $display_name = explode(" ", $display_name);
             $countnames = count($display_name);
-            if($countnames == 1){
+            if ($countnames == 1) {
                 $display_name = $display_name[0];
-            }elseif($countnames == 2){
+            } elseif ($countnames == 2) {
                 $display_name = $display_name[0].' '.$display_name[1];
-            }elseif($countnames == 3 || $countnames == 4){
+            } elseif ($countnames == 3 || $countnames == 4) {
                 $display_name = $display_name[0].' '.$display_name[2];
             }
             $username = new Usermeta(['name' => 'display_name', 'value' => $display_name]);
@@ -571,17 +571,17 @@ class DatabaseSeeder extends Seeder
         /**
          * Usuarios guardian
          */
-        factory(App\User::class, 50)->create()->each(function($user) {
+        factory(App\User::class, 50)->create()->each(function ($user) {
             $user->assignRole('guardian');
             //Añadir usermeta
             $display_name = $user->first_name . ' '. $user->last_name;
-            $display_name = explode( " ", $display_name );
+            $display_name = explode(" ", $display_name);
             $countnames = count($display_name);
-            if($countnames == 1){
+            if ($countnames == 1) {
                 $display_name = $display_name[0];
-            }elseif($countnames == 2){
+            } elseif ($countnames == 2) {
                 $display_name = $display_name[0].' '.$display_name[1];
-            }elseif($countnames == 3 || $countnames == 4){
+            } elseif ($countnames == 3 || $countnames == 4) {
                 $display_name = $display_name[0].' '.$display_name[2];
             }
             $username = new Usermeta(['name' => 'display_name', 'value' => $display_name]);
@@ -593,17 +593,17 @@ class DatabaseSeeder extends Seeder
         /**
          * Usuarios student
          */
-        factory(App\User::class, 100)->create()->each(function($user) {
+        factory(App\User::class, 100)->create()->each(function ($user) {
             $user->assignRole('student');
             //Añadir usermeta
             $display_name = $user->first_name . ' '. $user->last_name;
-            $display_name = explode(" ",$display_name);
+            $display_name = explode(" ", $display_name);
             $countnames = count($display_name);
-            if($countnames == 1){
+            if ($countnames == 1) {
                 $display_name = $display_name[0];
-            }elseif($countnames == 2){
+            } elseif ($countnames == 2) {
                 $display_name = $display_name[0].' '.$display_name[1];
-            }elseif($countnames == 3 || $countnames == 4){
+            } elseif ($countnames == 3 || $countnames == 4) {
                 $display_name = $display_name[0].' '.$display_name[2];
             }
             $username = new Usermeta(['name' => 'display_name', 'value' => $display_name]);
@@ -616,100 +616,100 @@ class DatabaseSeeder extends Seeder
         $class1a->year_id = 2;
         $class1a->headquarter_id = 2;
         $class1a->schoolday_id = 3;
-        $class1a->director_id = rand(1,30);
+        $class1a->director_id = rand(1, 30);
         $class1a->grade_id = 1;
         $class1a->name = 'Primero A';
-        $class1a->quota = rand(28,35);
+        $class1a->quota = rand(28, 35);
         $class1a->save();
 
         $class1b = new Classroom();
         $class1b->year_id = 2;
         $class1b->headquarter_id = 2;
         $class1b->schoolday_id = 3;
-        $class1b->director_id = rand(1,30);
+        $class1b->director_id = rand(1, 30);
         $class1b->grade_id = 1;
         $class1b->name = 'Primero B';
-        $class1b->quota = rand(28,35);
+        $class1b->quota = rand(28, 35);
         $class1b->save();
 
         $class2a = new Classroom();
         $class2a->year_id = 2;
         $class2a->headquarter_id = 2;
         $class2a->schoolday_id = 3;
-        $class2a->director_id = rand(1,30);
+        $class2a->director_id = rand(1, 30);
         $class2a->grade_id = 2;
         $class2a->name = 'Segundo A';
-        $class2a->quota = rand(28,35);
+        $class2a->quota = rand(28, 35);
         $class2a->save();
 
         $class2b = new Classroom();
         $class2b->year_id = 2;
         $class2b->headquarter_id = 2;
         $class2b->schoolday_id = 3;
-        $class2b->director_id = rand(1,30);
+        $class2b->director_id = rand(1, 30);
         $class2b->grade_id = 2;
         $class2b->name = 'Segundo B';
-        $class2b->quota = rand(28,35);
+        $class2b->quota = rand(28, 35);
         $class2b->save();
 
         $class3a = new Classroom();
         $class3a->year_id = 2;
         $class3a->headquarter_id = 2;
         $class3a->schoolday_id = 3;
-        $class3a->director_id = rand(1,30);
+        $class3a->director_id = rand(1, 30);
         $class3a->grade_id = 3;
         $class3a->name = 'Tercero A';
-        $class3a->quota = rand(28,35);
+        $class3a->quota = rand(28, 35);
         $class3a->save();
 
         $class3b = new Classroom();
         $class3b->year_id = 2;
         $class3b->headquarter_id = 2;
         $class3b->schoolday_id = 3;
-        $class3b->director_id = rand(1,30);
+        $class3b->director_id = rand(1, 30);
         $class3b->grade_id = 3;
         $class3b->name = 'Tercero B';
-        $class3b->quota = rand(28,35);
+        $class3b->quota = rand(28, 35);
         $class3b->save();
 
         $class4a = new Classroom();
         $class4a->year_id = 2;
         $class4a->headquarter_id = 2;
         $class4a->schoolday_id = 3;
-        $class4a->director_id = rand(1,30);
+        $class4a->director_id = rand(1, 30);
         $class4a->grade_id = 4;
         $class4a->name = 'Cuarto A';
-        $class4a->quota = rand(28,35);
+        $class4a->quota = rand(28, 35);
         $class4a->save();
 
         $class4b = new Classroom();
         $class4b->year_id = 2;
         $class4b->headquarter_id = 2;
         $class4b->schoolday_id = 3;
-        $class4b->director_id = rand(1,30);
+        $class4b->director_id = rand(1, 30);
         $class4b->grade_id = 4;
         $class4b->name = 'Cuarto B';
-        $class4b->quota = rand(28,35);
+        $class4b->quota = rand(28, 35);
         $class4b->save();
 
         $class5a = new Classroom();
         $class5a->year_id = 2;
         $class5a->headquarter_id = 2;
         $class5a->schoolday_id = 3;
-        $class5a->director_id = rand(1,30);
+        $class5a->director_id = rand(1, 30);
         $class5a->grade_id = 5;
         $class5a->name = 'Quinto A';
-        $class5a->quota = rand(28,35);
+        $class5a->quota = rand(28, 35);
         $class5a->save();
 
         $class5b = new Classroom();
         $class5b->year_id = 2;
         $class5b->headquarter_id = 2;
         $class5b->schoolday_id = 3;
-        $class5b->director_id = rand(1,30);
+        $class5b->director_id = rand(1, 30);
         $class5b->grade_id = 5;
         $class5b->name = 'Quinto B';
-        $class5b->quota = rand(28,35);
+        $class5b->quota = rand(28, 35);
         $class5b->save();
     }
 }

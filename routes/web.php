@@ -98,6 +98,31 @@ Route::middleware(['auth', 'enabled'])->group(function () {
             Route::put('edit/{userid}', 'UsersController@updateTeacher')->name('api.users.te.update');
             Route::post('destroy/{userid}', 'UsersController@destroyTeacher')->name('api.users.te.destroy');
         });
+        //Students
+        Route::prefix('students')->group(function () {
+            Route::view('/', 'layouts.users.st.index')->name('users.st.index');
+            Route::post('/index', 'UsersController@indexStudent')->name('api.users.st.index');
+            Route::post('masschanges', 'UsersController@massChangesStudent')->name('api.users.st.masschanges');
+            Route::get('add', 'UsersController@createStudent')->name('users.st.add');
+            Route::post('/', 'UsersController@storeStudent')->name('api.users.st.store');
+            Route::get('{userid}', 'UsersController@showStudent')->name('users.st.show');
+            Route::get('edit/{userid}', 'UsersController@editStudent')->name('users.st.edit');
+            Route::put('edit/{userid}', 'UsersController@updateStudent')->name('api.users.st.update');
+            Route::post('destroy/{userid}', 'UsersController@destroyStudent')->name('api.users.st.destroy');
+        });
+        //Guardians
+        Route::prefix('guardians')->group(function () {
+            Route::get('/all', 'GuardiansController@all')->name('api.guardians.all');
+            /*Route::view('/', 'layouts.users.st.index')->name('users.st.index');
+            Route::post('/index', 'UsersController@indexStudent')->name('api.users.st.index');
+            Route::post('masschanges', 'UsersController@massChangesStudent')->name('api.users.st.masschanges');
+            Route::get('add', 'UsersController@createStudent')->name('users.st.add');
+            Route::post('/', 'UsersController@storeStudent')->name('api.users.st.store');
+            Route::get('{userid}', 'UsersController@showStudent')->name('users.st.show');
+            Route::get('edit/{userid}', 'UsersController@editStudent')->name('users.st.edit');
+            Route::put('edit/{userid}', 'UsersController@updateStudent')->name('api.users.st.update');
+            Route::post('destroy/{userid}', 'UsersController@destroyStudent')->name('api.users.st.destroy');*/
+        });
     });
     //Areas
     Route::prefix('areas')->group(function () {

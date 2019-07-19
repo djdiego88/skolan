@@ -112,3 +112,27 @@ Breadcrumbs::for('edit-te', function ($trail, $user) {
     $trail->parent('teacher');
     $trail->push('Editar: '.$user->first_name.' '.$user->last_name, route('users.te.edit', $user->id));
 });
+
+// Inicio > Usuarios > Alumnos
+Breadcrumbs::for('student', function ($trail) {
+    $trail->parent('users');
+    $trail->push(__('Alumnos'), route('users.st.index'));
+});
+
+// Inicio > Usuarios > Alumnos > Añadir Usuario
+Breadcrumbs::for('add-st', function ($trail) {
+    $trail->parent('student');
+    $trail->push(__('Añadir Usuario'), route('users.st.add'));
+});
+
+// Inicio > Usuarios > Alumnos > <Usuario>
+Breadcrumbs::for('show-st', function ($trail, $user) {
+    $trail->parent('student');
+    $trail->push($user->first_name.' '.$user->last_name, route('users.st.show', $user->id));
+});
+
+// Inicio > Usuarios > Alumnos > Editar: <Usuario>
+Breadcrumbs::for('edit-st', function ($trail, $user) {
+    $trail->parent('student');
+    $trail->push('Editar: '.$user->first_name.' '.$user->last_name, route('users.st.edit', $user->id));
+});
