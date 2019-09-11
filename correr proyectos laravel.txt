@@ -5,7 +5,7 @@
 4. Crear base de datos por consola: CREATE DATABASE skolan_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 5. $ php artisan storage:link    IMPORTANTE: Crear symlink de public/storage apuntando a la carpeta real storage/app/public
 6. $ php artisan vendor:publish --provider="Spatie\Permission\PermissionServiceProvider" --tag="migrations"
-7. $ php artisan vendor:publish --provider="Cmgmyr\Messenger\MessengerServiceProvider" --tag="config"
+7. $ php artisan vendor:publish --provider="Arcanedev\LaravelMessenger\LaravelMessengerServiceProvider"
 8. Configurar user_model en /config/messenger.php
 9. $ php artisan vendor:publish --provider="Cmgmyr\Messenger\MessengerServiceProvider" --tag="migrations"
 X. $ php artisan vendor:publish --provider="Spatie\Activitylog\ActivitylogServiceProvider" --tag="migrations"

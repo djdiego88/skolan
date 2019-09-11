@@ -23,6 +23,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\ImageManagerStatic as Image;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Arr;
 
 class UsersController extends Controller
 {
@@ -198,7 +199,7 @@ class UsersController extends Controller
         $user->save();
 
         if ($request->filled('roles')) {
-            $rolesNames = array_pluck(json_decode($request->roles), ['name']);
+            $rolesNames = Arr::pluck(json_decode($request->roles), ['name']);
             $user->syncRoles($rolesNames);
         }
 

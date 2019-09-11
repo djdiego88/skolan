@@ -3,11 +3,11 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Waavi\Sanitizer\Laravel\SanitizesInput;
+//use Waavi\Sanitizer\Laravel\SanitizesInput;
 
 class UpdateOptionRequest extends FormRequest
 {
-    use SanitizesInput;
+    //use SanitizesInput;
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -56,7 +56,7 @@ class UpdateOptionRequest extends FormRequest
      *
      * @return array
      */
-    public function filters()
+    /*public function filters()
     {
         return [
             'site_name' => 'trim|escape',
@@ -80,5 +80,5 @@ class UpdateOptionRequest extends FormRequest
             'min_qualification_pass' => 'trim|escape',
             'decimal_positions' => 'trim',
         ];
-    }
+    }*/
 }

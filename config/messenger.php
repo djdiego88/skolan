@@ -2,20 +2,41 @@
 
 return [
 
-    'user_model' => App\User::class,
-
-    'message_model' => Cmgmyr\Messenger\Models\Message::class,
-
-    'participant_model' => Cmgmyr\Messenger\Models\Participant::class,
-
-    'thread_model' => Cmgmyr\Messenger\Models\Thread::class,
-
-    /**
-     * Define custom database table names - without prefixes.
+    /* -----------------------------------------------------------------
+     |  Database
+     | -----------------------------------------------------------------
      */
-    'messages_table' => null,
 
-    'participants_table' => null,
+    'database' => [
+        'connection' => env('DB_CONNECTION', 'mysql'),
 
-    'threads_table' => null,
+        'prefix'     => null,
+    ],
+
+    /* -----------------------------------------------------------------
+     |  Models
+     | -----------------------------------------------------------------
+     */
+
+    'users' => [
+        'table' => 'users',
+        'model' => App\User::class,
+        'morph' => 'participable',
+    ],
+
+    'discussions' => [
+        'table' => 'discussions',
+        'model' => Arcanedev\LaravelMessenger\Models\Discussion::class
+    ],
+
+    'participations' => [
+        'table' => 'participations',
+        'model' => Arcanedev\LaravelMessenger\Models\Participation::class,
+    ],
+
+    'messages' => [
+        'table' => 'messages',
+        'model' => Arcanedev\LaravelMessenger\Models\Message::class
+    ],
+
 ];

@@ -4,11 +4,11 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
-use Waavi\Sanitizer\Laravel\SanitizesInput;
+//use Waavi\Sanitizer\Laravel\SanitizesInput;
 
 class EditUserRequest extends FormRequest
 {
-    use SanitizesInput;
+    //use SanitizesInput;
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -63,7 +63,7 @@ class EditUserRequest extends FormRequest
      *
      * @return array
      */
-    public function filters()
+    /*public function filters()
     {
         return [
             'first_name' => 'trim|capitalize|escape',
@@ -80,5 +80,5 @@ class EditUserRequest extends FormRequest
             'address' => 'trim|escape',
             'status' => 'trim|escape',
         ];
-    }
+    }*/
 }
