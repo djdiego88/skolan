@@ -20,10 +20,14 @@ use Illuminate\Support\Facades\Hash;
 use Laracasts\Flash\Flash;
 use Spatie\Permission\Models\Role;
 use Carbon\Carbon;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Response as IlluminateHttpResponse;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\ImageManagerStatic as Image;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Response as IlluminateResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 class UsersController extends Controller
 {
@@ -38,7 +42,8 @@ class UsersController extends Controller
         $this->countries = json_decode($json, true);
         $this->allowedTags = '<p><ol><ul><li><strong><em><br>';
 
-        $this->middleware(['role:superadmin'])->only([
+        $this->middleware(['role:superadmin'])->only(
+            [
             'indexSuperAdmin',
             'createSuperAdmin',
             'storeSuperAdmin',
@@ -47,8 +52,10 @@ class UsersController extends Controller
             'updateSuperAdmin',
             'destroySuperAdmin',
             'massChangesSuperAdmin',
-        ]);
-        $this->middleware(['role:superadmin|administrative'])->only([
+            ]
+        );
+        $this->middleware(['role:superadmin|administrative'])->only(
+            [
             'indexAdministrative',
             'createAdministrative',
             'storeAdministrative',
@@ -82,23 +89,31 @@ class UsersController extends Controller
             'updateGuardian',
             'destroyGuardian',
             'massChangesGuardian',
-            
-        ]);
-        $this->middleware(['role:superadmin|administrative|coordinator'])->only([
+            ]
+        );
+        $this->middleware(['role:superadmin|administrative|coordinator'])->only(
+            [
             'indexCoordinator',
             'showTeacher',
-        ]);
-        $this->middleware(['role:superadmin|administrative|coordinator|teacher'])->only([
+            ]
+        );
+        $this->middleware(['role:superadmin|administrative|coordinator|teacher'])->only(
+            [
             'index',
             'indexTeacher',
             'indexStudent',
             'indexGuardian',
             'showStudent',
             'showGuardian',
-        ]);
+            ]
+        );
     }
-    
-    private function countriesArray()
+    /**
+     * Format the countries json in an array
+     *
+     * @return array Countries Array
+     */
+    private function countriesArray() : array
     {
         $callback = function ($key, $value) {
             return ['value'=> $key, 'label'=> $value];
@@ -106,12 +121,13 @@ class UsersController extends Controller
         return array_map($callback, array_keys($this->countries), $this->countries);
     }
     /**
-     * [getDisplayName description]
-     * @param  string $firstname [description]
-     * @param  string $lastname  [description]
-     * @return [type]            [description]
+     * Format the diplay name
+     *
+     * @param string $firstname
+     * @param string $lastname
+     * @return string
      */
-    private function getDisplayName(string $firstname, string $lastname): string
+    private function _getDisplayName(string $firstname, string $lastname): string
     {
         $display_name = $firstname . ' '. $lastname;
         $display_name = explode(" ", $display_name);
@@ -125,8 +141,14 @@ class UsersController extends Controller
         }
         return $display_name;
     }
-
-    private function storeUser($request, $rol)
+    /**
+     * Save an user to Database
+     *
+     * @param Request $request
+     * @param string $rol
+     * @return User
+     */
+    private function _storeUser($request, string $rol) : User
     {
         $user = new User();
         $user->it = $request->it;
@@ -159,18 +181,25 @@ class UsersController extends Controller
 
         $user->assignRole($rol);
         
-        $display_name = $this->getDisplayName($user->first_name, $user->last_name);
+        $display_name = $this->_getDisplayName($user->first_name, $user->last_name);
         $displayname = new Usermeta(['name' => 'display_name', 'value' => $display_name]);
         $user->usermeta()->save($displayname);
 
         return $user;
     }
-
-    private function updateUser($request, $id, $rol)
+    /**
+     * Updates a user data
+     *
+     * @param Request $request
+     * @param integer $id
+     * @param string $rol
+     * @return User
+     */
+    private function _updateUser($request, int $id, string $rol) : User
     {
         $user = User::role($rol)->findOrFail($id);
         if ($user->first_name != $request->first_name || $user->last_name != $request->last_name) {
-            $display_name = $this->getDisplayName($request->first_name, $request->last_name);
+            $display_name = $this->_getDisplayName($request->first_name, $request->last_name);
             $displayname = Usermeta::where('user_id', $user->id)->where('name', 'display_name')->firstOrFail();
             $displayname->value = $display_name;
             $displayname->save();
@@ -205,19 +234,35 @@ class UsersController extends Controller
 
         return $user;
     }
-    private function indexUser($request, $rol)
+    /**
+     * Get all users from Database
+     *
+     * @param Request $request
+     * @param string $rol
+     * @return JsonResponse
+     */
+    private function _indexUser($request, string $rol) : JsonResponse
     {
-        $query = User::role($rol)->with(['usermeta' => function ($query1) {
+        $query = User::role($rol)->with(
+            ['usermeta' => function ($query1) {
                         $query1->where('name', '=', 'display_name');
-        }]);
+            }]
+        );
         if ($request->search) {
             $query->searchByName($request->search);
         }
         $users = $query->orderBy($request->input('orderBy.column'), $request->input('orderBy.direction'))
-                    ->paginate($request->input('pagination.per_page'));
+            ->paginate($request->input('pagination.per_page'));
         return response()->json(['users' => $users], 200);
     }
-    private function massChangesUser($request, $rol)
+    /**
+     * Updates many users at once
+     *
+     * @param Request $request
+     * @param string $rol
+     * @return JsonResponse
+     */
+    private function _massChangesUser($request, string $rol) : JsonResponse
     {
         if (!empty($request->users)) {
             $usersids = $request->users;
@@ -260,84 +305,129 @@ class UsersController extends Controller
     {
         return view('layouts.users.index');
     }
-    
-    public function indexSuperAdmin(Request $request)
+    /**
+     * Get all users
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function indexSuperAdmin(Request $request) : JsonResponse
     {
         if (!$request->ajax()) {
             abort(403, 'Unauthorized action.');
         }
-        return $this->indexUser($request, 'superadmin');
+        return $this->_indexUser($request, 'superadmin');
     }
-
-    public function massChangesSuperAdmin(Request $request)
+    /**
+     * Updates many users
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function massChangesSuperAdmin(Request $request) : JsonResponse
     {
         if (!$request->ajax()) {
             abort(403, 'Unauthorized action.');
         }
-        return $this->massChangesUser($request, 'superadmin');
+        return $this->_massChangesUser($request, 'superadmin');
     }
-
+    /**
+     * Show page for create SuperAdmin
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function createSuperAdmin()
     {
         $countries = $this->countriesArray();
         return view('layouts.users.sa.add')
             ->with('countries', $countries);
     }
-
-    public function storeSuperAdmin(CreateUserRequest $request)
+    /**
+     * Create a SuperAdmin user
+     *
+     * @param CreateUserRequest $request
+     * @return JsonResponse
+     */
+    public function storeSuperAdmin(CreateUserRequest $request) : JsonResponse
     {
         if (!$request->ajax()) {
             abort(403, 'Unauthorized action.');
         }
-        $user = $this->storeUser($request, 'superadmin');
+        $user = $this->_storeUser($request, 'superadmin');
         
         return response()->json(null, 200);
     }
-
-    public function showSuperAdmin($id)
+    /**
+     * Show a SuperAdmin user
+     *
+     * @param integer $id
+     * @return mix 
+     */
+    public function showSuperAdmin(int $id)
     {
         if ($id != "1" || Auth::id() == 1) {
-            $user = User::role('superadmin')->with(['usermeta' => function ($query) {
+            $user = User::role('superadmin')->with(
+                ['usermeta' => function ($query) {
                         $query->where('name', '=', 'display_name');
-            }])->findOrFail($id);
+                }]
+            )->findOrFail($id);
             $user->load('roles');
             return view('layouts.users.sa.show')
-            ->with('user', $user)
-            ->with('countries', $this->countries);
+                ->with('user', $user)
+                ->with('countries', $this->countries);
         } else {
             Flash::error('No tienes los permisos suficientes para ver esta información.');
             return redirect()->route('users.sa');
         }
     }
-
-    public function editSuperAdmin($id)
+    /**
+     * Show SuperAdmin edit form
+     *
+     * @param integer $id
+     * @return mix
+     */
+    public function editSuperAdmin(int $id)
     {
         if ($id != "1" || Auth::id() == 1) {
             $countries = $this->countriesArray();
-            $user = User::role('superadmin')->with(['usermeta' => function ($query) {
+            $user = User::role('superadmin')->with(
+                ['usermeta' => function ($query) {
                         $query->where('name', '=', 'display_name');
-            }])->findOrFail($id);
+                }]
+            )->findOrFail($id);
             $user->load('roles');
             return view('layouts.users.sa.edit')
-            ->with('user', $user)
-            ->with('countries', $countries);
+                ->with('user', $user)
+                ->with('countries', $countries);
         } else {
             Flash::error('No tienes los permisos suficientes para editar a este usuario.');
             return redirect()->route('users.sa');
         }
     }
-
-    public function updateSuperAdmin(EditUserRequest $request, $id)
+    /**
+     * Update SuperAdmin user
+     *
+     * @param EditUserRequest $request
+     * @param integer $id
+     * @return JsonResponse
+     */
+    public function updateSuperAdmin(EditUserRequest $request, int $id) : JsonResponse
     {
         if (!$request->ajax()) {
             abort(403, 'Unauthorized action.');
         }
-        $user = $this->updateUser($request, $id, 'superadmin');
+        $user = $this->_updateUser($request, $id, 'superadmin');
                 
         return response()->json(null, 200);
     }
-
-    public function destroySuperAdmin(Request $request, $id)
+    /**
+     * Delete SuperAdmin user
+     *
+     * @param Request $request
+     * @param integer $id
+     * @return JsonResponse
+     */
+    public function destroySuperAdmin(Request $request, int $id) : JsonResponse
     {
         if (!$request->ajax()) {
             abort(403, 'Unauthorized action.');
@@ -348,22 +438,33 @@ class UsersController extends Controller
         $user->delete();
         return response()->json(['message' => 'Se ha eliminado al usuario '.$name], 200);
     }
-
-    public function indexAdministrative(Request $request)
+    /**
+     * Get all Administrative users
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function indexAdministrative(Request $request) : JsonResponse
     {
         if (!$request->ajax()) {
             abort(403, 'Unauthorized action.');
         }
-        return $this->indexUser($request, 'administrative');
+        return $this->_indexUser($request, 'administrative');
     }
-    public function massChangesAdministrative(Request $request)
+    /**
+     * Updates many Administrative users
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function massChangesAdministrative(Request $request) : JsonResponse
     {
         if (!$request->ajax()) {
             abort(403, 'Unauthorized action.');
         }
-        return $this->massChangesUser($request, 'administrative');
+        return $this->_massChangesUser($request, 'administrative');
     }
-
+    
     public function createAdministrative()
     {
         $countries = $this->countriesArray();
@@ -376,7 +477,7 @@ class UsersController extends Controller
         if (!$request->ajax()) {
             abort(403, 'Unauthorized action.');
         }
-        $user = $this->storeUser($request, 'administrative');
+        $user = $this->_storeUser($request, 'administrative');
         
         return response()->json(null, 200);
     }
@@ -419,7 +520,7 @@ class UsersController extends Controller
         if (!$request->ajax()) {
             abort(403, 'Unauthorized action.');
         }
-        $user = $this->updateUser($request, $id, 'administrative');
+        $user = $this->_updateUser($request, $id, 'administrative');
                 
         return response()->json(null, 200);
     }
@@ -441,7 +542,7 @@ class UsersController extends Controller
         if (!$request->ajax()) {
             abort(403, 'Unauthorized action.');
         }
-        return $this->indexUser($request, 'coordinator');
+        return $this->_indexUser($request, 'coordinator');
     }
 
     public function massChangesCoordinator(Request $request)
@@ -449,7 +550,7 @@ class UsersController extends Controller
         if (!$request->ajax()) {
             abort(403, 'Unauthorized action.');
         }
-        return $this->massChangesUser($request, 'coordinator');
+        return $this->_massChangesUser($request, 'coordinator');
     }
 
     public function createCoordinator()
@@ -464,7 +565,7 @@ class UsersController extends Controller
         if (!$request->ajax()) {
             abort(403, 'Unauthorized action.');
         }
-        $user = $this->storeUser($request, 'coordinator');
+        $user = $this->_storeUser($request, 'coordinator');
         
         return response()->json(null, 200);
     }
@@ -507,7 +608,7 @@ class UsersController extends Controller
         if (!$request->ajax()) {
             abort(403, 'Unauthorized action.');
         }
-        $user = $this->updateUser($request, $id, 'coordinator');
+        $user = $this->_updateUser($request, $id, 'coordinator');
                 
         return response()->json(null, 200);
     }
@@ -529,7 +630,7 @@ class UsersController extends Controller
         if (!$request->ajax()) {
             abort(403, 'Unauthorized action.');
         }
-        return $this->indexUser($request, 'teacher');
+        return $this->_indexUser($request, 'teacher');
     }
 
     public function massChangesTeacher(Request $request)
@@ -537,7 +638,7 @@ class UsersController extends Controller
         if (!$request->ajax()) {
             abort(403, 'Unauthorized action.');
         }
-        return $this->massChangesUser($request, 'teacher');
+        return $this->_massChangesUser($request, 'teacher');
     }
 
     public function createTeacher()
@@ -552,7 +653,7 @@ class UsersController extends Controller
         if (!$request->ajax()) {
             abort(403, 'Unauthorized action.');
         }
-        $user = $this->storeUser($request, 'teacher');
+        $user = $this->_storeUser($request, 'teacher');
 
         $areaid = data_get(json_decode($request->area), 'id');
         
@@ -613,7 +714,7 @@ class UsersController extends Controller
         if (!$request->ajax()) {
             abort(403, 'Unauthorized action.');
         }
-        $user = $this->updateUser($request, $id, 'teacher');
+        $user = $this->_updateUser($request, $id, 'teacher');
 
         $areaid = data_get(json_decode($request->area), 'id');
         
@@ -652,7 +753,7 @@ class UsersController extends Controller
         if (!$request->ajax()) {
             abort(403, 'Unauthorized action.');
         }
-        return $this->indexUser($request, 'student');
+        return $this->_indexUser($request, 'student');
     }
 
     public function massChangesStudent(Request $request)
@@ -660,7 +761,7 @@ class UsersController extends Controller
         if (!$request->ajax()) {
             abort(403, 'Unauthorized action.');
         }
-        return $this->massChangesUser($request, 'student');
+        return $this->_massChangesUser($request, 'student');
     }
 
     public function createStudent()
@@ -675,7 +776,7 @@ class UsersController extends Controller
         if (!$request->ajax()) {
             abort(403, 'Unauthorized action.');
         }
-        $user = $this->storeUser($request, 'student');
+        $user = $this->_storeUser($request, 'student');
 
         $student = new Student();
         $student->neighborhood = ($request->filled('neighborhood')) ? $request->neighborhood : null;
@@ -732,7 +833,7 @@ class UsersController extends Controller
         if (!$request->ajax()) {
             abort(403, 'Unauthorized action.');
         }
-        $user = $this->updateUser($request, $id, 'student');
+        $user = $this->_updateUser($request, $id, 'student');
 
         $student = Student::where('user_id', $user->id)->firstOrFail();
         $student->neighborhood = ($student->neighborhood != $request->neighborhood) ? $request->neighborhood : $student->neighborhood;

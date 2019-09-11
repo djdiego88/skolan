@@ -7,7 +7,6 @@
 6. $ php artisan vendor:publish --provider="Spatie\Permission\PermissionServiceProvider" --tag="migrations"
 7. $ php artisan vendor:publish --provider="Arcanedev\LaravelMessenger\LaravelMessengerServiceProvider"
 8. Configurar user_model en /config/messenger.php
-9. $ php artisan vendor:publish --provider="Cmgmyr\Messenger\MessengerServiceProvider" --tag="migrations"
 X. $ php artisan vendor:publish --provider="Spatie\Activitylog\ActivitylogServiceProvider" --tag="migrations"
 X. $ php artisan vendor:publish --provider="Spatie\Activitylog\ActivitylogServiceProvider" --tag="config"
 X. Configurar días a retener en el log
