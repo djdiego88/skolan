@@ -944,6 +944,16 @@ class UsersController extends Controller
         $student->diseases = ($request->filled('diseases')) ? strip_tags($request->diseases, $this->allowedTags) : null;
         $student->user()->associate($user);
         $student->save();
+
+        if ($request->filled('guardians')) {
+            $rolesNames = Arr::pluck(json_decode($request->guardians), ['name']);
+            $student->guardians()->sync(
+                [
+                    1 => ['relation' => 'father'],
+                    2 => ['relation' => 'mother']
+                ]
+            );
+        }
         
         return response()->json(null, 200);
     }

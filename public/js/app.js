@@ -8822,6 +8822,28 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -8840,9 +8862,10 @@ __webpack_require__.r(__webpack_exports__);
         'list': 'bullet'
       }], ['clean']],
       user: {
-        guardians: {}
+        guardians: []
       },
       guardians: [],
+      selected_guardians: [],
       errors: {},
       submiting: false,
       it: [{
@@ -8870,6 +8893,25 @@ __webpack_require__.r(__webpack_exports__);
       }, {
         label: 'Femenino',
         value: 'f'
+      }],
+      relation: [{
+        label: 'Padre',
+        value: 'father'
+      }, {
+        label: 'Madre',
+        value: 'mother'
+      }, {
+        label: 'Abuelo (a)',
+        value: 'grandparent'
+      }, {
+        label: 'Tío (a)',
+        value: 'uncle'
+      }, {
+        label: 'Hermano (a)',
+        value: 'brother'
+      }, {
+        label: 'Otro',
+        value: 'other'
       }],
       photo_preview: null,
       status: [{
@@ -8922,6 +8964,7 @@ __webpack_require__.r(__webpack_exports__);
         _self.user.status = this.user.status ? this.user.status.value : null;
         _self.user.socioeconomic_level = this.user.socioeconomic_level ? this.user.socioeconomic_level.value : null;
         _self.user.blood_type = this.user.blood_type ? this.user.blood_type.value : null;
+        _self.user.guardians = this.user.guardians ? JSON.stringify(this.user.guardians) : [];
         var config = {
           headers: {
             'Content-Type': 'multipart/form-data'
@@ -91858,16 +91901,18 @@ var render = function() {
                               "allow-empty": false,
                               disabled: _vm.submiting,
                               "custom-label": _vm.customLabel,
+                              multiple: true,
+                              "options-limit": 100,
                               "track-by": "id",
                               label: "user_id",
                               placeholder: "Acudientes"
                             },
                             model: {
-                              value: _vm.user.guardians,
+                              value: _vm.selected_guardians,
                               callback: function($$v) {
-                                _vm.$set(_vm.user, "guardians", $$v)
+                                _vm.selected_guardians = $$v
                               },
-                              expression: "user.guardians"
+                              expression: "selected_guardians"
                             }
                           }),
                           _vm._v(" "),
@@ -91881,7 +91926,71 @@ var render = function() {
                         ],
                         1
                       )
-                    ])
+                    ]),
+                    _vm._v(" "),
+                    _vm.selected_guardians
+                      ? _vm._l(_vm.user.guardians, function(guardian) {
+                          return _c(
+                            "div",
+                            { key: guardian.id, staticClass: "form-group row" },
+                            [
+                              _c(
+                                "label",
+                                {
+                                  staticClass: "col-sm-3 col-form-label",
+                                  attrs: { for: "status" }
+                                },
+                                [_vm._v("Acudientes:")]
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "div",
+                                { staticClass: "col-sm-9" },
+                                [
+                                  _c("multiselect", {
+                                    class: {
+                                      "border border-danger rounded":
+                                        _vm.errors.guardians
+                                    },
+                                    attrs: {
+                                      options: _vm.relation,
+                                      searchable: false,
+                                      "show-labels": false,
+                                      "allow-empty": false,
+                                      disabled: _vm.submiting,
+                                      "track-by": "value",
+                                      label: "label",
+                                      placeholder: "Parentesco"
+                                    },
+                                    model: {
+                                      value: _vm.user.guardians,
+                                      callback: function($$v) {
+                                        _vm.$set(_vm.user, "guardians", $$v)
+                                      },
+                                      expression: "user.guardians"
+                                    }
+                                  }),
+                                  _vm._v(" "),
+                                  _vm.errors.guardians
+                                    ? _c(
+                                        "small",
+                                        {
+                                          staticClass: "form-text text-danger"
+                                        },
+                                        [
+                                          _vm._v(
+                                            _vm._s(_vm.errors.guardians[0])
+                                          )
+                                        ]
+                                      )
+                                    : _vm._e()
+                                ],
+                                1
+                              )
+                            ]
+                          )
+                        })
+                      : _vm._e()
                   ]
                 : _vm._e()
             ],
@@ -121233,8 +121342,8 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /opt/lampp/htdocs/proyectos/php/laravel/skolar/resources/js/app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! /opt/lampp/htdocs/proyectos/php/laravel/skolar/resources/sass/app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! /opt/lampp/htdocs/projects/backend/php/laravel/skolar/resources/js/app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! /opt/lampp/htdocs/projects/backend/php/laravel/skolar/resources/sass/app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

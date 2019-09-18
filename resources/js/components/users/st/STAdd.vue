@@ -248,13 +248,15 @@
                                 <label for="status" class="col-sm-3 col-form-label">Acudientes:</label>
                                 <div class="col-sm-9">
                                     <multiselect
-                                    v-model="user.guardians"
+                                    v-model="selected_guardians"
                                     :options="guardians"
                                     :searchable="true"
                                     :show-labels="false"
                                     :allow-empty="false"
                                     :disabled="submiting"
                                     :custom-label="customLabel"
+                                    :multiple="true"
+                                    :options-limit="100"
                                     track-by="id"
                                     label="user_id"
                                     placeholder="Acudientes"
@@ -263,6 +265,26 @@
                                     <small class="form-text text-danger" v-if="errors.guardians">{{errors.guardians[0]}}</small>
                                 </div>
                             </div>
+                            <template v-if="selected_guardians">
+                                <div class="form-group row" v-for="guardian in user.guardians" :key="guardian.id">
+                                    <label for="status" class="col-sm-3 col-form-label">Acudientes:</label>
+                                    <div class="col-sm-9">
+                                        <multiselect
+                                        v-model="user.guardians"
+                                        :options="relation"
+                                        :searchable="false"
+                                        :show-labels="false"
+                                        :allow-empty="false"
+                                        :disabled="submiting"
+                                        track-by="value"
+                                        label="label"
+                                        placeholder="Parentesco"
+                                        :class="{'border border-danger rounded': errors.guardians}">
+                                        </multiselect>
+                                        <small class="form-text text-danger" v-if="errors.guardians">{{errors.guardians[0]}}</small>
+                                    </div>
+                                </div>
+                            </template>
                         </template>
                     </form>
                 </div>
@@ -290,9 +312,10 @@
                     ['clean']
                 ],
                 user: {
-                    guardians: {}
+                    guardians: []
                 },
                 guardians: [],
+                selected_guardians: [],
                 errors: {},
                 submiting: false,
                 it: [
@@ -306,6 +329,14 @@
                 gender: [
                     { label: 'Masculino', value: 'm' },
                     { label: 'Femenino', value: 'f' }
+                ],
+                relation: [
+                    { label: 'Padre', value: 'father' },
+                    { label: 'Madre', value: 'mother' },
+                    { label: 'Abuelo (a)', value: 'grandparent' },
+                    { label: 'Tío (a)', value: 'uncle' },
+                    { label: 'Hermano (a)', value: 'brother' },
+                    { label: 'Otro', value: 'other' }
                 ],
                 photo_preview: null,
                 status: [
@@ -352,6 +383,7 @@
                     _self.user.status = (this.user.status) ? this.user.status.value : null;
                     _self.user.socioeconomic_level = (this.user.socioeconomic_level) ? this.user.socioeconomic_level.value : null;
                     _self.user.blood_type = (this.user.blood_type) ? this.user.blood_type.value : null;
+                    _self.user.guardians = (this.user.guardians) ? JSON.stringify(this.user.guardians) : [];
                     let config = { headers: { 'Content-Type': 'multipart/form-data' } }
                     let formdata = new FormData();
                     Object.keys(_self.user).forEach((prop) => {
