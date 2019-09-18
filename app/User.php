@@ -60,17 +60,31 @@ class User extends Authenticatable
     {
         return $this->hasOne('App\Classroom');
     }
-    public function scopeSearchByName($query, $name)
+    /**
+     * Filter users by user display name
+     *
+     * @param $query
+     * @param string $name
+     * @return $query
+     */
+    public function scopeSearchByName($query, string $name)
     {
-        return $query->join('usermeta', function ($join) {
-                        $join->on('users.id', '=', 'usermeta.user_id')
-                             ->where('usermeta.name', '=', 'display_name');
-        })
+        return $query->join(
+            'usermeta', function ($join) {
+                $join->on('users.id', '=', 'usermeta.user_id')
+                            ->where('usermeta.name', '=', 'display_name');
+            }
+        )
         ->where('users.first_name', 'LIKE', "%$name%")
         ->orWhere('users.last_name', 'LIKE', "%$name%")
         ->orWhere('usermeta.value', 'LIKE', "%$name%");
     }
-    public function enabled()
+    /**
+     * Check if an user is enabled
+     *
+     * @return boolean
+     */
+    public function enabled() : bool
     {
         return $this->status === 'enabled';
     }

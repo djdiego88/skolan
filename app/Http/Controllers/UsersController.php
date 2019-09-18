@@ -716,31 +716,50 @@ class UsersController extends Controller
         $user->delete();
         return response()->json(['message' => 'Se ha eliminado al usuario '.$name], 200);
     }
-
-    public function indexTeacher(Request $request)
+    /**
+     * Show page with all Teacher users
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function indexTeacher(Request $request) : JsonResponse
     {
         if (!$request->ajax()) {
             abort(403, 'Unauthorized action.');
         }
         return $this->_indexUser($request, 'teacher');
     }
-
-    public function massChangesTeacher(Request $request)
+    /**
+     * Updates many Teacher users
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function massChangesTeacher(Request $request) : JsonResponse
     {
         if (!$request->ajax()) {
             abort(403, 'Unauthorized action.');
         }
         return $this->_massChangesUser($request, 'teacher');
     }
-
-    public function createTeacher()
+    /**
+     * Show page to create new Teacher user
+     *
+     * @return View
+     */
+    public function createTeacher() : View
     {
         $countries = $this->_countriesArray();
         return view('layouts.users.te.add')
             ->with('countries', $countries);
     }
-
-    public function storeTeacher(StoreTeacher $request)
+    /**
+     * Save Teacher data to database
+     *
+     * @param StoreTeacher $request
+     * @return JsonResponse
+     */
+    public function storeTeacher(StoreTeacher $request) : JsonResponse
     {
         if (!$request->ajax()) {
             abort(403, 'Unauthorized action.');
@@ -764,44 +783,64 @@ class UsersController extends Controller
         
         return response()->json(null, 200);
     }
-
-    public function showTeacher($id)
+    /**
+     * Show Page with Teacher info
+     *
+     * @param integer $id
+     * @return mixed
+     */
+    public function showTeacher(int $id)
     {
         if ($id != "1" || Auth::id() == 1) {
-            $user = User::role('teacher')->with(['usermeta' => function ($query) {
+            $user = User::role('teacher')->with(
+                ['usermeta' => function ($query) {
                         $query->where('name', '=', 'display_name');
-            }])->findOrFail($id);
+                }]
+            )->findOrFail($id);
             $user->load('roles', 'teacher.area');
             return view('layouts.users.te.show')
-            ->with('user', $user)
-            ->with('countries', $this->countries);
+                ->with('user', $user)
+                ->with('countries', $this->countries);
         } else {
             Flash::error('No tienes los permisos suficientes para ver esta información.');
             return redirect()->route('users.te.index');
         }
     }
-
-    public function editTeacher($id)
+    /**
+     * Show page to edit Teacher info
+     *
+     * @param integer $id
+     * @return mixed
+     */
+    public function editTeacher(int $id)
     {
         if ($id != "1" || Auth::id() == 1) {
             $countries = $this->_countriesArray();
-            $user = User::role('teacher')->with(['usermeta' => function ($query) {
+            $user = User::role('teacher')->with(
+                ['usermeta' => function ($query) {
                         $query->where('name', '=', 'display_name');
-            }])->findOrFail($id);
+                }]
+            )->findOrFail($id);
             $user->load('roles');
             $teacher = Teacher::where('user_id', $user->id)->firstOrFail();
             $teacher->load('area');
             return view('layouts.users.te.edit')
-            ->with('user', $user)
-            ->with('teacher', $teacher)
-            ->with('countries', $countries);
+                ->with('user', $user)
+                ->with('teacher', $teacher)
+                ->with('countries', $countries);
         } else {
             Flash::error('No tienes los permisos suficientes para editar a este usuario.');
             return redirect()->route('users.te.index');
         }
     }
-
-    public function updateTeacher(EditTeacher $request, $id)
+    /**
+     * Update Teacher info in database
+     *
+     * @param EditTeacher $request
+     * @param integer $id
+     * @return JsonResponse
+     */
+    public function updateTeacher(EditTeacher $request, int $id) : JsonResponse
     {
         if (!$request->ajax()) {
             abort(403, 'Unauthorized action.');
@@ -825,8 +864,14 @@ class UsersController extends Controller
                 
         return response()->json(null, 200);
     }
-
-    public function destroyTeacher(Request $request, $id)
+    /**
+     * Delete Teacher user form database
+     *
+     * @param Request $request
+     * @param integer $id
+     * @return JsonResponse
+     */
+    public function destroyTeacher(Request $request, int $id) : JsonResponse
     {
         if (!$request->ajax()) {
             abort(403, 'Unauthorized action.');
@@ -839,31 +884,50 @@ class UsersController extends Controller
         $user->delete();
         return response()->json(['message' => 'Se ha eliminado al usuario '.$name], 200);
     }
-
-    public function indexStudent(Request $request)
+    /**
+     * Show all Students users
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function indexStudent(Request $request) : JsonResponse
     {
         if (!$request->ajax()) {
             abort(403, 'Unauthorized action.');
         }
         return $this->_indexUser($request, 'student');
     }
-
-    public function massChangesStudent(Request $request)
+    /**
+     * Update many Student users
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function massChangesStudent(Request $request) : JsonResponse
     {
         if (!$request->ajax()) {
             abort(403, 'Unauthorized action.');
         }
         return $this->_massChangesUser($request, 'student');
     }
-
-    public function createStudent()
+    /**
+     * Show page for create ne Student
+     *
+     * @return View
+     */
+    public function createStudent() : View
     {
         $countries = $this->_countriesArray();
         return view('layouts.users.st.add')
             ->with('countries', $countries);
     }
-
-    public function storeStudent(StoreStudent $request)
+    /**
+     * Save info for new Student user
+     *
+     * @param StoreStudent $request
+     * @return JsonResponse
+     */
+    public function storeStudent(StoreStudent $request) : JsonResponse
     {
         if (!$request->ajax()) {
             abort(403, 'Unauthorized action.');
@@ -883,8 +947,13 @@ class UsersController extends Controller
         
         return response()->json(null, 200);
     }
-
-    public function showStudent($id)
+    /**
+     * Show a page with Student info
+     *
+     * @param integer $id
+     * @return mixed
+     */
+    public function showStudent(int $id)
     {
         if ($id != "1" || Auth::id() == 1) {
             $user = User::role('student')->with(['usermeta' => function ($query) {
@@ -899,28 +968,41 @@ class UsersController extends Controller
             return redirect()->route('users.st.index');
         }
     }
-
-    public function editStudent($id)
+    /**
+     * Show page for edit Student info
+     *
+     * @param integer $id
+     * @return void
+     */
+    public function editStudent(int $id)
     {
         if ($id != "1" || Auth::id() == 1) {
             $countries = $this->_countriesArray();
-            $user = User::role('student')->with(['usermeta' => function ($query) {
+            $user = User::role('student')->with(
+                ['usermeta' => function ($query) {
                         $query->where('name', '=', 'display_name');
-            }])->findOrFail($id);
+                }]
+            )->findOrFail($id);
             $user->load('roles');
             $student = Student::where('user_id', $user->id)->firstOrFail();
             $student->load('guardians');
             return view('layouts.users.st.edit')
-            ->with('user', $user)
-            ->with('student', $student)
-            ->with('countries', $countries);
+                ->with('user', $user)
+                ->with('student', $student)
+                ->with('countries', $countries);
         } else {
             Flash::error('No tienes los permisos suficientes para editar a este usuario.');
             return redirect()->route('users.st.index');
         }
     }
-
-    public function updateStudent(EditStudent $request, $id)
+    /**
+     * Update Student info in database
+     *
+     * @param EditStudent $request
+     * @param integer $id
+     * @return JsonResponse
+     */
+    public function updateStudent(EditStudent $request, int $id) : JsonResponse
     {
         if (!$request->ajax()) {
             abort(403, 'Unauthorized action.');
@@ -939,8 +1021,14 @@ class UsersController extends Controller
                 
         return response()->json(null, 200);
     }
-
-    public function destroyStudent(Request $request, $id)
+    /**
+     * Delete a Student user
+     *
+     * @param Request $request
+     * @param integer $id
+     * @return JsonResponse
+     */
+    public function destroyStudent(Request $request, int $id) : JsonResponse
     {
         if (!$request->ajax()) {
             abort(403, 'Unauthorized action.');
@@ -974,22 +1062,22 @@ class UsersController extends Controller
         //
     }
 
-    public function showGuardian($id)
+    public function showGuardian(int $id)
     {
         //
     }
 
-    public function editGuardian($id)
+    public function editGuardian(int $id)
     {
         //
     }
 
-    public function updateGuardian(Request $request, $id)
+    public function updateGuardian(Request $request, int $id)
     {
         //
     }
 
-    public function destroyGuardian(Request $request, $id)
+    public function destroyGuardian(Request $request, int $id)
     {
         //
     }

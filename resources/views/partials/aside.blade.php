@@ -1,7 +1,7 @@
 <div class="sidebar">
     <nav class="sidebar-nav">
         <ul class="nav">
-        	<li class="nav-title">Menu</li>
+        	<li class="nav-title">{{ __('Menu') }}</li>
         	@hasanyrole('superadmin|administrative')
             <li class="nav-item">
                 <a class="nav-link" href="{{route('options')}}">

@@ -489,128 +489,140 @@ class DatabaseSeeder extends Seeder
         /**
          * Usuarios superadmin
          */
-        factory(App\User::class, 50)->create()->each(function ($user) {
-            $user->assignRole('superadmin');
-            //Añadir usermeta
-            $display_name = $user->first_name . ' '. $user->last_name;
-            $display_name = explode(" ", $display_name);
-            $countnames = count($display_name);
-            if ($countnames == 1) {
-                $display_name = $display_name[0];
-            } elseif ($countnames == 2) {
-                $display_name = $display_name[0].' '.$display_name[1];
-            } elseif ($countnames == 3 || $countnames == 4) {
-                $display_name = $display_name[0].' '.$display_name[2];
+        factory(App\User::class, 50)->create()->each(
+            function ($user) {
+                $user->assignRole('superadmin');
+                //Añadir usermeta
+                $display_name = $user->first_name . ' '. $user->last_name;
+                $display_name = explode(" ", $display_name);
+                $countnames = count($display_name);
+                if ($countnames == 1) {
+                    $display_name = $display_name[0];
+                } elseif ($countnames == 2) {
+                    $display_name = $display_name[0].' '.$display_name[1];
+                } elseif ($countnames == 3 || $countnames == 4) {
+                    $display_name = $display_name[0].' '.$display_name[2];
+                }
+                $username = new Usermeta(['name' => 'display_name', 'value' => $display_name]);
+                $user->usermeta()->save($username);
             }
-            $username = new Usermeta(['name' => 'display_name', 'value' => $display_name]);
-            $user->usermeta()->save($username);
-        });
+        );
 
         /**
          * Usuarios administrative
          */
-        factory(App\User::class, 50)->create()->each(function ($user) {
-            $user->assignRole('administrative');
-            //Añadir usermeta
-            $display_name = $user->first_name . ' '. $user->last_name;
-            $display_name = explode(" ", $display_name);
-            $countnames = count($display_name);
-            if ($countnames == 1) {
-                $display_name = $display_name[0];
-            } elseif ($countnames == 2) {
-                $display_name = $display_name[0].' '.$display_name[1];
-            } elseif ($countnames == 3 || $countnames == 4) {
-                $display_name = $display_name[0].' '.$display_name[2];
+        factory(App\User::class, 50)->create()->each(
+            function ($user) {
+                $user->assignRole('administrative');
+                //Añadir usermeta
+                $display_name = $user->first_name . ' '. $user->last_name;
+                $display_name = explode(" ", $display_name);
+                $countnames = count($display_name);
+                if ($countnames == 1) {
+                    $display_name = $display_name[0];
+                } elseif ($countnames == 2) {
+                    $display_name = $display_name[0].' '.$display_name[1];
+                } elseif ($countnames == 3 || $countnames == 4) {
+                    $display_name = $display_name[0].' '.$display_name[2];
+                }
+                $username = new Usermeta(['name' => 'display_name', 'value' => $display_name]);
+                $user->usermeta()->save($username);
             }
-            $username = new Usermeta(['name' => 'display_name', 'value' => $display_name]);
-            $user->usermeta()->save($username);
-        });
+        );
 
         /**
          * Usuarios coordinator
          */
-        factory(App\User::class, 25)->create()->each(function ($user) {
-            $user->assignRole('coordinator');
-            //Añadir usermeta
-            $display_name = $user->first_name . ' '. $user->last_name;
-            $display_name = explode(" ", $display_name);
-            $countnames = count($display_name);
-            if ($countnames == 1) {
-                $display_name = $display_name[0];
-            } elseif ($countnames == 2) {
-                $display_name = $display_name[0].' '.$display_name[1];
-            } elseif ($countnames == 3 || $countnames == 4) {
-                $display_name = $display_name[0].' '.$display_name[2];
+        factory(App\User::class, 25)->create()->each(
+            function ($user) {
+                $user->assignRole('coordinator');
+                //Añadir usermeta
+                $display_name = $user->first_name . ' '. $user->last_name;
+                $display_name = explode(" ", $display_name);
+                $countnames = count($display_name);
+                if ($countnames == 1) {
+                    $display_name = $display_name[0];
+                } elseif ($countnames == 2) {
+                    $display_name = $display_name[0].' '.$display_name[1];
+                } elseif ($countnames == 3 || $countnames == 4) {
+                    $display_name = $display_name[0].' '.$display_name[2];
+                }
+                $username = new Usermeta(['name' => 'display_name', 'value' => $display_name]);
+                $user->usermeta()->save($username);
             }
-            $username = new Usermeta(['name' => 'display_name', 'value' => $display_name]);
-            $user->usermeta()->save($username);
-        });
+        );
 
         /**
          * Usuarios teacher
          */
-        factory(App\User::class, 30)->create()->each(function ($user) {
-            $user->assignRole('teacher');
-            //Añadir usermeta
-            $display_name = $user->first_name . ' '. $user->last_name;
-            $display_name = explode(" ", $display_name);
-            $countnames = count($display_name);
-            if ($countnames == 1) {
-                $display_name = $display_name[0];
-            } elseif ($countnames == 2) {
-                $display_name = $display_name[0].' '.$display_name[1];
-            } elseif ($countnames == 3 || $countnames == 4) {
-                $display_name = $display_name[0].' '.$display_name[2];
+        factory(App\User::class, 30)->create()->each(
+            function ($user) {
+                $user->assignRole('teacher');
+                //Añadir usermeta
+                $display_name = $user->first_name . ' '. $user->last_name;
+                $display_name = explode(" ", $display_name);
+                $countnames = count($display_name);
+                if ($countnames == 1) {
+                    $display_name = $display_name[0];
+                } elseif ($countnames == 2) {
+                    $display_name = $display_name[0].' '.$display_name[1];
+                } elseif ($countnames == 3 || $countnames == 4) {
+                    $display_name = $display_name[0].' '.$display_name[2];
+                }
+                $username = new Usermeta(['name' => 'display_name', 'value' => $display_name]);
+                $user->usermeta()->save($username);
+                //Crear teacher
+                $user->teacher()->save(factory(App\Teacher::class)->make());
             }
-            $username = new Usermeta(['name' => 'display_name', 'value' => $display_name]);
-            $user->usermeta()->save($username);
-            //Crear teacher
-            $user->teacher()->save(factory(App\Teacher::class)->make());
-        });
+        );
 
         /**
          * Usuarios guardian
          */
-        factory(App\User::class, 50)->create()->each(function ($user) {
-            $user->assignRole('guardian');
-            //Añadir usermeta
-            $display_name = $user->first_name . ' '. $user->last_name;
-            $display_name = explode(" ", $display_name);
-            $countnames = count($display_name);
-            if ($countnames == 1) {
-                $display_name = $display_name[0];
-            } elseif ($countnames == 2) {
-                $display_name = $display_name[0].' '.$display_name[1];
-            } elseif ($countnames == 3 || $countnames == 4) {
-                $display_name = $display_name[0].' '.$display_name[2];
+        factory(App\User::class, 50)->create()->each(
+            function ($user) {
+                $user->assignRole('guardian');
+                //Añadir usermeta
+                $display_name = $user->first_name . ' '. $user->last_name;
+                $display_name = explode(" ", $display_name);
+                $countnames = count($display_name);
+                if ($countnames == 1) {
+                    $display_name = $display_name[0];
+                } elseif ($countnames == 2) {
+                    $display_name = $display_name[0].' '.$display_name[1];
+                } elseif ($countnames == 3 || $countnames == 4) {
+                    $display_name = $display_name[0].' '.$display_name[2];
+                }
+                $username = new Usermeta(['name' => 'display_name', 'value' => $display_name]);
+                $user->usermeta()->save($username);
+                //Crear guardian
+                $user->guardian()->save(factory(App\Guardian::class)->make());
             }
-            $username = new Usermeta(['name' => 'display_name', 'value' => $display_name]);
-            $user->usermeta()->save($username);
-            //Crear guardian
-            $user->guardian()->save(factory(App\Guardian::class)->make());
-        });
+        );
 
         /**
          * Usuarios student
          */
-        factory(App\User::class, 100)->create()->each(function ($user) {
-            $user->assignRole('student');
-            //Añadir usermeta
-            $display_name = $user->first_name . ' '. $user->last_name;
-            $display_name = explode(" ", $display_name);
-            $countnames = count($display_name);
-            if ($countnames == 1) {
-                $display_name = $display_name[0];
-            } elseif ($countnames == 2) {
-                $display_name = $display_name[0].' '.$display_name[1];
-            } elseif ($countnames == 3 || $countnames == 4) {
-                $display_name = $display_name[0].' '.$display_name[2];
+        factory(App\User::class, 100)->create()->each(
+            function ($user) {
+                $user->assignRole('student');
+                //Añadir usermeta
+                $display_name = $user->first_name . ' '. $user->last_name;
+                $display_name = explode(" ", $display_name);
+                $countnames = count($display_name);
+                if ($countnames == 1) {
+                    $display_name = $display_name[0];
+                } elseif ($countnames == 2) {
+                    $display_name = $display_name[0].' '.$display_name[1];
+                } elseif ($countnames == 3 || $countnames == 4) {
+                    $display_name = $display_name[0].' '.$display_name[2];
+                }
+                $username = new Usermeta(['name' => 'display_name', 'value' => $display_name]);
+                $user->usermeta()->save($username);
+                //Crear student
+                $user->student()->save(factory(App\Student::class)->make());
             }
-            $username = new Usermeta(['name' => 'display_name', 'value' => $display_name]);
-            $user->usermeta()->save($username);
-            //Crear student
-            $user->student()->save(factory(App\Student::class)->make());
-        });
+        );
 
         $class1a = new Classroom();
         $class1a->year_id = 2;
