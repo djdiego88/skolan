@@ -18,16 +18,11 @@ use App\Http\Requests\EditStudent;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Laracasts\Flash\Flash;
-use Spatie\Permission\Models\Role;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Response as IlluminateHttpResponse;
-use Illuminate\Support\Facades\Storage;
 use Intervention\Image\ImageManagerStatic as Image;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Response as IlluminateResponse;
-use Symfony\Component\HttpFoundation\Response;
+use Illuminate\View\View;
 
 class UsersController extends Controller
 {
@@ -301,7 +296,7 @@ class UsersController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index() : View
     {
         return view('layouts.users.index');
     }
@@ -336,7 +331,7 @@ class UsersController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function createSuperAdmin()
+    public function createSuperAdmin() : View
     {
         $countries = $this->countriesArray();
         return view('layouts.users.sa.add')
