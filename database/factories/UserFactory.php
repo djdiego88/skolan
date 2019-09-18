@@ -2,6 +2,7 @@
 
 use Faker\Generator as Faker;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,6 +38,6 @@ $factory->define(App\User::class, function (Faker $faker) {
         'photo' => $faker->optional($weight = 0.7)->image('public/storage/images/photos',200,200, 'people', false),
         'status' => $faker->randomElement($statuses),
         'last_access' => $faker->dateTimeThisMonth(),
-        'remember_token' => str_random(15),
+        'remember_token' => Str::random(),
     ];
 });

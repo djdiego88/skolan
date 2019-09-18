@@ -108,7 +108,7 @@ class UsersController extends Controller
      *
      * @return array Countries Array
      */
-    private function countriesArray() : array
+    private function _countriesArray() : array
     {
         $callback = function ($key, $value) {
             return ['value'=> $key, 'label'=> $value];
@@ -167,9 +167,14 @@ class UsersController extends Controller
         $user->last_access = date('Y-m-d H:i:s');
         if ($request->hasFile('photo')) {
             $file = $request->file('photo');
-            $name=basename($file->getClientOriginalName(), '.'.$file->getClientOriginalExtension());
-            $imgname = $name.'_'.time().'.'.$file->getClientOriginalExtension();
-            Image::make($request->file('photo')->getRealPath())->fit(200)->save('storage/images/photos/'.$imgname);
+            $name = basename(
+                $file->getClientOriginalName(),
+                '.' . $file->getClientOriginalExtension()
+            );
+            $imgname = $name . '_' . time() . '.' . $file->getClientOriginalExtension();
+            Image::make($request->file('photo')->getRealPath())
+                ->fit(200)
+                ->save('storage/images/photos/'.$imgname);
             $user->photo = $imgname;
         }
         $user->save();
@@ -177,7 +182,12 @@ class UsersController extends Controller
         $user->assignRole($rol);
         
         $display_name = $this->_getDisplayName($user->first_name, $user->last_name);
-        $displayname = new Usermeta(['name' => 'display_name', 'value' => $display_name]);
+        $displayname = new Usermeta(
+            [
+            'name' => 'display_name',
+            'value' => $display_name
+            ]
+        );
         $user->usermeta()->save($displayname);
 
         return $user;
@@ -195,7 +205,9 @@ class UsersController extends Controller
         $user = User::role($rol)->findOrFail($id);
         if ($user->first_name != $request->first_name || $user->last_name != $request->last_name) {
             $display_name = $this->_getDisplayName($request->first_name, $request->last_name);
-            $displayname = Usermeta::where('user_id', $user->id)->where('name', 'display_name')->firstOrFail();
+            $displayname = Usermeta::where('user_id', $user->id)
+                            ->where('name', 'display_name')
+                            ->firstOrFail();
             $displayname->value = $display_name;
             $displayname->save();
         }
@@ -215,9 +227,14 @@ class UsersController extends Controller
         $user->status = ($user->status != $request->status) ? $request->status : $user->status;
         if ($request->hasFile('photo')) {
             $file = $request->file('photo');
-            $name=basename($file->getClientOriginalName(), '.'.$file->getClientOriginalExtension());
+            $name = basename(
+                $file->getClientOriginalName(),
+                '.'.$file->getClientOriginalExtension()
+            );
             $imgname = $name.'_'.time().'.'.$file->getClientOriginalExtension();
-            Image::make($request->file('photo')->getRealPath())->fit(200, 266)->save('storage/images/photos/'.$imgname);
+            Image::make($request->file('photo')->getRealPath())
+                ->fit(200, 266)
+                ->save('storage/images/photos/'.$imgname);
             $user->photo = $imgname;
         }
         $user->save();
@@ -333,7 +350,7 @@ class UsersController extends Controller
      */
     public function createSuperAdmin() : View
     {
-        $countries = $this->countriesArray();
+        $countries = $this->_countriesArray();
         return view('layouts.users.sa.add')
             ->with('countries', $countries);
     }
@@ -384,7 +401,7 @@ class UsersController extends Controller
     public function editSuperAdmin(int $id)
     {
         if ($id != "1" || Auth::id() == 1) {
-            $countries = $this->countriesArray();
+            $countries = $this->_countriesArray();
             $user = User::role('superadmin')->with(
                 ['usermeta' => function ($query) {
                         $query->where('name', '=', 'display_name');
@@ -459,15 +476,24 @@ class UsersController extends Controller
         }
         return $this->_massChangesUser($request, 'administrative');
     }
-    
-    public function createAdministrative()
+    /**
+     * Show page for create an Administrative user
+     *
+     * @return View
+     */
+    public function createAdministrative() : View
     {
-        $countries = $this->countriesArray();
+        $countries = $this->_countriesArray();
         return view('layouts.users.ad.add')
             ->with('countries', $countries);
     }
-
-    public function storeAdministrative(CreateUserRequest $request)
+    /**
+     * Store de data for Administrative user in database
+     *
+     * @param CreateUserRequest $request
+     * @return JsonResponse
+     */
+    public function storeAdministrative(CreateUserRequest $request) : JsonResponse
     {
         if (!$request->ajax()) {
             abort(403, 'Unauthorized action.');
@@ -476,41 +502,61 @@ class UsersController extends Controller
         
         return response()->json(null, 200);
     }
-
-    public function showAdministrative($id)
+    /**
+     * Show page of an Administrative user
+     *
+     * @param integer $id 
+     * @return mixed
+     */
+    public function showAdministrative(int $id)
     {
         if ($id != "1" || Auth::id() == 1) {
-            $user = User::role('administrative')->with(['usermeta' => function ($query) {
+            $user = User::role('administrative')->with(
+                ['usermeta' => function ($query) {
                         $query->where('name', '=', 'display_name');
-            }])->findOrFail($id);
+                }]
+            )->findOrFail($id);
             $user->load('roles');
             return view('layouts.users.ad.show')
-            ->with('user', $user)
-            ->with('countries', $this->countries);
+                ->with('user', $user)
+                ->with('countries', $this->countries);
         } else {
             Flash::error('No tienes los permisos suficientes para ver esta información.');
             return redirect()->route('users.ad.index');
         }
     }
-
-    public function editAdministrative($id)
+    /**
+     * Show the page for edit an Administrative user
+     *
+     * @param integer $id
+     * @return mixed
+     */
+    public function editAdministrative(int $id)
     {
         if ($id != "1" || Auth::id() == 1) {
-            $countries = $this->countriesArray();
-            $user = User::role('administrative')->with(['usermeta' => function ($query) {
+            $countries = $this->_countriesArray();
+            $user = User::role('administrative')->with(
+                ['usermeta' => function ($query) {
                         $query->where('name', '=', 'display_name');
-            }])->findOrFail($id);
+                }]
+            )->findOrFail($id);
             $user->load('roles');
             return view('layouts.users.ad.edit')
-            ->with('user', $user)
-            ->with('countries', $countries);
+                ->with('user', $user)
+                ->with('countries', $countries);
         } else {
             Flash::error('No tienes los permisos suficientes para editar a este usuario.');
             return redirect()->route('users.ad.index');
         }
     }
-
-    public function updateAdministrative(EditUserRequest $request, $id)
+    /**
+     * Update data for Administrative user in database
+     *
+     * @param EditUserRequest $request
+     * @param integer $id
+     * @return JsonResponse
+     */
+    public function updateAdministrative(EditUserRequest $request, int $id) : JsonResponse
     {
         if (!$request->ajax()) {
             abort(403, 'Unauthorized action.');
@@ -519,8 +565,14 @@ class UsersController extends Controller
                 
         return response()->json(null, 200);
     }
-
-    public function destroyAdministrative(Request $request, $id)
+    /**
+     * Delete an Administrative user from database
+     *
+     * @param Request $request
+     * @param integer $id
+     * @return JsonResponse
+     */
+    public function destroyAdministrative(Request $request, int $id) : JsonResponse
     {
         if (!$request->ajax()) {
             abort(403, 'Unauthorized action.');
@@ -531,31 +583,50 @@ class UsersController extends Controller
         $user->delete();
         return response()->json(['message' => 'Se ha eliminado al usuario '.$name], 200);
     }
-
-    public function indexCoordinator(Request $request)
+    /**
+     * Show main page for users Cordinators
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function indexCoordinator(Request $request) : JsonResponse
     {
         if (!$request->ajax()) {
             abort(403, 'Unauthorized action.');
         }
         return $this->_indexUser($request, 'coordinator');
     }
-
-    public function massChangesCoordinator(Request $request)
+    /**
+     * Update many Coordinator users
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function massChangesCoordinator(Request $request) : JsonResponse
     {
         if (!$request->ajax()) {
             abort(403, 'Unauthorized action.');
         }
         return $this->_massChangesUser($request, 'coordinator');
     }
-
-    public function createCoordinator()
+    /**
+     * Show page for create a Coordinator user
+     *
+     * @return View
+     */
+    public function createCoordinator() : View
     {
-        $countries = $this->countriesArray();
+        $countries = $this->_countriesArray();
         return view('layouts.users.co.add')
             ->with('countries', $countries);
     }
-
-    public function storeCoordinator(CreateUserRequest $request)
+    /**
+     * Save new coordinator data to database
+     *
+     * @param CreateUserRequest $request
+     * @return JsonResponse
+     */
+    public function storeCoordinator(CreateUserRequest $request) : JsonResponse
     {
         if (!$request->ajax()) {
             abort(403, 'Unauthorized action.');
@@ -564,41 +635,61 @@ class UsersController extends Controller
         
         return response()->json(null, 200);
     }
-
-    public function showCoordinator($id)
+    /**
+     * Show the page for a Coordinator user
+     *
+     * @param integer $id
+     * @return mixed
+     */
+    public function showCoordinator(int $id)
     {
         if ($id != "1" || Auth::id() == 1) {
-            $user = User::role('coordinator')->with(['usermeta' => function ($query) {
+            $user = User::role('coordinator')->with(
+                ['usermeta' => function ($query) {
                         $query->where('name', '=', 'display_name');
-            }])->findOrFail($id);
+                }]
+            )->findOrFail($id);
             $user->load('roles');
             return view('layouts.users.co.show')
-            ->with('user', $user)
-            ->with('countries', $this->countries);
+                ->with('user', $user)
+                ->with('countries', $this->countries);
         } else {
             Flash::error('No tienes los permisos suficientes para ver esta información.');
             return redirect()->route('users.co.index');
         }
     }
-
-    public function editCoordinator($id)
+    /**
+     * Show the page for edit a Coordinator user
+     *
+     * @param integer $id
+     * @return mixed
+     */
+    public function editCoordinator(int $id)
     {
         if ($id != "1" || Auth::id() == 1) {
-            $countries = $this->countriesArray();
-            $user = User::role('coordinator')->with(['usermeta' => function ($query) {
+            $countries = $this->_countriesArray();
+            $user = User::role('coordinator')->with(
+                ['usermeta' => function ($query) {
                         $query->where('name', '=', 'display_name');
-            }])->findOrFail($id);
+                }]
+            )->findOrFail($id);
             $user->load('roles');
             return view('layouts.users.co.edit')
-            ->with('user', $user)
-            ->with('countries', $countries);
+                ->with('user', $user)
+                ->with('countries', $countries);
         } else {
             Flash::error('No tienes los permisos suficientes para editar a este usuario.');
             return redirect()->route('users.co.index');
         }
     }
-
-    public function updateCoordinator(EditUserRequest $request, $id)
+    /**
+     * Update info for Coordinator user
+     *
+     * @param EditUserRequest $request
+     * @param integer $id
+     * @return JsonResponse
+     */
+    public function updateCoordinator(EditUserRequest $request, int $id) : JsonResponse
     {
         if (!$request->ajax()) {
             abort(403, 'Unauthorized action.');
@@ -607,8 +698,14 @@ class UsersController extends Controller
                 
         return response()->json(null, 200);
     }
-
-    public function destroyCoordinator(Request $request, $id)
+    /**
+     * Delete a Coordinator user
+     *
+     * @param Request $request
+     * @param integer $id
+     * @return JsonResponse
+     */
+    public function destroyCoordinator(Request $request, int $id) : JsonResponse
     {
         if (!$request->ajax()) {
             abort(403, 'Unauthorized action.');
@@ -638,7 +735,7 @@ class UsersController extends Controller
 
     public function createTeacher()
     {
-        $countries = $this->countriesArray();
+        $countries = $this->_countriesArray();
         return view('layouts.users.te.add')
             ->with('countries', $countries);
     }
@@ -687,7 +784,7 @@ class UsersController extends Controller
     public function editTeacher($id)
     {
         if ($id != "1" || Auth::id() == 1) {
-            $countries = $this->countriesArray();
+            $countries = $this->_countriesArray();
             $user = User::role('teacher')->with(['usermeta' => function ($query) {
                         $query->where('name', '=', 'display_name');
             }])->findOrFail($id);
@@ -761,7 +858,7 @@ class UsersController extends Controller
 
     public function createStudent()
     {
-        $countries = $this->countriesArray();
+        $countries = $this->_countriesArray();
         return view('layouts.users.st.add')
             ->with('countries', $countries);
     }
@@ -806,7 +903,7 @@ class UsersController extends Controller
     public function editStudent($id)
     {
         if ($id != "1" || Auth::id() == 1) {
-            $countries = $this->countriesArray();
+            $countries = $this->_countriesArray();
             $user = User::role('student')->with(['usermeta' => function ($query) {
                         $query->where('name', '=', 'display_name');
             }])->findOrFail($id);
