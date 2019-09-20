@@ -8844,6 +8844,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 
 
@@ -91929,7 +91930,7 @@ var render = function() {
                     ]),
                     _vm._v(" "),
                     _vm.selected_guardians
-                      ? _vm._l(_vm.user.guardians, function(guardian) {
+                      ? _vm._l(_vm.selected_guardians, function(guardian) {
                           return _c(
                             "div",
                             { key: guardian.id, staticClass: "form-group row" },
@@ -91937,17 +91938,34 @@ var render = function() {
                               _c(
                                 "label",
                                 {
-                                  staticClass: "col-sm-3 col-form-label",
+                                  staticClass: "col-sm-5 col-form-label",
                                   attrs: { for: "status" }
                                 },
-                                [_vm._v("Acudientes:")]
+                                [
+                                  _c(
+                                    "strong",
+                                    [
+                                      _c("big", [
+                                        _vm._v(
+                                          _vm._s(
+                                            guardian.user.first_name +
+                                              " " +
+                                              guardian.user.last_name
+                                          ) + ":"
+                                        )
+                                      ])
+                                    ],
+                                    1
+                                  )
+                                ]
                               ),
                               _vm._v(" "),
                               _c(
                                 "div",
-                                { staticClass: "col-sm-9" },
+                                { staticClass: "col-sm-7" },
                                 [
                                   _c("multiselect", {
+                                    key: guardian.user_id,
                                     class: {
                                       "border border-danger rounded":
                                         _vm.errors.guardians

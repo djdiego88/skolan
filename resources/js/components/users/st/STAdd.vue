@@ -266,11 +266,12 @@
                                 </div>
                             </div>
                             <template v-if="selected_guardians">
-                                <div class="form-group row" v-for="guardian in user.guardians" :key="guardian.id">
-                                    <label for="status" class="col-sm-3 col-form-label">Acudientes:</label>
-                                    <div class="col-sm-9">
+                                <div class="form-group row" v-for="guardian in selected_guardians" :key="guardian.id">
+                                    <label for="status" class="col-sm-5 col-form-label"><strong><big>{{ `${guardian.user.first_name} ${guardian.user.last_name}` }}:</big></strong></label>
+                                    <div class="col-sm-7">
                                         <multiselect
                                         v-model="user.guardians"
+                                        :key="guardian.user_id"
                                         :options="relation"
                                         :searchable="false"
                                         :show-labels="false"
