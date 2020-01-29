@@ -36,7 +36,7 @@ $factory->define(
             'nacionality' => 'CO',
             'location' => 'Bogotá D.C.',
             'address' => $faker->address,
-            'photo' => $faker->optional($weight = 0.7)->image('public/storage/images/photos',200,200, 'people', false),
+            //'photo' => $faker->optional($weight = 0.7)->image('public/storage/images/photos',200,200, 'people', false),
             'status' => $faker->randomElement($statuses),
             'last_access' => $faker->dateTimeThisMonth(),
             'remember_token' => Str::random(),
